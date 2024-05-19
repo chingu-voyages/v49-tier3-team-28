@@ -1,7 +1,8 @@
-import mongoose from "mongoose";
+import { User } from "@/models/user.model";
+import mongoose, { Schema } from "mongoose";
 
 /* UserSchema will correspond to the User collection in the MongoDB database. */
-const UserSchema = new mongoose.Schema({
+const userSchema = new Schema<User>({
   username: {
     type: String,
     required: true,
@@ -27,4 +28,5 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.models.User || mongoose.model("User", UserSchema);
+export const UserRepository: mongoose.Model<User> =
+  mongoose.models.User || mongoose.model("User", userSchema);
