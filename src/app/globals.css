@@ -1,11 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* This is for the Futura font taken from Adobe Typekit */
+@import url('https://use.typekit.net/eoe3hsu.css'); 
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  font-family: futura-pt, sans-serif;
+  margin: 0;
+  --background-color: 'white';
+  --main-text-color: 'black';
+  --orange: #fb7210;
+  --dark-teal: #005246;
+  --sky-blue: #c4fcf0;
+  --light-teal: #4c8077;
+  --smoke-grey: rgba(43, 67, 81, 0.5);
+  --light-blue-green-teal: #00bb9a;
+  --light-faint-grey: #F2F2F2;
+  --light-dark-grey: #808080;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -17,17 +28,27 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color: var(--main-text-color);
+  background: var(--background-color)
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+/* anchor element hyperlink color (in sign up/sign in pages) */
+.lightBlueGreenTealHyperlink {
+  color: var(--light-blue-green-teal);
+}
+
+/* Background color of text input fields */
+.faintGreyInputColor {
+  background-color: var(--light-faint-grey);
+}
+
+/* Background color for the signup with google button */
+.signUpWithGoogleButtonColor {
+  background-color: var(--smoke-grey) !important;
 }
