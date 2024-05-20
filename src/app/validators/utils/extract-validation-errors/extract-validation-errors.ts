@@ -3,6 +3,7 @@
 /**
  *
  * @param errors This will taken in the errors from a yup validation schema and convert them to a format that can be displayed as form field errors
+ * ex. { fieldName: { error: true, message: "This field is required" } }
  */
 export function extractValidationErrors(
   errors: any
