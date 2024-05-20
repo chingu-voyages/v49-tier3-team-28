@@ -9,6 +9,7 @@ interface FormTextInputFieldProps {
   onChange?: (value: string) => void;
   helperText?: string;
   error?: boolean;
+  disabled?: boolean;
 }
 
 export function FormTextInputField({
@@ -19,6 +20,7 @@ export function FormTextInputField({
   onChange,
   helperText,
   error,
+  disabled,
 }: FormTextInputFieldProps) {
   return (
     <TextField
@@ -30,6 +32,7 @@ export function FormTextInputField({
       helperText={helperText}
       error={error}
       onChange={(e) => onChange && onChange(e.target.value)}
+      disabled={disabled}
       sx={{
         marginTop: "4px",
         marginBottom: "4px",

@@ -6,15 +6,18 @@ import styles from "./styles.module.css";
 export function GoogleAuthButton({
   onClick,
   authType, // signup or signin
+  disabled,
 }: {
   authType: "signin" | "signup";
   onClick?: () => void;
+  disabled?: boolean;
 }) {
   return (
     <BasicRoundedButton
       label={`Or sign ${authType === "signup" ? "up" : "in"}  with Google`}
       buttonClassNames={styles.signUpWithGoogleButtonColor}
       onClick={onClick}
+      disabled={disabled}
       startIcon={
         <Image
           src="/images/google-auth-logo/google-auth-logo.svg"

@@ -6,6 +6,7 @@ interface BasicRoundedButtonProps {
   buttonClassNames?: string;
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
+  disabled?: boolean;
 }
 
 // Reusable button with rounded corners, default is orange background, but can be customized with classNames
@@ -15,6 +16,7 @@ export function BasicRoundedButton({
   buttonClassNames,
   startIcon,
   endIcon,
+  disabled,
 }: BasicRoundedButtonProps) {
   return (
     <Button
@@ -24,6 +26,7 @@ export function BasicRoundedButton({
       onClick={onClick}
       startIcon={startIcon}
       endIcon={endIcon}
+      disabled={disabled}
       sx={{
         textTransform: "none",
         fontFamily: "Verdana, sans-serif",

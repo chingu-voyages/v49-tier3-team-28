@@ -11,6 +11,7 @@ export const PasswordInputField = ({
   onInputChanged,
   error,
   helperText,
+  disabled,
 }: {
   id: string;
   name: string;
@@ -18,6 +19,7 @@ export const PasswordInputField = ({
   error?: boolean;
   helperText?: string;
   onInputChanged?: (value: string) => void;
+  disabled?: boolean;
 }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false); // toggles whether the password is visible in a text input field
 
@@ -31,6 +33,7 @@ export const PasswordInputField = ({
       onChange={(e) => onInputChanged && onInputChanged(e.target.value)}
       error={error}
       helperText={helperText}
+      disabled={disabled}
       sx={{
         marginTop: "4px",
         marginBottom: "4px",
