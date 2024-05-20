@@ -37,13 +37,15 @@ export default function SignupForm() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const formFieldsValid = (): boolean => {
+  const allFormFieldsValid = (displayErrors: boolean = true): boolean => {
     // TODO: We may be able to extract this logic so it can be used in signin?
     try {
       signupFormValidator.validateSync(formFieldValues, { abortEarly: false });
     } catch (error) {
-      const errors = extractValidationErrors(error);
-      setFormFieldErrors(errors);
+      if (displayErrors) {
+        const errors = extractValidationErrors(error);
+        setFormFieldErrors(errors);
+      }
       return false;
     }
     return true;
@@ -55,7 +57,7 @@ export default function SignupForm() {
 
   const signUpUser = async () => {
     // Validate the form fields and register the user if valid
-    if (formFieldsValid()) {
+    if (allFormFieldsValid()) {
       setIsLoading(true);
       try {
         await AuthClient.signUpUser({
@@ -88,11 +90,11 @@ export default function SignupForm() {
 
   return (
     <div className={`mt-6`}>
-      <h1 className={"font-bold leading-7 text-xl uppercase mt-14"}>
+      <h1 className={"font-bold leading-7 text-xl uppercase mt-14 p-5"}>
         Let's get started!
       </h1>
       <div>
-        <h2 className="font-normal leading-7 text-xs">
+        <h2 className="font-normal leading-7 text-xs p-5">
           Fill in the form below to join our community.
         </h2>
       </div>
@@ -110,7 +112,7 @@ export default function SignupForm() {
               maxLength={50}
               onBlur={() => {
                 clearValidationErrors();
-                formFieldsValid();
+                allFormFieldsValid();
               }}
               onChange={(value) => {
                 setFormFieldValues({
@@ -130,7 +132,7 @@ export default function SignupForm() {
               maxLength={50}
               onBlur={() => {
                 clearValidationErrors();
-                formFieldsValid();
+                allFormFieldsValid();
               }}
               onChange={(value) => {
                 setFormFieldValues({
@@ -149,7 +151,7 @@ export default function SignupForm() {
               maxLength={50}
               onBlur={() => {
                 clearValidationErrors();
-                formFieldsValid();
+                allFormFieldsValid();
               }}
               onInputChanged={(value) => {
                 setFormFieldValues({
@@ -168,7 +170,7 @@ export default function SignupForm() {
               maxLength={50}
               onBlur={() => {
                 clearValidationErrors();
-                formFieldsValid();
+                allFormFieldsValid();
               }}
               onInputChanged={(value) => {
                 setFormFieldValues({
@@ -200,7 +202,7 @@ export default function SignupForm() {
           <BasicRoundedButton
             label="Sign up"
             onClick={signUpUser}
-            disabled={isLoading}
+            disabled={isLoading || !allFormFieldsValid(false)}
           />
         </div>
         <div className="mt-12">
