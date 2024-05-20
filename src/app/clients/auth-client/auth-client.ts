@@ -3,8 +3,7 @@ import { signIn } from "next-auth/react";
 // Functions grouped together for authentication related requests (signup, signin, signout)
 export const AuthClient = {
   /**
-   * Sends request to create a user in the system, registering them for the app.
-   * @param param0
+   * Sends request to the backend to create a user.
    */
   async signUpUser({
     username,
@@ -28,6 +27,9 @@ export const AuthClient = {
       throw new Error(response?.message || "Error: Cannot register user");
     }
   },
+  /**
+   * Sends request to the backend to sign in the user and create a nextAuth session
+   */
   signInUser: async ({
     email,
     password,
@@ -40,9 +42,8 @@ export const AuthClient = {
     isRegistering?: boolean;
   }): Promise<{ success: boolean; errorMessage?: string }> => {
     /* 
-    This function handles signin using nextAuth signIn function.
-    There is also logic here to handle the signin flow when the user is registering, as after
-    user has successfully created an account, we can immediately log them in to a session.
+    This function handles signIn using nextAuth, which manages sessions for us.
+    There is logic here to handle the sign in flow differently if the user is registering.
     */
 
     const res = await signIn("credentials", {
