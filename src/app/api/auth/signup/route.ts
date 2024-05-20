@@ -7,8 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   const requestBody = await req.json();
 
-  // We need to validate the request body.
-  // Do it here
+  // TODO: here we can use yup to validate the request body
 
   const { email, password, username } = requestBody;
 
