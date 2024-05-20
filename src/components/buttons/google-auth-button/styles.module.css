@@ -1,0 +1,4 @@
+/* Background color for the signup with google button */
+.signUpWithGoogleButtonColor {
+  background-color: var(--smoke-grey) !important;
+}

@@ -1,20 +1,41 @@
 "use client";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Button, InputAdornment, TextField } from "@mui/material";
-import Image from "next/image";
+import { signupFormValidator } from "@/app/validators/signup/signup-form.validator";
+import { extractValidationErrors } from "@/app/validators/utils/extract-validation-errors/extract-validation-errors";
 import { useState } from "react";
-import styles from "./styles.module.css";
+import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
+import { GoogleAuthButton } from "../buttons/google-auth-button/Google-auth-button";
+import { PasswordInputField } from "../input-fields/password-input-field/Password-input-field";
+import { FormTextInputField } from "../input-fields/text-input-field/Form-text-input-field";
 
 export default function SignupForm() {
-  const [signupFields, setSignupFields] = useState({
+  const [formFieldValues, setFormFieldValues] = useState({
     username: "",
     email: "",
     password1: "",
     password2: "",
   });
 
+  // Keeps track of each field's error state and message
+  const [formFieldErrors, setFormFieldErrors] = useState<
+    Record<string, { error: boolean; message: string }>
+  >({
+    username: { error: false, message: "" },
+    email: { error: false, message: "" },
+    password1: { error: false, message: "" },
+    password2: { error: false, message: "" },
+  });
+
+  const validateFormFields = () => {
+    try {
+      signupFormValidator.validateSync(formFieldValues, { abortEarly: false });
+    } catch (error) {
+      const errors = extractValidationErrors(error);
+      setFormFieldErrors(errors);
+    }
+  };
+
   return (
-    <div className={`${styles.header} mt-6`}>
+    <div className={`mt-6`}>
       <h1 className={"font-bold leading-7 text-xl uppercase"}>
         Let's get started!
       </h1>
@@ -26,27 +47,31 @@ export default function SignupForm() {
       <div className="mt-6">
         <form onSubmit={(e) => e.preventDefault()}>
           <div className="form-elements flex flex-col justify-between gap-y-3 p-5">
-            <input
+            <FormTextInputField
               id="username"
+              name="username"
               type="text"
               placeholder="Username"
-              className="w-full h-12 px-3 faintGreyInputColor"
-              onChange={(e) => {
-                setSignupFields({
-                  ...signupFields,
-                  username: e.target.value,
+              error={formFieldErrors.username?.error}
+              helperText={formFieldErrors.username?.message}
+              onChange={(value) => {
+                setFormFieldValues({
+                  ...formFieldValues,
+                  username: value,
                 });
               }}
             />
-            <input
+            <FormTextInputField
               id="email"
+              name="email"
               type="email"
               placeholder="Email"
-              className="w-full h-12 px-3 faintGreyInputColor"
-              onChange={(e) => {
-                setSignupFields({
-                  ...signupFields,
-                  email: e.target.value,
+              error={formFieldErrors.email?.error}
+              helperText={formFieldErrors.email?.message}
+              onChange={(value) => {
+                setFormFieldValues({
+                  ...formFieldValues,
+                  email: value,
                 });
               }}
             />
@@ -54,9 +79,11 @@ export default function SignupForm() {
               id="password1"
               name="password1"
               placeholder="Enter password"
+              error={formFieldErrors.password1?.error}
+              helperText={formFieldErrors.password1?.message}
               onInputChanged={(value) => {
-                setSignupFields({
-                  ...signupFields,
+                setFormFieldValues({
+                  ...formFieldValues,
                   password1: value,
                 });
               }}
@@ -65,9 +92,11 @@ export default function SignupForm() {
               id="password2"
               name="password2"
               placeholder="Confirm password"
+              error={formFieldErrors.password2?.error}
+              helperText={formFieldErrors.password2?.message}
               onInputChanged={(value) => {
-                setSignupFields({
-                  ...signupFields,
+                setFormFieldValues({
+                  ...formFieldValues,
                   password2: value,
                 });
               }}
@@ -75,52 +104,19 @@ export default function SignupForm() {
           </div>
         </form>
       </div>
-      <div className="text-center  mt-6">
+      <div className="text-center mt-6">
         <div>
-          <Button
-            variant="contained"
-            color="primary"
-            className={`w-full h-12 mt-6 ${styles.submitButton}`}
-            onClick={() => console.log(signupFields)}
-            sx={{
-              textTransform: "none",
-              fontFamily: "Verdana, sans-serif",
-              fontWeight: "700",
-              borderRadius: "60px",
-              width: "315px",
-              boxShadow: "none",
-            }}
-          >
-            Sign Up
-          </Button>
+          <BasicRoundedButton label="Sign up" onClick={validateFormFields} />
         </div>
         <div className="mt-12">
-          <Button
-            variant="contained"
-            color="secondary"
-            className={`w-full h-12 signUpWithGoogleButtonColor`}
-            startIcon={
-              <Image
-                src="/images/google-auth-logo/google-auth-logo.svg"
-                alt="google"
-                width={16}
-                height={16}
-              />
-            }
-            sx={{
-              textTransform: "none",
-              fontFamily: "Verdana, sans-serif",
-              fontWeight: "700",
-              borderRadius: "60px",
-              width: "315px",
-              boxShadow: "none",
-            }}
-          >
-            Or Sign up with Google
-          </Button>
+          <GoogleAuthButton
+            onClick={() => console.log("Google auth button clicked")}
+            authType="signup"
+          />
         </div>
       </div>
       <div className="ml-10 mt-6 flex justify-center">
+        {/* TODO: This can be reused for signin? */}
         <footer>
           <h1 className="font-normal leading-7 text-xs">
             Already have an account?{" "}
@@ -136,56 +132,3 @@ export default function SignupForm() {
     </div>
   );
 }
-
-// This is a MUI input field, making it easier to add the input adornments
-const PasswordInputField = ({
-  id,
-  name,
-  placeholder,
-  onInputChanged,
-}: {
-  id: string;
-  name: string;
-  placeholder: string;
-  onInputChanged?: (value: string) => void;
-}) => {
-  const [showPassword, setShowPassword] = useState<boolean>(false); // toggles whether the password is visible in a text input field
-
-  return (
-    <TextField
-      id={id}
-      name={name}
-      type={showPassword ? "text" : "password"}
-      placeholder={placeholder}
-      className="w-full px-3 faintGreyInputColor"
-      onChange={(e) => onInputChanged && onInputChanged(e.target.value)}
-      sx={{
-        marginTop: "4px",
-        marginBottom: "4px",
-        "&&& input": {
-          height: "16px",
-        },
-        "& fieldset": { border: "none" }, // Removes the default border from MaterialUi TextField
-        "&:focus-within fieldset, &:focus-visible fieldset": {
-          border: "1.9px solid black !important", // Adds a black border when the input is focused
-        },
-      }}
-      InputProps={{
-        endAdornment: (
-          <InputAdornment position="end">
-            <button
-              className="focus:outline-none"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? (
-                <Visibility sx={{ height: "16px", width: "auto" }} />
-              ) : (
-                <VisibilityOff sx={{ height: "16px", width: "auto" }} />
-              )}
-            </button>
-          </InputAdornment>
-        ),
-      }}
-    />
-  );
-};

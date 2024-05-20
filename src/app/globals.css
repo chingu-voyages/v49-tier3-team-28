@@ -43,12 +43,13 @@ body {
   color: var(--light-blue-green-teal);
 }
 
+/* Background color of most buttons */
+.defaultButtonColor {
+  background-color: var(--orange) !important;
+}
+
 /* Background color of text input fields */
 .faintGreyInputColor {
   background-color: var(--light-faint-grey);
 }
 
-/* Background color for the signup with google button */
-.signUpWithGoogleButtonColor {
-  background-color: var(--smoke-grey) !important;
-}

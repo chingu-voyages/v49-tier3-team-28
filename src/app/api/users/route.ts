@@ -13,16 +13,8 @@ export default async function handler(
   switch (method) {
     case "GET":
       try {
-        const users = await UserRepository.find({}); // Fetch all users
+        const users = await UserRepository.find({}).select("-password"); // Fetch all users
         res.status(200).json({ success: true, data: users });
-      } catch (error) {
-        res.status(400).json({ success: false });
-      }
-      break;
-    case "POST":
-      try {
-        const user = await UserRepository.create(req.body); // Create a new user
-        res.status(201).json({ success: true, data: user });
       } catch (error) {
         res.status(400).json({ success: false });
       }
