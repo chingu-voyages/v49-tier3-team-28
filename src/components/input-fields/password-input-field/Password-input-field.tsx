@@ -12,6 +12,8 @@ export const PasswordInputField = ({
   error,
   helperText,
   disabled,
+  onBlur,
+  maxLength,
 }: {
   id: string;
   name: string;
@@ -20,6 +22,8 @@ export const PasswordInputField = ({
   helperText?: string;
   onInputChanged?: (value: string) => void;
   disabled?: boolean;
+  onBlur?: () => void;
+  maxLength?: number;
 }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false); // toggles whether the password is visible in a text input field
 
@@ -34,6 +38,8 @@ export const PasswordInputField = ({
       error={error}
       helperText={helperText}
       disabled={disabled}
+      onBlur={onBlur}
+      inputProps={{ maxLength }}
       sx={{
         marginTop: "4px",
         marginBottom: "4px",

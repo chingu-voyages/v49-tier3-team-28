@@ -17,15 +17,17 @@ export default function SignupForm() {
     password2: "",
   });
 
-  // Keeps track of each field's error state and message
-  const [formFieldErrors, setFormFieldErrors] = useState<
-    Record<string, { error: boolean; message: string }>
-  >({
+  const formFieldErrorsInitialState = {
     username: { error: false, message: "" },
     email: { error: false, message: "" },
     password1: { error: false, message: "" },
     password2: { error: false, message: "" },
-  });
+  };
+
+  // Keeps track of each field's error state and message
+  const [formFieldErrors, setFormFieldErrors] = useState<
+    Record<string, { error: boolean; message: string }>
+  >(formFieldErrorsInitialState);
 
   // If there are any errors with API calls or other errors, this will be set
   const [appError, setAppError] = useState({
@@ -45,6 +47,10 @@ export default function SignupForm() {
       return false;
     }
     return true;
+  };
+
+  const clearValidationErrors = () => {
+    setFormFieldErrors(formFieldErrorsInitialState);
   };
 
   const signUpUser = async () => {
@@ -101,6 +107,11 @@ export default function SignupForm() {
               error={formFieldErrors.username?.error}
               helperText={formFieldErrors.username?.message}
               disabled={isLoading}
+              maxLength={50}
+              onBlur={() => {
+                clearValidationErrors();
+                formFieldsValid();
+              }}
               onChange={(value) => {
                 setFormFieldValues({
                   ...formFieldValues,
@@ -116,6 +127,11 @@ export default function SignupForm() {
               error={formFieldErrors.email?.error}
               helperText={formFieldErrors.email?.message}
               disabled={isLoading}
+              maxLength={50}
+              onBlur={() => {
+                clearValidationErrors();
+                formFieldsValid();
+              }}
               onChange={(value) => {
                 setFormFieldValues({
                   ...formFieldValues,
@@ -130,6 +146,11 @@ export default function SignupForm() {
               error={formFieldErrors.password1?.error}
               helperText={formFieldErrors.password1?.message}
               disabled={isLoading}
+              maxLength={50}
+              onBlur={() => {
+                clearValidationErrors();
+                formFieldsValid();
+              }}
               onInputChanged={(value) => {
                 setFormFieldValues({
                   ...formFieldValues,
@@ -144,6 +165,11 @@ export default function SignupForm() {
               error={formFieldErrors.password2?.error}
               helperText={formFieldErrors.password2?.message}
               disabled={isLoading}
+              maxLength={50}
+              onBlur={() => {
+                clearValidationErrors();
+                formFieldsValid();
+              }}
               onInputChanged={(value) => {
                 setFormFieldValues({
                   ...formFieldValues,

@@ -7,9 +7,11 @@ interface FormTextInputFieldProps {
   name: string;
   placeholder?: string;
   onChange?: (value: string) => void;
+  onBlur?: () => void;
   helperText?: string;
   error?: boolean;
   disabled?: boolean;
+  maxLength?: number;
 }
 
 export function FormTextInputField({
@@ -21,6 +23,8 @@ export function FormTextInputField({
   helperText,
   error,
   disabled,
+  onBlur,
+  maxLength,
 }: FormTextInputFieldProps) {
   return (
     <TextField
@@ -33,6 +37,8 @@ export function FormTextInputField({
       error={error}
       onChange={(e) => onChange && onChange(e.target.value)}
       disabled={disabled}
+      onBlur={onBlur}
+      inputProps={{ maxLength }}
       sx={{
         marginTop: "4px",
         marginBottom: "4px",
