@@ -65,7 +65,7 @@ export default function SignupForm() {
         });
       } catch (error: any) {
         // If there is an error, set the error state and abort
-        setAppError({ error: true, message: error });
+        setAppError({ error: true, message: error.toString() });
         setIsLoading(false);
         return;
       }
