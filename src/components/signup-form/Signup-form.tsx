@@ -57,34 +57,34 @@ export default function SignupForm() {
 
   const signUpUser = async () => {
     // Validate the form fields and register the user if valid
-    if (allFormFieldsValid()) {
-      setIsLoading(true);
-      try {
-        await AuthClient.signUpUser({
-          username: formFieldValues.username,
-          email: formFieldValues.email,
-          password: formFieldValues.password1,
-        });
-      } catch (error: any) {
-        // If there is an error, set the error state and abort
-        setAppError({ error: true, message: error.toString() });
-        setIsLoading(false);
-        return;
-      }
+    if (!allFormFieldsValid()) return;
 
-      // If there was no error, sign the user in using the isRegistering flag
-      try {
-        await AuthClient.signInUser({
-          email: formFieldValues.email,
-          password: formFieldValues.password1,
-          isRegistering: true,
-          callbackUrl: "/", // TODO: Update this, user should be redirected to 'my sets page' as per the trello card?
-        });
-      } catch (error: any) {
-        setAppError({ error: true, message: error });
-      } finally {
-        setIsLoading(false);
-      }
+    setIsLoading(true);
+    try {
+      await AuthClient.signUpUser({
+        username: formFieldValues.username,
+        email: formFieldValues.email,
+        password: formFieldValues.password1,
+      });
+    } catch (error: any) {
+      // If there is an error, set the error state and abort
+      setAppError({ error: true, message: error.toString() });
+      setIsLoading(false);
+      return;
+    }
+
+    // If there was no error, sign the user in using the isRegistering flag
+    try {
+      await AuthClient.signInUser({
+        email: formFieldValues.email,
+        password: formFieldValues.password1,
+        isRegistering: true,
+        callbackUrl: "/", // TODO: Update this, user should be redirected to 'my sets page' as per the trello card?
+      });
+    } catch (error: any) {
+      setAppError({ error: true, message: error });
+    } finally {
+      setIsLoading(false);
     }
   };
 
