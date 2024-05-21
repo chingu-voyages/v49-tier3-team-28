@@ -1,0 +1,182 @@
+"use client";
+
+import { AuthClient } from "@/app/clients/auth-client/auth-client";
+import { signinFormValidator } from "@/app/validators/signin/signin-form.validator";
+import { extractValidationErrors } from "@/app/validators/utils/extract-validation-errors/extract-validation-errors";
+import { CircularProgress } from "@mui/material";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
+import { GoogleAuthButton } from "../buttons/google-auth-button/Google-auth-button";
+import { PasswordInputField } from "../input-fields/password-input-field/Password-input-field";
+import { FormTextInputField } from "../input-fields/text-input-field/Form-text-input-field";
+
+export function SigninForm() {
+  const [formFieldValues, setFormFieldValues] = useState({
+    email: "",
+    password: "",
+  });
+
+  const formFieldErrorsInitialState = {
+    email: { error: false, message: "" },
+    password: { error: false, message: "" },
+  };
+
+  const [formFieldErrors, setFormFieldErrors] = useState<
+    Record<string, { error: boolean; message: string }>
+  >(formFieldErrorsInitialState);
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [appError, setAppError] = useState({
+    error: false,
+    message: "",
+  });
+
+  const router = useRouter();
+
+  const allFormFieldsValid = (displayErrors: boolean = true): boolean => {
+    // TODO: We may be able to extract this logic so it can be used in signin?
+    try {
+      signinFormValidator.validateSync(formFieldValues, { abortEarly: false });
+    } catch (error) {
+      if (displayErrors) {
+        const errors = extractValidationErrors(error);
+        setFormFieldErrors(errors);
+      }
+      return false;
+    }
+    return true;
+  };
+
+  const clearValidationErrors = () => {
+    setFormFieldErrors(formFieldErrorsInitialState);
+  };
+
+  const signInUser = async () => {
+    if (allFormFieldsValid()) {
+      setIsLoading(true);
+
+      const res = await AuthClient.signInUser({
+        email: formFieldValues.email,
+        password: formFieldValues.password,
+        callbackUrl: "/profile", // TODO: what is the callback url?
+        redirect: false,
+      });
+
+      // If there is an error, set the error state and abort
+      if (!res.success) {
+        setAppError({ error: true, message: res.errorMessage! });
+        setIsLoading(false);
+        return;
+      }
+
+      // If all is good redirect to the redirect url
+      router.push(res.redirectUrl!);
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="mt-6">
+      <h1 className={"font-bold leading-7 text-xl uppercase mt-14 p-5"}>
+        Welcome back!
+      </h1>
+      <div>
+        <h2 className="font-normal leading-7 text-xs p-5">
+          Sign in to continue your journey
+        </h2>
+      </div>
+      <div className="mt-6">
+        <form onSubmit={(e) => e.preventDefault()}>
+          <div className="form-elements flex flex-col justify-between gap-y-3 p-5">
+            <FormTextInputField
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Email"
+              error={formFieldErrors.email?.error}
+              helperText={formFieldErrors.email?.message}
+              disabled={isLoading}
+              maxLength={50}
+              onBlur={() => {
+                clearValidationErrors();
+                allFormFieldsValid();
+              }}
+              onChange={(value) => {
+                setFormFieldValues({
+                  ...formFieldValues,
+                  email: value,
+                });
+              }}
+            />
+            <PasswordInputField
+              id="password"
+              name="password"
+              placeholder="Enter password"
+              error={formFieldErrors.password?.error}
+              helperText={formFieldErrors.password?.message}
+              disabled={isLoading}
+              maxLength={50}
+              onBlur={() => {
+                clearValidationErrors();
+                allFormFieldsValid();
+              }}
+              onInputChanged={(value) => {
+                setFormFieldValues({
+                  ...formFieldValues,
+                  password: value,
+                });
+              }}
+            />
+            {isLoading && (
+              <div className="flex justify-center">
+                <CircularProgress
+                  sx={{
+                    color: "var(--orange)",
+                  }}
+                />
+              </div>
+            )}
+            {/* API errors */}
+            {appError.error && (
+              <div className="flex justify-center text-red-500 text-sm font-normal">
+                {appError.message}
+              </div>
+            )}
+          </div>
+        </form>
+      </div>
+      <div className="text-center mt-6">
+        <div>
+          <BasicRoundedButton
+            label="Sign in"
+            onClick={signInUser}
+            disabled={isLoading || !allFormFieldsValid(false)}
+          />
+        </div>
+        <div className="mt-12">
+          <GoogleAuthButton
+            onClick={() => console.log("Google auth button clicked")}
+            authType="signin"
+            disabled={isLoading}
+          />
+        </div>
+      </div>
+      <div className="ml-10 mt-6 flex justify-center">
+        {/* TODO: This can be reused for signin? */}
+        <footer>
+          <h1 className="font-normal leading-7 text-xs">
+            New to our site?{" "}
+            <a
+              href="/login"
+              className="lightBlueGreenTealHyperlink font-bold text-xs"
+            >
+              Sign up now
+            </a>
+          </h1>
+        </footer>
+      </div>
+    </div>
+  );
+}
