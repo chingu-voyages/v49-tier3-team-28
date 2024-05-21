@@ -79,7 +79,7 @@ export default function SignupForm() {
         email: formFieldValues.email,
         password: formFieldValues.password1,
         isRegistering: true,
-        callbackUrl: "/", // TODO: Update this, user should be redirected to 'my sets page' as per the trello card?
+        callbackUrl: "/home", // User is directed to the landing (home) page
       });
     } catch (error: any) {
       setAppError({ error: true, message: error });
