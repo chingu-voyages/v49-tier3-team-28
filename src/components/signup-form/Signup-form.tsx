@@ -38,7 +38,6 @@ export default function SignupForm() {
   const [isLoading, setIsLoading] = useState(false);
 
   const allFormFieldsValid = (displayErrors: boolean = true): boolean => {
-    // TODO: We may be able to extract this logic so it can be used in signin?
     try {
       signupFormValidator.validateSync(formFieldValues, { abortEarly: false });
     } catch (error) {
@@ -214,7 +213,6 @@ export default function SignupForm() {
         </div>
       </div>
       <div className="ml-10 mt-6 flex justify-center">
-        {/* TODO: This can be reused for signin? */}
         <footer>
           <h1 className="font-normal leading-7 text-xs">
             Already have an account?{" "}

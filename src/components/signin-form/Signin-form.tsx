@@ -190,7 +190,6 @@ export function SigninForm() {
         </div>
       </div>
       <div className="ml-10 mt-6 flex justify-center">
-        {/* TODO: This can be reused for signin? */}
         <footer>
           <h1 className="font-normal leading-7 text-xs">
             New to our site?{" "}
