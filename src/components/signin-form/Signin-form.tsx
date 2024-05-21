@@ -3,7 +3,8 @@
 import { AuthClient } from "@/app/clients/auth-client/auth-client";
 import { signinFormValidator } from "@/app/validators/signin/signin-form.validator";
 import { extractValidationErrors } from "@/app/validators/utils/extract-validation-errors/extract-validation-errors";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, FormControlLabel, Switch } from "@mui/material";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
@@ -36,7 +37,6 @@ export function SigninForm() {
   const router = useRouter();
 
   const allFormFieldsValid = (displayErrors: boolean = true): boolean => {
-    // TODO: We may be able to extract this logic so it can be used in signin?
     try {
       signinFormValidator.validateSync(formFieldValues, { abortEarly: false });
     } catch (error) {
@@ -54,27 +54,27 @@ export function SigninForm() {
   };
 
   const signInUser = async () => {
-    if (allFormFieldsValid()) {
-      setIsLoading(true);
+    if (!allFormFieldsValid()) return;
 
-      const res = await AuthClient.signInUser({
-        email: formFieldValues.email,
-        password: formFieldValues.password,
-        callbackUrl: "/profile", // TODO: what is the callback url?
-        redirect: false,
-      });
+    setIsLoading(true);
 
-      // If there is an error, set the error state and abort
-      if (!res.success) {
-        setAppError({ error: true, message: res.errorMessage! });
-        setIsLoading(false);
-        return;
-      }
+    const res = await AuthClient.signInUser({
+      email: formFieldValues.email,
+      password: formFieldValues.password,
+      callbackUrl: "/profile", // TODO: what is the callback url?
+      redirect: false,
+    });
 
-      // If all is good redirect to the redirect url
-      router.push(res.redirectUrl!);
+    // If there is an error, set the error state and abort
+    if (!res.success) {
+      setAppError({ error: true, message: res.errorMessage! });
       setIsLoading(false);
+      return;
     }
+
+    // If all is good redirect to the redirect url
+    router.push(res.redirectUrl!);
+    setIsLoading(false);
   };
 
   return (
@@ -129,6 +129,32 @@ export function SigninForm() {
                 });
               }}
             />
+            {/* Remember me toggle and forgot password link */}
+            <div className="flex justify-between">
+              <div>
+                <FormControlLabel
+                  sx={{
+                    // This customization is needed to style the switch's label text
+                    "& .MuiTypography-root": {
+                      fontSize: "12px",
+                      lineHeight: "20px",
+                    },
+                  }}
+                  control={
+                    <Switch inputProps={{ "aria-label": "Remember me" }} />
+                  }
+                  label="Remember me"
+                />
+              </div>
+              <div className="self-center">
+                <Link
+                  href="/forgot-password"
+                  className="lightBlueGreenTealHyperlink leading-5 font-normal text-xs"
+                >
+                  Forgot password?
+                </Link>
+              </div>
+            </div>
             {isLoading && (
               <div className="flex justify-center">
                 <CircularProgress
@@ -168,12 +194,12 @@ export function SigninForm() {
         <footer>
           <h1 className="font-normal leading-7 text-xs">
             New to our site?{" "}
-            <a
+            <Link
               href="/login"
               className="lightBlueGreenTealHyperlink font-bold text-xs"
             >
               Sign up now
-            </a>
+            </Link>
           </h1>
         </footer>
       </div>
