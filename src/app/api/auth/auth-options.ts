@@ -1,4 +1,4 @@
-import dbConnect from "@/lib/mongodb";
+import dbConnect from "@/lib/mongodb/mongodb";
 import { UserRepository } from "@/schemas/user.schema";
 import { compare } from "bcrypt";
 import { NextAuthOptions } from "next-auth";
