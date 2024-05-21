@@ -1,6 +1,6 @@
 import { UserRepository } from "@/schemas/user.schema";
 import { NextApiRequest, NextApiResponse } from "next";
-import dbConnect from "../../../lib/mongodb";
+import dbConnect from "../../../lib/mongodb/mongodb";
 
 export default async function handler(
   req: NextApiRequest,
