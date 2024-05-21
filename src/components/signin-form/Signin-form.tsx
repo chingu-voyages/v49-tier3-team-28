@@ -134,7 +134,7 @@ export function SigninForm() {
               <div>
                 <FormControlLabel
                   sx={{
-                    // This customization is needed to style the switch's label text
+                    // This materialUI customization is needed to style the switch's label text
                     "& .MuiTypography-root": {
                       fontSize: "12px",
                       lineHeight: "20px",

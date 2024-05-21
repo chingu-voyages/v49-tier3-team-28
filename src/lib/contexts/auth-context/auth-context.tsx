@@ -8,7 +8,7 @@ type UpdateSession = (data?: any) => Promise<Session | null>;
 interface AuthContextInterface {
   status: "unauthenticated" | "loading" | "authenticated";
   session: Session | null;
-  update: UpdateSession | null;
+  update: UpdateSession | null; //  This is used when some aspect of the session needs to be updated (ex. the user updates their username)
 }
 
 // Creating a context with initialState
@@ -20,7 +20,6 @@ const AuthenticationContext = React.createContext<AuthContextInterface>({
 
 // This is the context provider that will wrap around our app in layout.tsx
 // This will allow us to access the nextAuth session object in any component (using the useAuthSession hook)
-// ie. to determine if a user has a valid session etc.
 export const AuthSessionProvider = ({
   children,
 }: {
