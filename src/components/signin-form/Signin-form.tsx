@@ -1,45 +1,44 @@
 "use client";
+
 import { AuthClient } from "@/app/clients/auth-client/auth-client";
-import { signupFormValidator } from "@/app/validators/signup/signup-form.validator";
+import { signinFormValidator } from "@/app/validators/signin/signin-form.validator";
 import { extractValidationErrors } from "@/app/validators/utils/extract-validation-errors/extract-validation-errors";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, FormControlLabel, Switch } from "@mui/material";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
 import { GoogleAuthButton } from "../buttons/google-auth-button/Google-auth-button";
 import { PasswordInputField } from "../input-fields/password-input-field/Password-input-field";
 import { FormTextInputField } from "../input-fields/text-input-field/Form-text-input-field";
 
-export default function SignupForm() {
+export function SigninForm() {
   const [formFieldValues, setFormFieldValues] = useState({
-    username: "",
     email: "",
-    password1: "",
-    password2: "",
+    password: "",
   });
 
   const formFieldErrorsInitialState = {
-    username: { error: false, message: "" },
     email: { error: false, message: "" },
-    password1: { error: false, message: "" },
-    password2: { error: false, message: "" },
+    password: { error: false, message: "" },
   };
 
-  // Keeps track of each field's error state and message
   const [formFieldErrors, setFormFieldErrors] = useState<
     Record<string, { error: boolean; message: string }>
   >(formFieldErrorsInitialState);
 
-  // If there are any errors with API calls or other errors, this will be set
+  const [isLoading, setIsLoading] = useState(false);
+
   const [appError, setAppError] = useState({
     error: false,
     message: "",
   });
 
-  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const allFormFieldsValid = (displayErrors: boolean = true): boolean => {
     try {
-      signupFormValidator.validateSync(formFieldValues, { abortEarly: false });
+      signinFormValidator.validateSync(formFieldValues, { abortEarly: false });
     } catch (error) {
       if (displayErrors) {
         const errors = extractValidationErrors(error);
@@ -54,72 +53,43 @@ export default function SignupForm() {
     setFormFieldErrors(formFieldErrorsInitialState);
   };
 
-  const signUpUser = async () => {
-    // Validate the form fields and register the user if valid
+  const signInUser = async () => {
     if (!allFormFieldsValid()) return;
 
     setIsLoading(true);
-    try {
-      await AuthClient.signUpUser({
-        username: formFieldValues.username,
-        email: formFieldValues.email,
-        password: formFieldValues.password1,
-      });
-    } catch (error: any) {
-      // If there is an error, set the error state and abort
-      setAppError({ error: true, message: error.toString() });
+
+    const res = await AuthClient.signInUser({
+      email: formFieldValues.email,
+      password: formFieldValues.password,
+      callbackUrl: "/home", // User is redirected to the landing (home) page once they are signed in.
+      redirect: false,
+    });
+
+    // If there is an error, set the error state and abort
+    if (!res.success) {
+      setAppError({ error: true, message: res.errorMessage! });
       setIsLoading(false);
       return;
     }
 
-    // If there was no error, sign the user in using the isRegistering flag
-    try {
-      await AuthClient.signInUser({
-        email: formFieldValues.email,
-        password: formFieldValues.password1,
-        isRegistering: true,
-        callbackUrl: "/home", // User is directed to the landing (home) page
-      });
-    } catch (error: any) {
-      setAppError({ error: true, message: error });
-    } finally {
-      setIsLoading(false);
-    }
+    // If all is good redirect to the redirect url
+    router.push(res.redirectUrl!);
+    setIsLoading(false);
   };
 
   return (
-    <div className={`mt-6`}>
+    <div className="mt-6">
       <h1 className={"font-bold leading-7 text-xl uppercase mt-14 p-5"}>
-        Let's get started!
+        Welcome back!
       </h1>
       <div>
         <h2 className="font-normal leading-7 text-xs p-5">
-          Fill in the form below to join our community.
+          Sign in to continue your journey
         </h2>
       </div>
       <div className="mt-6">
         <form onSubmit={(e) => e.preventDefault()}>
           <div className="form-elements flex flex-col justify-between gap-y-3 p-5">
-            <FormTextInputField
-              id="username"
-              name="username"
-              type="text"
-              placeholder="Username"
-              error={formFieldErrors.username?.error}
-              helperText={formFieldErrors.username?.message}
-              disabled={isLoading}
-              maxLength={50}
-              onBlur={() => {
-                clearValidationErrors();
-                allFormFieldsValid();
-              }}
-              onChange={(value) => {
-                setFormFieldValues({
-                  ...formFieldValues,
-                  username: value,
-                });
-              }}
-            />
             <FormTextInputField
               id="email"
               name="email"
@@ -141,11 +111,11 @@ export default function SignupForm() {
               }}
             />
             <PasswordInputField
-              id="password1"
-              name="password1"
+              id="password"
+              name="password"
               placeholder="Enter password"
-              error={formFieldErrors.password1?.error}
-              helperText={formFieldErrors.password1?.message}
+              error={formFieldErrors.password?.error}
+              helperText={formFieldErrors.password?.message}
               disabled={isLoading}
               maxLength={50}
               onBlur={() => {
@@ -155,29 +125,36 @@ export default function SignupForm() {
               onInputChanged={(value) => {
                 setFormFieldValues({
                   ...formFieldValues,
-                  password1: value,
+                  password: value,
                 });
               }}
             />
-            <PasswordInputField
-              id="password2"
-              name="password2"
-              placeholder="Confirm password"
-              error={formFieldErrors.password2?.error}
-              helperText={formFieldErrors.password2?.message}
-              disabled={isLoading}
-              maxLength={50}
-              onBlur={() => {
-                clearValidationErrors();
-                allFormFieldsValid();
-              }}
-              onInputChanged={(value) => {
-                setFormFieldValues({
-                  ...formFieldValues,
-                  password2: value,
-                });
-              }}
-            />
+            {/* Remember me toggle and forgot password link */}
+            <div className="flex justify-between">
+              <div>
+                <FormControlLabel
+                  sx={{
+                    // This materialUI customization is needed to style the switch's label text
+                    "& .MuiTypography-root": {
+                      fontSize: "12px",
+                      lineHeight: "20px",
+                    },
+                  }}
+                  control={
+                    <Switch inputProps={{ "aria-label": "Remember me" }} />
+                  }
+                  label="Remember me"
+                />
+              </div>
+              <div className="self-center">
+                <Link
+                  href="/forgot-password"
+                  className="lightBlueGreenTealHyperlink leading-5 font-normal text-xs"
+                >
+                  Forgot password?
+                </Link>
+              </div>
+            </div>
             {isLoading && (
               <div className="flex justify-center">
                 <CircularProgress
@@ -199,15 +176,15 @@ export default function SignupForm() {
       <div className="text-center mt-6">
         <div>
           <BasicRoundedButton
-            label="Sign up"
-            onClick={signUpUser}
+            label="Sign in"
+            onClick={signInUser}
             disabled={isLoading || !allFormFieldsValid(false)}
           />
         </div>
         <div className="mt-12">
           <GoogleAuthButton
             onClick={() => console.log("Google auth button clicked")}
-            authType="signup"
+            authType="signin"
             disabled={isLoading}
           />
         </div>
@@ -215,13 +192,13 @@ export default function SignupForm() {
       <div className="ml-10 mt-6 flex justify-center">
         <footer>
           <h1 className="font-normal leading-7 text-xs">
-            Already have an account?{" "}
-            <a
+            New to our site?{" "}
+            <Link
               href="/login"
               className="lightBlueGreenTealHyperlink font-bold text-xs"
             >
-              Login here
-            </a>
+              Sign up now
+            </Link>
           </h1>
         </footer>
       </div>

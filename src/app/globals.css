@@ -4,6 +4,8 @@
 /* This is for the Futura font taken from Adobe Typekit */
 @import url('https://use.typekit.net/eoe3hsu.css'); 
 
+/* This is the Rowdies font from google fonts */
+@import url('https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap');
 :root {
   font-family: futura-pt, sans-serif;
   margin: 0;
@@ -17,6 +19,7 @@
   --light-blue-green-teal: #00bb9a;
   --light-faint-grey: #F2F2F2;
   --light-dark-grey: #808080;
+  --white: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {

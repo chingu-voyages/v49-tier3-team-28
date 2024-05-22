@@ -1,4 +1,4 @@
-import dbConnect from "@/lib/mongodb";
+import dbConnect from "@/lib/mongodb/mongodb";
 import { UserRepository } from "@/schemas/user.schema";
 import { compare } from "bcrypt";
 import { NextAuthOptions } from "next-auth";
@@ -59,7 +59,6 @@ export const authOptions: NextAuthOptions = {
 
         const user = await UserRepository.findOne({
           email: credentials?.email,
-          password: credentials?.password,
         });
 
         if (!user) return null;
@@ -79,7 +78,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   pages: {
-    signIn: "/auth/signin",
+    signIn: "/signin",
   },
 
   session: {

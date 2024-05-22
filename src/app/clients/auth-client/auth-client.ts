@@ -35,12 +35,18 @@ export const AuthClient = {
     password,
     callbackUrl,
     isRegistering = false,
+    redirect = true,
   }: {
     email: string;
     password: string;
     callbackUrl?: string;
     isRegistering?: boolean;
-  }): Promise<{ success: boolean; errorMessage?: string }> => {
+    redirect?: boolean;
+  }): Promise<{
+    success: boolean;
+    errorMessage?: string;
+    redirectUrl?: string;
+  }> => {
     /* 
     This function handles signIn using nextAuth, which manages sessions for us.
     There is logic here to handle the sign in flow differently if the user is registering.
@@ -50,6 +56,7 @@ export const AuthClient = {
       email,
       password,
       callbackUrl: callbackUrl,
+      redirect: redirect,
     });
 
     if (res === null) {
@@ -63,7 +70,7 @@ export const AuthClient = {
     }
 
     // This is to handle basic sign in
-    if (res?.ok) return { success: true };
+    if (res?.ok) return { success: true, redirectUrl: res.url! };
     return {
       success: false,
       errorMessage: "Please check your credentials and try again",
