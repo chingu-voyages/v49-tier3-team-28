@@ -1,8 +1,6 @@
 "use client";
-import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
-import { Link } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import moduleStyles from "../home-page.module.css";
@@ -31,7 +29,7 @@ export default function CreateLog() {
   const handleSelectExercise = (exercise) => {
     setSelectedExercises((prev) => [
       ...prev,
-      { ...exercise, sets: [{ reps: "", weight: "" }] },
+      { ...exercise, sets: [{ reps: 0, weight: 0 }] },
     ]);
     setSearchInput(""); // Clear search input after selection
     setSearchResults([]); // Clear search results after selection
@@ -39,7 +37,7 @@ export default function CreateLog() {
 
   const handleAddSet = (index) => {
     const newSelectedExercises = [...selectedExercises];
-    newSelectedExercises[index].sets.push({ reps: "", weight: "" });
+    newSelectedExercises[index].sets.push({ reps: 0, weight: 0 });
     setSelectedExercises(newSelectedExercises);
   };
 
@@ -54,6 +52,39 @@ export default function CreateLog() {
     // Remove the set at setIndex from the selected exercise
     newSelectedExercises[index].sets.splice(setIndex, 1);
     setSelectedExercises(newSelectedExercises);
+  };
+
+  const handleSaveLog = () => {
+    // Create an array to store logs for each exercise
+    const logData = [];
+
+    // Loop through each selected exercise
+    selectedExercises.forEach((exercise) => {
+      const exerciseLog = {
+        exercise: exercise.label,
+        sets: [],
+      };
+
+      // Loop through each set of the exercise
+      exercise.sets.forEach((set, setIndex) => {
+        const setLog = {
+          setNumber: setIndex + 1, // Set number starts from 1
+          weight: set.weight,
+          unit: "lbs", // Assuming the default unit is pounds
+          reps: set.reps,
+        };
+        exerciseLog.sets.push(setLog);
+      });
+
+      // Push exercise log to the main log data array
+      logData.push(exerciseLog);
+    });
+
+    // Convert logData to JSON format
+    const jsonData = JSON.stringify(logData);
+
+    // Send jsonData to backend for storage in the database
+    console.log(jsonData);
   };
 
   if (status === "unauthenticated") {
@@ -167,12 +198,14 @@ export default function CreateLog() {
           </div>
         ))}
       </div>
-
       {/* Save Button */}
       <div className="flex flex-col gap-y-9">
-        <Link href="/home">
-          <BasicRoundedButton label="Save Your Log" />
-        </Link>
+        <button
+          onClick={handleSaveLog}
+          className="p-2 border rounded bg-green-500 text-white"
+        >
+          Save Your Log
+        </button>
       </div>
     </div>
   );
