@@ -7,7 +7,9 @@ interface Set {
 }
 
 // Define the Exercise type
-interface Exercise {
+interface ExerciseEntry extends Exercise { 
+  sets: Set[];
+}
   id: number;
   name: string;
   label: string;
