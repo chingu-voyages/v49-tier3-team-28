@@ -78,16 +78,13 @@ export default function CreateLog() {
       },
     ];
 
-    // Create userSchema
-    const user = {
-      username: "exampleUser",
-      password: "examplePassword",
-      email: "user@example.com",
+    const formData = {
+      userId: session?.user?._id,
       sessions: sessions,
     };
 
     // Convert userSchema to JSON format
-    const jsonData = JSON.stringify(user);
+    const jsonData = JSON.stringify(formData);
 
     // Log the JSON data
     console.log(jsonData);
