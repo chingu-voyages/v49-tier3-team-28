@@ -11,12 +11,10 @@ export default function CreateLog() {
   const { status } = useAuthSession(); // status, session and update are available, see auth-context.tsx
   const router = useRouter();
 
-  // State for search input, search results, and selected exercises
   const [searchInput, setSearchInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [selectedExercises, setSelectedExercises] = useState([]);
 
-  // Convert ExercisesDictionary to an array
   const exercisesArray = Object.values(ExercisesDictionary);
 
   useEffect(() => {
@@ -30,14 +28,34 @@ export default function CreateLog() {
     }
   }, [searchInput]);
 
-  // Function to handle selecting an exercise
   const handleSelectExercise = (exercise) => {
-    setSelectedExercises((prev) => [...prev, exercise]);
+    setSelectedExercises((prev) => [
+      ...prev,
+      { ...exercise, sets: [{ reps: "", weight: "" }] },
+    ]);
     setSearchInput(""); // Clear search input after selection
     setSearchResults([]); // Clear search results after selection
   };
 
-  // Users who are not authenticated will be redirected to the sign in page.
+  const handleAddSet = (index) => {
+    const newSelectedExercises = [...selectedExercises];
+    newSelectedExercises[index].sets.push({ reps: "", weight: "" });
+    setSelectedExercises(newSelectedExercises);
+  };
+
+  const handleSetChange = (index, setIndex, field, value) => {
+    const newSelectedExercises = [...selectedExercises];
+    newSelectedExercises[index].sets[setIndex][field] = value;
+    setSelectedExercises(newSelectedExercises);
+  };
+
+  const handleDeleteSet = (index, setIndex) => {
+    const newSelectedExercises = [...selectedExercises];
+    // Remove the set at setIndex from the selected exercise
+    newSelectedExercises[index].sets.splice(setIndex, 1);
+    setSelectedExercises(newSelectedExercises);
+  };
+
   if (status === "unauthenticated") {
     router.replace("/signin");
     return null; // Ensure the component does not render until redirection
@@ -79,11 +97,73 @@ export default function CreateLog() {
       </div>
 
       {/* Selected Exercises */}
-      <div className="flex flex-col gap-y-9">
+      <div className="flex flex-col gap-y-9 w-full px-4">
         <h3>Selected Exercises:</h3>
-        {selectedExercises.map((exercise) => (
-          <div key={exercise.id} className="p-2 border rounded">
-            {exercise.label}
+        {selectedExercises.map((exercise, index) => (
+          <div key={exercise.id} className="p-2 border rounded mb-4">
+            <h4>{exercise.label}</h4>
+            <table className="w-full border-collapse">
+              <thead>
+                <tr>
+                  <th className="border p-2">Set</th>
+                  <th className="border p-2">Reps</th>
+                  <th className="border p-2">Weight (lbs)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {exercise.sets.map((set, setIndex) => (
+                  <tr key={setIndex}>
+                    <td className="border p-2 text-center">{setIndex + 1}</td>
+                    <td className="border p-2">
+                      <input
+                        type="number"
+                        value={set.reps}
+                        onChange={(e) =>
+                          handleSetChange(
+                            index,
+                            setIndex,
+                            "reps",
+                            e.target.value
+                          )
+                        }
+                        className="w-full p-1 border rounded"
+                      />
+                    </td>
+                    <td className="border p-2">
+                      <input
+                        type="number"
+                        value={set.weight}
+                        onChange={(e) =>
+                          handleSetChange(
+                            index,
+                            setIndex,
+                            "weight",
+                            e.target.value
+                          )
+                        }
+                        className="w-full p-1 border rounded"
+                      />
+                    </td>
+                    {exercise.sets.length > 1 && ( // Condition to render the delete button
+                      <td className="border p-2">
+                        <button
+                          onClick={() => handleDeleteSet(index, setIndex)}
+                          className="p-1 border rounded bg-red-500 text-white"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <button
+              onClick={() => handleAddSet(index)}
+              className="mt-2 p-2 border rounded bg-blue-500 text-white"
+            >
+              Add Set
+            </button>
           </div>
         ))}
       </div>
