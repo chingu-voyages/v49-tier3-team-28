@@ -55,7 +55,7 @@ export default function CreateLog() {
     setSelectedExercises(newSelectedExercises);
   };
 
-  const handleSaveLog = () => {
+  const handleSaveLog = async () => {
     // Create sessions array
     const sessions = [
       {
@@ -83,11 +83,28 @@ export default function CreateLog() {
       sessions: sessions,
     };
 
-    // Convert userSchema to JSON format
     const jsonData = JSON.stringify(formData);
-
-    // Log the JSON data
     console.log(jsonData);
+
+    try {
+      // Send a POST request to your backend API endpoint
+      const response = await fetch("/api/logging", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: jsonData,
+      });
+
+      // Check if the request was successful
+      if (response.ok) {
+        console.log("Log saved successfully!");
+      } else {
+        console.error("Failed to save log:", response.statusText);
+      }
+    } catch (error) {
+      console.error("An error occurred while saving the log:", error);
+    }
   };
 
   if (status === "unauthenticated") {
