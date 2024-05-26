@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import moduleStyles from "../home-page.module.css";
 
-export default function LandingPage() {
+export default function CreateLog() {
   const { status } = useAuthSession(); // status, session and update are available, see auth-context.tsx
   const router = useRouter();
 
@@ -44,7 +44,7 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-y-36 justify-center w-screen h-screen bg-cover bg-no-repeat bg-center">
+    <div className="flex flex-col items-center gap-y-10 justify-center w-screen h-screen bg-cover bg-no-repeat bg-center">
       {/* Header */}
       <div className="flex flex-col gap-y-10">
         <h1 className={` ${moduleStyles.titleLogo} text-5xl leading-6`}>
@@ -54,7 +54,7 @@ export default function LandingPage() {
       </div>
 
       {/* Search Bar */}
-      <div className="flex flex-col gap-y-10">
+      <div className="flex flex-col">
         <input
           type="text"
           value={searchInput}
@@ -62,7 +62,10 @@ export default function LandingPage() {
           placeholder="Search for an exercise"
           className="border rounded p-2"
         />
-        <div className="flex flex-col gap-y-2">
+        <div
+          className="flex flex-col gap-y-2 border rounded p-2"
+          style={{ maxHeight: "200px", overflowY: "auto" }}
+        >
           {searchResults.map((exercise) => (
             <div
               key={exercise.id}
