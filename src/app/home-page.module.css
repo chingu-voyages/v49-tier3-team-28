@@ -1,9 +1,13 @@
-
 .titleLogo {
   color: var(--orange);
 }
 
 .whiteSignUpButton {
   background-color: var(--white) !important;
+  color: #12121d !important;
+}
+
+.grayButton {
+  background-color: var(--gray) !important;
   color: #12121d !important;
 }

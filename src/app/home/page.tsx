@@ -3,9 +3,24 @@ import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Ba
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { Link } from "@mui/material";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import moduleStyles from "../home-page.module.css";
 
 export default function LandingPage() {
+  // State to hold the current date
+  const [currentDate, setCurrentDate] = useState("");
+
+  // useEffect to set the current date when the component mounts
+  useEffect(() => {
+    const date = new Date();
+    const formattedDate = date.toLocaleDateString(undefined, {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+    setCurrentDate(formattedDate);
+  }, []);
   /*
     This is an example of how to use the hook to access the auth sesion, which indicates if user is logged in or not.
     It also has basic user data that we may need to use on the front end (like the email, username, _id).
@@ -26,7 +41,7 @@ export default function LandingPage() {
         <h1 className={` ${moduleStyles.titleLogo} text-5xl leading-6`}>
           Welcome User
         </h1>
-        <h3>Date</h3>
+        <h3>{currentDate}</h3>
       </div>
       {/* Logging Button */}
       <div className="flex flex-col gap-y-9">
