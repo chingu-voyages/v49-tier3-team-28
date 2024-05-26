@@ -41,7 +41,7 @@ export default function LandingPage() {
       {/* Header */}
       <div className="flex flex-col gap-y-10">
         <h1 className={` ${moduleStyles.titleLogo} text-5xl leading-6`}>
-          Log Your Workout
+          Log From Scratch
         </h1>
         <h3>{currentDate}</h3>
         <h3>How do you want to log your exercise today?</h3>
@@ -50,11 +50,11 @@ export default function LandingPage() {
       <div className="flex flex-col gap-y-9">
         <div className="flex flex-col gap-y-10">
           <Link href="/createlog">
-            <BasicRoundedButton label="Start Logging" />
+            <BasicRoundedButton label="Create New Log" />
           </Link>
           <Link href="/templates">
             <BasicRoundedButton
-              label="Templates"
+              label="View Templates"
               buttonClassNames={`${moduleStyles.grayButton}`}
             />
           </Link>
