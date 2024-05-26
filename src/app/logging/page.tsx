@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import moduleStyles from "../home-page.module.css";
 
-export default function LandingPage() {
+export default function Logging() {
   // State to hold the current date
   const [currentDate, setCurrentDate] = useState("");
 

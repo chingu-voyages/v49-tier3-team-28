@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import moduleStyles from "../home-page.module.css";
 
 export default function CreateLog() {
-  const { status } = useAuthSession(); // status, session and update are available, see auth-context.tsx
+  const { status, session } = useAuthSession(); // status, session and update are available, see auth-context.tsx
+  console.log(session);
   const router = useRouter();
 
   const [searchInput, setSearchInput] = useState("");
@@ -55,35 +56,40 @@ export default function CreateLog() {
   };
 
   const handleSaveLog = () => {
-    // Create an array to store logs for each exercise
-    const logData = [];
+    // Create sessions array
+    const sessions = [
+      {
+        date: new Date(), // Use current date as an example
+        exercises: selectedExercises.map((exercise) => {
+          // Map selected exercises to exerciseSchema
+          return {
+            exerciseName: exercise.label,
+            sets: exercise.sets.map((set, index) => {
+              // Map sets to setSchema
+              return {
+                setNumber: index + 1, // Set number starts from 1
+                weight: set.weight,
+                unit: "lbs", // Assuming the default unit is pounds
+                reps: set.reps,
+              };
+            }),
+          };
+        }),
+      },
+    ];
 
-    // Loop through each selected exercise
-    selectedExercises.forEach((exercise) => {
-      const exerciseLog = {
-        exercise: exercise.label,
-        sets: [],
-      };
+    // Create userSchema
+    const user = {
+      username: "exampleUser",
+      password: "examplePassword",
+      email: "user@example.com",
+      sessions: sessions,
+    };
 
-      // Loop through each set of the exercise
-      exercise.sets.forEach((set, setIndex) => {
-        const setLog = {
-          setNumber: setIndex + 1, // Set number starts from 1
-          weight: set.weight,
-          unit: "lbs", // Assuming the default unit is pounds
-          reps: set.reps,
-        };
-        exerciseLog.sets.push(setLog);
-      });
+    // Convert userSchema to JSON format
+    const jsonData = JSON.stringify(user);
 
-      // Push exercise log to the main log data array
-      logData.push(exerciseLog);
-    });
-
-    // Convert logData to JSON format
-    const jsonData = JSON.stringify(logData);
-
-    // Send jsonData to backend for storage in the database
+    // Log the JSON data
     console.log(jsonData);
   };
 

@@ -26,7 +26,7 @@ export default function LandingPage() {
     It also has basic user data that we may need to use on the front end (like the email, username, _id).
     We can always add more data to the session object in the auth-options.ts file.
   */
-  const { status } = useAuthSession(); // status, session and update are available, see auth-context.tsx
+  const { status, session } = useAuthSession(); // status, session and update are available, see auth-context.tsx
   const router = useRouter();
 
   // Users who are not authenticated will be redirected to the sign in page.
@@ -39,7 +39,7 @@ export default function LandingPage() {
       {/* Header */}
       <div className="flex flex-col gap-y-10">
         <h1 className={` ${moduleStyles.titleLogo} text-5xl leading-6`}>
-          Welcome User
+          Welcome {session?.user?.username}
         </h1>
         <h3>{currentDate}</h3>
       </div>
