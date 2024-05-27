@@ -3,11 +3,11 @@ import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FiSearch, FiX } from "react-icons/fi"; // Importing the search and clear icons
 import moduleStyles from "../home-page.module.css";
 
 export default function CreateLog() {
   const { status, session } = useAuthSession(); // status, session and update are available, see auth-context.tsx
-  console.log(session);
   const router = useRouter();
 
   const [searchInput, setSearchInput] = useState("");
@@ -123,16 +123,25 @@ export default function CreateLog() {
       </div>
 
       {/* Search Bar */}
-      <div className="flex flex-col">
-        <input
-          type="text"
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-          placeholder="Search for an exercise"
-          className="border rounded p-2"
-        />
+      <div className="flex flex-col relative">
+        <div className="relative flex items-center">
+          <FiSearch className="absolute left-3 text-gray-400" />
+          <input
+            type="text"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            placeholder="Search for an exercise"
+            className="border rounded pl-10 pr-10 p-2 w-full"
+          />
+          {searchInput && (
+            <FiX
+              className="absolute right-3 text-gray-400 cursor-pointer"
+              onClick={() => setSearchInput("")}
+            />
+          )}
+        </div>
         <div
-          className="flex flex-col gap-y-2 border rounded p-2"
+          className="flex flex-col gap-y-2 border rounded p-2 mt-2"
           style={{ maxHeight: "200px", overflowY: "auto" }}
         >
           {searchResults.map((exercise) => (
