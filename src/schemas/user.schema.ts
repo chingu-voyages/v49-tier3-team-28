@@ -23,6 +23,7 @@ const userSchema = new Schema<User>(
       required: true,
       minlength: 6, // Ensures the password is at least 6 characters long
     },
+    
   },
   { timestamps: true }
 );
