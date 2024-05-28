@@ -202,6 +202,7 @@ export default function SignupForm() {
             label="Sign up"
             onClick={signUpUser}
             disabled={isLoading || !allFormFieldsValid(false)}
+            buttonClassNames="defaultButtonColor"
           />
         </div>
         <div className="mt-12">

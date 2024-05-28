@@ -179,6 +179,7 @@ export function SigninForm() {
             label="Sign in"
             onClick={signInUser}
             disabled={isLoading || !allFormFieldsValid(false)}
+            buttonClassNames="defaultButtonColor"
           />
         </div>
         <div className="mt-12">
