@@ -26,7 +26,10 @@ export default function TitlePage() {
         </div>
         <div>
           <Link href="/signin">
-            <BasicRoundedButton label="Sign in" />
+            <BasicRoundedButton
+              label="Sign in"
+              buttonClassNames={moduleStyles.signInButton}
+            />
           </Link>
         </div>
       </div>
