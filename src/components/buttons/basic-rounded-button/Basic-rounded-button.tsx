@@ -7,6 +7,7 @@ interface BasicRoundedButtonProps {
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
   disabled?: boolean;
+  customMaterialButtonStyles?: object;
 }
 
 // Reusable button with rounded corners, default is orange background, but can be customized with classNames
@@ -17,12 +18,13 @@ export function BasicRoundedButton({
   startIcon,
   endIcon,
   disabled,
+  customMaterialButtonStyles,
 }: BasicRoundedButtonProps) {
   return (
     <Button
       variant="contained"
       color="primary"
-      className={`w-full h-12 defaultButtonColor ${buttonClassNames}`}
+      className={`w-full h-12  ${buttonClassNames}`}
       onClick={onClick}
       startIcon={startIcon}
       endIcon={endIcon}
@@ -34,6 +36,7 @@ export function BasicRoundedButton({
         borderRadius: "60px",
         width: "315px",
         boxShadow: "none",
+        ...customMaterialButtonStyles,
       }}
     >
       {label}
