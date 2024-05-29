@@ -4,7 +4,7 @@ import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FiSearch, FiTrash, FiX } from "react-icons/fi";
+import { FiPlus, FiSearch, FiTrash, FiX } from "react-icons/fi";
 import Switch from "react-switch";
 
 export default function CreateLog() {
@@ -199,9 +199,11 @@ export default function CreateLog() {
         {selectedExercises.map((exercise, index) => (
           <div
             key={exercise.id}
-            className="rounded-xl mb-4 border border-gray-100 text-center shadow-md relative"
+            className="rounded-xl mb-4 border border-gray-100 shadow-md relative"
           >
-            <h4 className="text-black font-bold p-2">{exercise.label}</h4>
+            <h4 className="text-black font-bold p-2 text-center ">
+              {exercise.label}
+            </h4>
             <button
               onClick={() => handleDeleteExercise(index)}
               className="absolute top-2 right-2"
@@ -210,7 +212,7 @@ export default function CreateLog() {
             </button>
             <table className="w-full border-collapse bg-white">
               <thead>
-                <tr className="text-white bg-orange-500">
+                <tr className="text-white text-center bg-orange-500">
                   <th className="p-left-2 font-bold">Set</th>
                   <th className="p-2">Reps</th>
                   <th className="p-2">Weight ({unit})</th>
@@ -219,9 +221,9 @@ export default function CreateLog() {
               </thead>
               <tbody>
                 {exercise.sets.map((set, setIndex) => (
-                  <tr key={setIndex} className="odd:bg-orange-100">
+                  <tr key={setIndex} className="odd:bg-orange-100 text-center">
                     <td className="p-2 text-center">{setIndex + 1}</td>
-                    <td className="p-2">
+                    <td className="p-2 text-center ">
                       <input
                         type="number"
                         value={set.reps}
@@ -267,9 +269,9 @@ export default function CreateLog() {
             </table>
             <button
               onClick={() => handleAddSet(index)}
-              className="mt-2 mb-2 p-2 border rounded-xl bg-orange-500 text-white font-bold hover:bg-orange-600"
+              className="m-2 p-2 border rounded-xl bg-green-500 text-white font-bold hover:bg-green-600"
             >
-              + Add Set
+              <FiPlus />
             </button>
           </div>
         ))}
