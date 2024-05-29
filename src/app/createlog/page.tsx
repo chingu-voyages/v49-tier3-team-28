@@ -125,31 +125,31 @@ export default function CreateLog() {
       {/* Search Bar */}
       <div className="relative flex flex-col min-w-80">
         <div className="relative flex items-center">
-          <FiSearch className="absolute left-3 text-gray-400" />
+          <FiSearch className="absolute left-3" />
           <input
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Search for an exercise"
-            className="border rounded pl-10 pr-10 p-2 w-full"
+            className="border rounded pl-10 pr-10 p-2 w-full bg-gray-50"
           />
           {searchInput && (
             <FiX
-              className="absolute right-3 text-gray-400 cursor-pointer"
+              className="absolute right-3 cursor-pointer"
               onClick={() => setSearchInput("")}
             />
           )}
         </div>
         {searchResults.length > 0 && (
           <div
-            className="absolute top-full left-0 right-0 flex flex-col gap-y-2 border rounded bg-white shadow-lg z-10"
+            className="absolute top-full bg-gray-50 left-0 right-0 flex flex-col border rounded shadow-lg z-10"
             style={{ overflowY: "auto", maxHeight: "200px" }}
           >
             {searchResults.map((exercise) => (
               <div
                 key={exercise.id}
                 onClick={() => handleSelectExercise(exercise)}
-                className="cursor-pointer p-2 border-b"
+                className="cursor-pointer p-2 border-b hover:bg-orange-500 hover:text-white"
               >
                 {exercise.label}
               </div>
