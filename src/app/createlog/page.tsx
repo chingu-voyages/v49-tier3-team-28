@@ -1,10 +1,10 @@
 "use client";
+import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiSearch, FiTrash, FiX } from "react-icons/fi"; // Importing the search and clear icons
-import moduleStyles from "../home-page.module.css";
 
 export default function CreateLog() {
   const { status, session } = useAuthSession(); // status, session and update are available, see auth-context.tsx
@@ -121,11 +121,9 @@ export default function CreateLog() {
   return (
     <div className="flex flex-col items-center gap-y-10 justify-center w-screen h-screen bg-cover bg-no-repeat bg-center">
       {/* Header */}
-      <div className="flex flex-col gap-y-10">
-        <h1 className={` ${moduleStyles.titleLogo} text-5xl leading-6`}>
-          Log Your Workout
-        </h1>
-        <h3>Start searching and build your log.</h3>
+      <div className="flex flex-col gap-y-10 text-center">
+        <h1 className="text-5xl font-bold leading-6">Log Your Workout</h1>
+        <h3 className="text-2xl">Start searching and build your log.</h3>
       </div>
 
       {/* Search Bar */}
@@ -247,12 +245,10 @@ export default function CreateLog() {
       </div>
       {/* Save Button */}
       <div className="flex flex-col gap-y-9">
-        <button
+        <BasicRoundedButton
           onClick={handleSaveLog}
-          className="p-2 border rounded bg-green-500 text-white"
-        >
-          Save Your Log
-        </button>
+          label="Save Your Log"
+        ></BasicRoundedButton>
       </div>
     </div>
   );
