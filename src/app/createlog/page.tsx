@@ -248,6 +248,7 @@ export default function CreateLog() {
         <BasicRoundedButton
           onClick={handleSaveLog}
           label="Save Your Log"
+          disabled={selectedExercises.length === 0}
         ></BasicRoundedButton>
       </div>
     </div>
