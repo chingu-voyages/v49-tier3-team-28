@@ -13,6 +13,7 @@ export default function CreateLog() {
   const [searchInput, setSearchInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [selectedExercises, setSelectedExercises] = useState([]);
+  const [unit, setUnit] = useState("lbs");
 
   const exercisesArray = Object.values(ExercisesDictionary);
 
@@ -61,6 +62,10 @@ export default function CreateLog() {
     setSelectedExercises(newSelectedExercises);
   };
 
+  const toggleUnit = () => {
+    setUnit(unit === "lbs" ? "kg" : "lbs");
+  };
+
   const handleSaveLog = async () => {
     // Create sessions array
     const sessions = [
@@ -75,7 +80,7 @@ export default function CreateLog() {
               return {
                 setNumber: index + 1, // Set number starts from 1
                 weight: set.weight,
-                unit: "lbs", // Assuming the default unit is pounds
+                unit: unit,
                 reps: set.reps,
               };
             }),
@@ -164,7 +169,9 @@ export default function CreateLog() {
 
       {/* Selected Exercises */}
       <div className="flex flex-col gap-y-9 w-3/4 px-4">
-        {/* <h3>Selected Exercises:</h3> */}
+        <button onClick={toggleUnit}>
+          Metric: {unit === "lbs" ? "lbs" : "kg"}
+        </button>
         {selectedExercises.map((exercise, index) => (
           <div
             key={exercise.id}
@@ -182,7 +189,7 @@ export default function CreateLog() {
                 <tr className="text-white bg-orange-500">
                   <th className="p-left-2 font-bold">Set</th>
                   <th className="p-2">Reps</th>
-                  <th className="p-2">Weight (lbs)</th>
+                  <th className="p-2">Weight ({unit})</th>
                   <th className="p-2"></th>
                 </tr>
               </thead>
