@@ -1,15 +1,9 @@
 // This is the title page of the application "/
+import { AppNameTextLogo } from "@/components/App-name-text-logo/App-name-text-logo";
 import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
-import { Rowdies } from "next/font/google";
 import Link from "next/link";
 import BackgroundTitleSplash from "../../public/images/title-page/title-page-splash.png";
 import moduleStyles from "./home-page.module.css";
-
-const rowdies = Rowdies({
-  subsets: ["latin"],
-  weight: "700",
-  display: "swap",
-});
 
 export default function TitlePage() {
   return (
@@ -19,13 +13,7 @@ export default function TitlePage() {
         backgroundImage: `url(${BackgroundTitleSplash.src})`,
       }}
     >
-      <div>
-        <h1
-          className={`${rowdies.className} ${moduleStyles.titleLogo} text-5xl leading-6`}
-        >
-          FitFlex
-        </h1>
-      </div>
+      <AppNameTextLogo />
       {/* Signup, signin buttons */}
       <div className="flex flex-col gap-y-9">
         <div>
@@ -38,7 +26,10 @@ export default function TitlePage() {
         </div>
         <div>
           <Link href="/signin">
-            <BasicRoundedButton label="Sign in" />
+            <BasicRoundedButton
+              label="Sign in"
+              buttonClassNames={moduleStyles.signInButton}
+            />
           </Link>
         </div>
       </div>
