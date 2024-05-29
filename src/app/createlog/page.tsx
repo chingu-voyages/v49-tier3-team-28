@@ -179,7 +179,6 @@ export default function CreateLog() {
       {/* Selected Exercises */}
       <div className="flex flex-col gap-y-9 w-3/4 px-4">
         <div className="flex justify-end gap-2 w-full">
-          <span>Weighted Unit: {unit === "lbs" ? "lbs" : "kg"}</span>
           <div>
             <Switch
               onChange={toggleUnit}
@@ -195,6 +194,7 @@ export default function CreateLog() {
               width={40}
             />
           </div>
+          <span>Weighted Unit: {unit === "lbs" ? "lbs" : "kg"}</span>
         </div>
         {selectedExercises.map((exercise, index) => (
           <div
