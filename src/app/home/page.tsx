@@ -46,7 +46,7 @@ export default function LandingPage() {
       {/* Logging Button */}
       <div className="flex flex-col gap-y-9">
         <div>
-          <Link href="/logging">
+          <Link href="/createlog">
             <BasicRoundedButton label="Start Logging" />
           </Link>
         </div>
