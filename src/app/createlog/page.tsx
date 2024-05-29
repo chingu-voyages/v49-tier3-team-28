@@ -170,7 +170,7 @@ export default function CreateLog() {
             <table className="w-full border-collapse bg-white">
               <thead>
                 <tr className="text-white bg-orange-500">
-                  <th className="p-left-2">Set</th>
+                  <th className="p-left-2 font-bol">Set</th>
                   <th className="p-2">Reps</th>
                   <th className="p-2">Weight (lbs)</th>
                   <th className="p-2"></th>
