@@ -1,4 +1,4 @@
-import { Log } from './log.model'
+import { Log } from "./log.model";
 
 export interface User {
   _id?: string;
