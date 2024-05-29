@@ -3,7 +3,7 @@ import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FiSearch, FiX } from "react-icons/fi"; // Importing the search and clear icons
+import { FiSearch, FiTrash, FiX } from "react-icons/fi"; // Importing the search and clear icons
 import moduleStyles from "../home-page.module.css";
 
 export default function CreateLog() {
@@ -131,7 +131,7 @@ export default function CreateLog() {
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Search for an exercise"
-            className="border rounded pl-10 pr-10 p-2 w-full bg-gray-50"
+            className="border rounded-xl pl-10 pr-10 p-2 w-full bg-gray-50"
           />
           {searchInput && (
             <FiX
@@ -159,24 +159,28 @@ export default function CreateLog() {
       </div>
 
       {/* Selected Exercises */}
-      <div className="flex flex-col gap-y-9 w-full px-4">
-        <h3>Selected Exercises:</h3>
+      <div className="flex flex-col gap-y-9 w-3/4 px-4">
+        {/* <h3>Selected Exercises:</h3> */}
         {selectedExercises.map((exercise, index) => (
-          <div key={exercise.id} className="p-2 border rounded mb-4">
-            <h4>{exercise.label}</h4>
-            <table className="w-full border-collapse">
+          <div
+            key={exercise.id}
+            className="rounded-xl mb-4 border border-gray-100 text-center shadow-md"
+          >
+            <h4 className="text-black font-bold p-2">{exercise.label}</h4>
+            <table className="w-full border-collapse bg-white">
               <thead>
-                <tr>
-                  <th className="border p-2">Set</th>
-                  <th className="border p-2">Reps</th>
-                  <th className="border p-2">Weight (lbs)</th>
+                <tr className="text-white bg-orange-500">
+                  <th className="p-left-2">Set</th>
+                  <th className="p-2">Reps</th>
+                  <th className="p-2">Weight (lbs)</th>
+                  <th className="p-2"></th>
                 </tr>
               </thead>
               <tbody>
                 {exercise.sets.map((set, setIndex) => (
-                  <tr key={setIndex}>
-                    <td className="border p-2 text-center">{setIndex + 1}</td>
-                    <td className="border p-2">
+                  <tr key={setIndex} className="odd:bg-orange-100">
+                    <td className="p-2 text-center">{setIndex + 1}</td>
+                    <td className="p-2">
                       <input
                         type="number"
                         value={set.reps}
@@ -188,10 +192,10 @@ export default function CreateLog() {
                             e.target.value
                           )
                         }
-                        className="w-full p-1 border rounded"
+                        className="w-3/4 p-1 border rounded-xl text-center bg-gray-50"
                       />
                     </td>
-                    <td className="border p-2">
+                    <td className="p-2">
                       <input
                         type="number"
                         value={set.weight}
@@ -203,28 +207,28 @@ export default function CreateLog() {
                             e.target.value
                           )
                         }
-                        className="w-full p-1 border rounded"
+                        className="w-3/4 p-1 border rounded-xl text-center bg-gray-50"
                       />
                     </td>
-                    {exercise.sets.length > 1 && ( // Condition to render the delete button
-                      <td className="border p-2">
+                    <td className="p-1">
+                      {exercise.sets.length > 1 && ( // Condition to render the delete button
                         <button
                           onClick={() => handleDeleteSet(index, setIndex)}
-                          className="p-1 border rounded bg-red-500 text-white"
+                          className=" text-red-500"
                         >
-                          Delete
+                          <FiTrash />
                         </button>
-                      </td>
-                    )}
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
             <button
               onClick={() => handleAddSet(index)}
-              className="mt-2 p-2 border rounded bg-blue-500 text-white"
+              className="mt-2 mb-2 p-2 border rounded-xl bg-orange-500 text-white font-bold hover:bg-orange-600"
             >
-              Add Set
+              + Add Set
             </button>
           </div>
         ))}
