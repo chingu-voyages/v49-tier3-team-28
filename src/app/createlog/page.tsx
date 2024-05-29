@@ -8,13 +8,24 @@ import { FiPlus, FiSearch, FiTrash, FiX } from "react-icons/fi";
 import Switch from "react-switch";
 import { LoggingClient } from "../clients/logging-client/logging-client";
 
+interface Exercise {
+  id: string;
+  label: string;
+  sets: Set[];
+}
+
+interface Set {
+  reps: number;
+  weight: number;
+}
+
 export default function CreateLog() {
   const { status, session } = useAuthSession(); // status, session and update are available, see auth-context.tsx
   const router = useRouter();
 
-  const [searchInput, setSearchInput] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  const [selectedExercises, setSelectedExercises] = useState([]);
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [searchResults, setSearchResults] = useState<Exercise[]>([]);
+  const [selectedExercises, setSelectedExercises] = useState<Exercise[]>([]);
   const [unit, setUnit] = useState("lbs");
 
   const exercisesArray = Object.values(ExercisesDictionary);
@@ -30,7 +41,7 @@ export default function CreateLog() {
     }
   }, [searchInput]);
 
-  const handleSelectExercise = (exercise) => {
+  const handleSelectExercise = (exercise: Exercise) => {
     setSelectedExercises((prev) => [
       ...prev,
       { ...exercise, sets: [{ reps: 0, weight: 0 }] },
@@ -39,26 +50,31 @@ export default function CreateLog() {
     setSearchResults([]); // Clear search results after selection
   };
 
-  const handleAddSet = (index) => {
+  const handleAddSet = (index: number) => {
     const newSelectedExercises = [...selectedExercises];
     newSelectedExercises[index].sets.push({ reps: 0, weight: 0 });
     setSelectedExercises(newSelectedExercises);
   };
 
-  const handleSetChange = (index, setIndex, field, value) => {
+  const handleSetChange = (
+    index: number,
+    setIndex: number,
+    field: keyof Set,
+    value: number
+  ) => {
     const newSelectedExercises = [...selectedExercises];
     newSelectedExercises[index].sets[setIndex][field] = value;
     setSelectedExercises(newSelectedExercises);
   };
 
-  const handleDeleteSet = (index, setIndex) => {
+  const handleDeleteSet = (index: number, setIndex: number) => {
     const newSelectedExercises = [...selectedExercises];
     // Remove the set at setIndex from the selected exercise
     newSelectedExercises[index].sets.splice(setIndex, 1);
     setSelectedExercises(newSelectedExercises);
   };
 
-  const handleDeleteExercise = (index) => {
+  const handleDeleteExercise = (index: number) => {
     const newSelectedExercises = [...selectedExercises];
     newSelectedExercises.splice(index, 1);
     setSelectedExercises(newSelectedExercises);
@@ -211,7 +227,7 @@ export default function CreateLog() {
                             index,
                             setIndex,
                             "reps",
-                            e.target.value
+                            Number(e.target.value)
                           )
                         }
                         className="w-3/4 p-1 border rounded-xl text-center bg-gray-50"
@@ -226,7 +242,7 @@ export default function CreateLog() {
                             index,
                             setIndex,
                             "weight",
-                            e.target.value
+                            Number(e.target.value)
                           )
                         }
                         className="w-3/4 p-1 border rounded-xl text-center bg-gray-50"
