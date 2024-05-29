@@ -4,7 +4,8 @@ import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FiSearch, FiTrash, FiX } from "react-icons/fi"; // Importing the search and clear icons
+import { FiSearch, FiTrash, FiX } from "react-icons/fi";
+import Switch from "react-switch";
 
 export default function CreateLog() {
   const { status, session } = useAuthSession(); // status, session and update are available, see auth-context.tsx
@@ -169,9 +170,24 @@ export default function CreateLog() {
 
       {/* Selected Exercises */}
       <div className="flex flex-col gap-y-9 w-3/4 px-4">
-        <button onClick={toggleUnit}>
-          Metric: {unit === "lbs" ? "lbs" : "kg"}
-        </button>
+        <div className="flex justify-end gap-2 w-full">
+          <span>Weighted Unit: {unit === "lbs" ? "lbs" : "kg"}</span>
+          <div>
+            <Switch
+              onChange={toggleUnit}
+              checked={unit === "kg"}
+              onColor="#4CAF50"
+              onHandleColor="#fff"
+              handleDiameter={24}
+              uncheckedIcon={false}
+              checkedIcon={false}
+              boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+              activeBoxShadow="0px 0px 1px 0px rgba(0, 0, 0, 0.1)"
+              height={16}
+              width={40}
+            />
+          </div>
+        </div>
         {selectedExercises.map((exercise, index) => (
           <div
             key={exercise.id}
