@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiPlus, FiSearch, FiTrash, FiX } from "react-icons/fi";
 import Switch from "react-switch";
+import { LoggingClient } from "../clients/logging-client/logging-client";
 
 export default function CreateLog() {
   const { status, session } = useAuthSession(); // status, session and update are available, see auth-context.tsx
@@ -68,54 +69,32 @@ export default function CreateLog() {
   };
 
   const handleSaveLog = async () => {
-    // Create sessions array
-    const sessions = [
-      {
-        date: new Date(), // Use current date as an example
-        exercises: selectedExercises.map((exercise) => {
-          // Map selected exercises to exerciseSchema
-          return {
-            exerciseName: exercise.label,
-            sets: exercise.sets.map((set, index) => {
-              // Map sets to setSchema
-              return {
-                setNumber: index + 1, // Set number starts from 1
-                weight: set.weight,
-                unit: unit,
-                reps: set.reps,
-              };
-            }),
-          };
-        }),
-      },
-    ];
-
-    const formData = {
-      userId: session?.user?._id,
-      sessions: sessions,
-    };
-
-    const jsonData = JSON.stringify(formData);
-    console.log(jsonData);
-
-    try {
-      // Send a POST request to your backend API endpoint
-      const response = await fetch("/api/logging", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    if (session?.user?._id) {
+      const sessions = [
+        {
+          date: new Date(),
+          exercises: selectedExercises.map((exercise) => {
+            // Map selected exercises to exerciseSchema
+            return {
+              exerciseName: exercise.label,
+              sets: exercise.sets.map((set, index) => {
+                // Map sets to setSchema
+                return {
+                  setNumber: index + 1, // Set number starts from 1
+                  weight: set.weight,
+                  unit: unit,
+                  reps: set.reps,
+                };
+              }),
+            };
+          }),
         },
-        body: jsonData,
-      });
+      ];
 
-      // Check if the request was successful
-      if (response.ok) {
-        console.log("Log saved successfully!");
-      } else {
-        console.error("Failed to save log:", response.statusText);
-      }
-    } catch (error) {
-      console.error("An error occurred while saving the log:", error);
+      await LoggingClient.saveLog({
+        userId: session.user._id,
+        sessions: sessions,
+      });
     }
   };
 
