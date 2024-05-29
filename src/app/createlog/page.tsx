@@ -125,11 +125,19 @@ export default function CreateLog() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-y-10 justify-center w-screen mt-10 mb-10">
+    <div className="flex flex-col items-center gap-y-20 justify-center w-screen mt-20 mb-10">
       {/* Header */}
-      <div className="flex flex-col gap-y-10 text-center ">
-        <h1 className="text-5xl font-bold leading-6">Log Your Workout</h1>
-        <h3 className="text-2xl">Start searching and build your log.</h3>
+      <h1 className="text-5xl font-bold leading-6 text-center">
+        Log Your Workout
+      </h1>
+      <BasicRoundedButton label="Choose From Templates" />
+      <div className="flex items-center">
+        <div className="flex-1 w-48 border-t-2"></div>
+        <h2 className="text-xl text-gray-500 pl-2 pr-2">
+          {" "}
+          Or Start Logging By Search{" "}
+        </h2>
+        <div className="flex-1 w-48 border-t-2"></div>
       </div>
 
       {/* Search Bar */}
