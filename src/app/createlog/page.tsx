@@ -24,7 +24,8 @@ export default function CreateLog() {
   const router = useRouter();
 
   const [searchInput, setSearchInput] = useState<string>("");
-  const [searchResults, setSearchResults] = useState<Exercise[]>([]);
+  const [searchResults, setSearchResults] = useState<any>([]);
+  console.log(searchResults);
   const [selectedExercises, setSelectedExercises] = useState<Exercise[]>([]);
   const [unit, setUnit] = useState("lbs");
 
@@ -158,7 +159,7 @@ export default function CreateLog() {
             className="absolute top-full bg-gray-50 left-0 right-0 flex flex-col border rounded shadow-lg z-10"
             style={{ overflowY: "auto", maxHeight: "200px" }}
           >
-            {searchResults.map((exercise) => (
+            {searchResults.map((exercise: Exercise) => (
               <div
                 key={exercise.id}
                 onClick={() => handleSelectExercise(exercise)}
