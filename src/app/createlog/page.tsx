@@ -123,7 +123,7 @@ export default function CreateLog() {
       </div>
 
       {/* Search Bar */}
-      <div className="flex flex-col relative">
+      <div className="relative flex flex-col min-w-80">
         <div className="relative flex items-center">
           <FiSearch className="absolute left-3 text-gray-400" />
           <input
@@ -140,20 +140,22 @@ export default function CreateLog() {
             />
           )}
         </div>
-        <div
-          className="flex flex-col gap-y-2 border rounded p-2 mt-2"
-          style={{ maxHeight: "200px", overflowY: "auto" }}
-        >
-          {searchResults.map((exercise) => (
-            <div
-              key={exercise.id}
-              onClick={() => handleSelectExercise(exercise)}
-              className="cursor-pointer p-2 border-b"
-            >
-              {exercise.label}
-            </div>
-          ))}
-        </div>
+        {searchResults.length > 0 && (
+          <div
+            className="absolute top-full left-0 right-0 flex flex-col gap-y-2 border rounded bg-white shadow-lg z-10"
+            style={{ overflowY: "auto", maxHeight: "200px" }}
+          >
+            {searchResults.map((exercise) => (
+              <div
+                key={exercise.id}
+                onClick={() => handleSelectExercise(exercise)}
+                className="cursor-pointer p-2 border-b"
+              >
+                {exercise.label}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Selected Exercises */}
