@@ -55,6 +55,12 @@ export default function CreateLog() {
     setSelectedExercises(newSelectedExercises);
   };
 
+  const handleDeleteExercise = (index) => {
+    const newSelectedExercises = [...selectedExercises];
+    newSelectedExercises.splice(index, 1);
+    setSelectedExercises(newSelectedExercises);
+  };
+
   const handleSaveLog = async () => {
     // Create sessions array
     const sessions = [
@@ -164,13 +170,19 @@ export default function CreateLog() {
         {selectedExercises.map((exercise, index) => (
           <div
             key={exercise.id}
-            className="rounded-xl mb-4 border border-gray-100 text-center shadow-md"
+            className="rounded-xl mb-4 border border-gray-100 text-center shadow-md relative"
           >
             <h4 className="text-black font-bold p-2">{exercise.label}</h4>
+            <button
+              onClick={() => handleDeleteExercise(index)}
+              className="absolute top-2 right-2"
+            >
+              <FiX />
+            </button>
             <table className="w-full border-collapse bg-white">
               <thead>
                 <tr className="text-white bg-orange-500">
-                  <th className="p-left-2 font-bol">Set</th>
+                  <th className="p-left-2 font-bold">Set</th>
                   <th className="p-2">Reps</th>
                   <th className="p-2">Weight (lbs)</th>
                   <th className="p-2"></th>
