@@ -1,11 +1,11 @@
 "use client";
 import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
+import { ColorToggleButton } from "@/components/buttons/unit-toggle-button/Unit-toggle-button";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiPlus, FiSearch, FiTrash, FiX } from "react-icons/fi";
-import Switch from "react-switch";
 import { LoggingClient } from "../clients/logging-client/logging-client";
 
 interface Exercise {
@@ -20,7 +20,7 @@ interface Set {
 }
 
 const convertWeight = (weight: number, unit: string) => {
-  const conversionRate = 2.2;
+  const conversionRate = 2.20462;
   if (unit === "kg") {
     return weight / conversionRate;
   } else {
@@ -210,22 +210,14 @@ export default function CreateLog() {
       {/* Selected Exercises (Exercise Log) */}
       <div className="flex flex-col gap-y-9 w-3/4 px-4">
         <div className="flex justify-end gap-2 w-full">
-          <div>
-            <Switch
-              onChange={toggleUnit}
-              checked={unit === "kg"}
-              onColor="#4CAF50"
-              onHandleColor="#fff"
-              handleDiameter={24}
-              uncheckedIcon={false}
-              checkedIcon={false}
-              boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
-              activeBoxShadow="0px 0px 1px 0px rgba(0, 0, 0, 0.1)"
-              height={16}
-              width={40}
-            />
-          </div>
-          <span>Weighted Unit: {unit === "lbs" ? "lbs" : "kg"}</span>
+          <ColorToggleButton
+            onChange={toggleUnit}
+            alignment={unit}
+            leftLabel="Metric"
+            rightLabel="Imperial"
+            leftValue="lbs"
+            rightValue="kg"
+          />
         </div>
         {selectedExercises.map((exercise, index) => (
           <div
