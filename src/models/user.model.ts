@@ -1,10 +1,10 @@
-import { Session } from './session.model'
+import { Log } from './log.model'
 
 export interface User {
   _id?: string;
   username: string;
   email: string;
   password: string;
-  session: Session[];
+  logs: Log[];
   createdAt: Date;
 }

@@ -1,7 +1,7 @@
 import { Set } from "@/models/set.model";
 import mongoose, { Schema } from "mongoose";
 
-const setSchema = new Schema<Set>({
+export const setSchema = new Schema<Set>({
   setNumber: {
     type: Number,
     required: true,
@@ -20,7 +20,3 @@ const setSchema = new Schema<Set>({
     required: true,
   }
 })
-
-
-export const SetRepository: mongoose.Model<Set> =
-  mongoose.models.Set || mongoose.model("Set", setSchema);

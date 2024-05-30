@@ -1,19 +1,15 @@
 import { Exercise } from "@/models/exercise.model";
 import mongoose, { Schema } from "mongoose";
-import { SetRepository } from "./set.schema";
+import { setSchema } from "./set.schema";
 
-const exerciseSchema = new Schema<Exercise>({
+export const exerciseSchema = new Schema<Exercise>({
   exerciseName: {
     type: String,
     required: true,
     unique: true,
   },
   sets: {
-    type: [SetRepository],
+    type: [setSchema],
     required: true,
   }
 })
-
-
-export const ExerciseRepository: mongoose.Model<Exercise> =
-  mongoose.models.Exercise || mongoose.model("Exercise", exerciseSchema);
