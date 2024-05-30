@@ -1,7 +1,7 @@
-import { Exercise } from "./exercise.model";
+import { ExerciseActivity } from "./exercise-activity.model";
 
 export interface Log {
   createdAt: Date;
-  exercises: Exercise[];
+  exercises: ExerciseActivity[];
   isTemplate: boolean;
 }

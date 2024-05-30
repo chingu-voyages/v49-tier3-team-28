@@ -1,5 +1,5 @@
 import { Set } from "@/models/set.model";
-import mongoose, { Schema } from "mongoose";
+import { Schema } from "mongoose";
 
 export const setSchema = new Schema<Set>({
   setNumber: {
@@ -18,5 +18,5 @@ export const setSchema = new Schema<Set>({
   reps: {
     type: Number,
     required: true,
-  }
-})
+  },
+});

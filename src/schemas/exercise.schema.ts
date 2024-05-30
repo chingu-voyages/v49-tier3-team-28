@@ -1,8 +1,8 @@
-import { Exercise } from "@/models/exercise.model";
-import mongoose, { Schema } from "mongoose";
+import { ExerciseActivity } from "@/models/exercise-activity.model";
+import { Schema } from "mongoose";
 import { setSchema } from "./set.schema";
 
-export const exerciseSchema = new Schema<Exercise>({
+export const exerciseSchema = new Schema<ExerciseActivity>({
   exerciseName: {
     type: String,
     required: true,
@@ -11,5 +11,5 @@ export const exerciseSchema = new Schema<Exercise>({
   sets: {
     type: [setSchema],
     required: true,
-  }
-})
+  },
+});
