@@ -1,11 +1,11 @@
 import { Log } from "@/models/log.model";
 import { Schema } from "mongoose";
-import { exerciseSchema } from "./exercise.schema";
+import { exerciseActivitySchema } from "./exercise-activity.schema";
 
 export const logSchema = new Schema<Log>(
   {
     exercises: {
-      type: [exerciseSchema],
+      type: [exerciseActivitySchema],
       required: true,
     },
     isTemplate: {
