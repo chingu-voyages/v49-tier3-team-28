@@ -1,3 +1,4 @@
+import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Modal } from "@mui/material";
 import React, { useState } from "react";
 import { FiX } from "react-icons/fi";
@@ -7,7 +8,7 @@ interface TemplateModalProps {
   open: boolean;
   onClose: () => void;
   onGenerate: () => void;
-  onTemplateSelect: () => void;
+  onTemplateSelect: (template: ExerciseActivity[] | null) => void;
 }
 
 let mockData = {
@@ -58,12 +59,14 @@ const TemplatesModal: React.FC<TemplateModalProps> = ({
   onGenerate,
   onTemplateSelect,
 }) => {
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<
+    ExerciseActivity[] | null
+  >(null);
 
   const templates = mockData.logs.filter((log) => log.isTemplate);
 
-  const handleTemplateClick = (template) => {
-    console.log(template.exercises);
+  const handleTemplateClick = (template: ExerciseActivity[]) => {
+    console.log(template);
     setSelectedTemplate(template);
     onTemplateSelect(template);
   };
@@ -83,19 +86,19 @@ const TemplatesModal: React.FC<TemplateModalProps> = ({
         </button>
         <h1>Please choose one template to start:</h1>
         {/* Templates to Choose From */}
-        {templates.map((log, idx) => (
+        {templates.map((template, idx) => (
           <div
             key={idx}
             className="cursor-pointer p-2 border-b hover:bg-orange-500 hover:text-white"
-            onClick={() => handleTemplateClick(log)}
+            onClick={() => handleTemplateClick(template.exercises)} //error due to createdAt being required in type Log
           >
-            {log.name}
+            {template.name}
           </div>
         ))}
         {selectedTemplate !== null ? (
           <div className="mt-4">
             <h2 className="text-2xl font-semibold">Exercises</h2>
-            {selectedTemplate.exercises.map((exercise, eIdx) => (
+            {selectedTemplate.map((exercise, eIdx) => (
               <div key={eIdx} className="mt-2">
                 <h3 className="text-xl font-medium">{exercise.exerciseName}</h3>
                 {exercise.sets.map((set, sIdx) => (

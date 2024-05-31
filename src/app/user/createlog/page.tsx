@@ -40,7 +40,9 @@ export default function CreateLog() {
   const [selectedExercises, setSelectedExercises] = useState<
     ExerciseActivity[]
   >([]);
-  const [selectedTemplateData, setSelectedTemplateData] = useState(null);
+  const [selectedTemplateData, setSelectedTemplateData] = useState<
+    ExerciseActivity[] | null
+  >(null);
   const [unit, setUnit] = useState<string>("lbs");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isTemplateModalOpen, setIsTemplateModalOpen] =
@@ -161,7 +163,7 @@ export default function CreateLog() {
     if (session?.user?._id) {
       const logData = [
         {
-          date: new Date(),
+          createdAt: new Date(),
           name: isTemplate ? "Template" : new Date(),
           exercises: selectedExercises.map((exerciseActivity) => {
             // Map selected exercises to exerciseSchema
@@ -193,8 +195,8 @@ export default function CreateLog() {
     isTemplate = false;
   };
 
-  const handleTemplateSelection = async (templateData) => {
-    await setSelectedTemplateData(templateData.exercises);
+  const handleTemplateSelection = (templateData: ExerciseActivity[]) => {
+    setSelectedTemplateData(templateData);
   };
 
   const handleSetTemplates = () => {
