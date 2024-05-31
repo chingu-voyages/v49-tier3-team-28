@@ -40,6 +40,7 @@ export default function CreateLog() {
   >([]);
   const [unit, setUnit] = useState<string>("lbs");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  let isTemplate = false;
 
   const exercisesArray = Object.values(ExercisesDictionary);
 
@@ -156,7 +157,7 @@ export default function CreateLog() {
               }),
             };
           }),
-          isTemplate: false,
+          isTemplate: isTemplate,
         },
       ];
 
@@ -168,10 +169,12 @@ export default function CreateLog() {
       });
     }
     setIsModalOpen(false);
+    isTemplate = false;
   };
 
-  const handleSaveAsTemplate = () => {
-    console.log("Saving template");
+  const handleSaveAsTemplate = async () => {
+    isTemplate = true;
+    handleSaveLog();
   };
 
   if (status === "unauthenticated") {
