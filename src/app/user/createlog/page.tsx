@@ -3,15 +3,15 @@ import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Ba
 import { ColorToggleButton } from "@/components/buttons/unit-toggle-button/Unit-toggle-button";
 import SaveLogModal from "@/components/modals/SaveLogModal";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
+import { Exercise } from "@/lib/exercises/exercise";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiPlus, FiSearch, FiTrash, FiX } from "react-icons/fi";
 import { LoggingClient } from "../../clients/logging-client/logging-client";
 
-interface Exercise {
-  id: string;
-  label: string;
+interface ExerciseActivity {
+  exerciseName: string;
   sets: Set[];
 }
 
@@ -34,8 +34,10 @@ export default function CreateLog() {
   const router = useRouter();
 
   const [searchInput, setSearchInput] = useState<string>("");
-  const [searchResults, setSearchResults] = useState<any[]>([]);
-  const [selectedExercises, setSelectedExercises] = useState<Exercise[]>([]);
+  const [searchResults, setSearchResults] = useState<Exercise[]>([]);
+  const [selectedExercises, setSelectedExercises] = useState<
+    ExerciseActivity[]
+  >([]);
   const [unit, setUnit] = useState<string>("lbs");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -62,13 +64,18 @@ export default function CreateLog() {
   }, []);
 
   // Adds an exercise to the log when selected from the search bar
-  const handleSelectExercise = (exercise: Exercise) => {
-    setSelectedExercises((prev) => [
-      ...prev,
-      { ...exercise, sets: [{ reps: 0, weight: 0 }] },
-    ]);
+  const handleSelectExercise = (exercise: Exercise): ExerciseActivity => {
+    const newExercise: ExerciseActivity = {
+      exerciseName: exercise.label,
+      sets: [{ reps: 0, weight: 0 }],
+    };
+
+    setSelectedExercises((prev) => [...prev, newExercise]);
+    console.log(selectedExercises);
     setSearchInput(""); // Clear search input after selection
     setSearchResults([]); // Clear search results after selection
+
+    return newExercise;
   };
 
   // Adds a set to a selected exercise
@@ -138,7 +145,7 @@ export default function CreateLog() {
           exercises: selectedExercises.map((exercise) => {
             // Map selected exercises to exerciseSchema
             return {
-              exerciseName: exercise.label,
+              exerciseName: exercise.exerciseName,
               sets: exercise.sets.map((set, index) => {
                 // Map sets to setSchema
                 return {
@@ -235,11 +242,11 @@ export default function CreateLog() {
         </div>
         {selectedExercises.map((exercise, index) => (
           <div
-            key={exercise.id}
+            key={index}
             className="rounded-xl mb-4 border border-gray-100 shadow-md relative"
           >
             <h4 className="text-black font-bold p-2 text-center ">
-              {exercise.label}
+              {exercise.exerciseName}
             </h4>
             <button
               onClick={() => handleDeleteExercise(index)}
