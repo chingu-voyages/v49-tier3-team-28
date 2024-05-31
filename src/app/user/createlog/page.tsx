@@ -24,7 +24,6 @@ const convertWeight = (weight: number, unit: string) => {
 
 export default function CreateLog() {
   const { status, session } = useAuthSession(); // status, session and update are available, see auth-context.tsx
-
   const router = useRouter();
 
   if (status === "unauthenticated") {
@@ -32,8 +31,7 @@ export default function CreateLog() {
     return null; // Ensure the component does not render until redirection
   }
 
-  // let templateData = mockData.logs[0].exercises;
-  // console.log(mockData.logs[0].exercises);
+  // ---------------------------- State Management ------------------------------------
 
   const [searchInput, setSearchInput] = useState<string>("");
   const [searchResults, setSearchResults] = useState<Exercise[]>([]);
@@ -71,7 +69,8 @@ export default function CreateLog() {
     }
   }, []);
 
-  // Adds an exercise to the log when selected from the search bar
+  // ------------------ Add, Delete, Update Exercises ----------------------------------
+
   const handleSelectExercise = (exercise: Exercise): ExerciseActivity => {
     const newExercise: ExerciseActivity = {
       exerciseName: exercise.label,
@@ -85,19 +84,14 @@ export default function CreateLog() {
     return newExercise;
   };
 
-  // Adds a set to a selected exercise
-  const handleAddSet = (index: number) => {
+  const handleDeleteExercise = (index: number) => {
     const newSelectedExercises = [...selectedExercises];
-    newSelectedExercises[index].sets.push({
-      setNumber: 1,
-      reps: 0,
-      weight: 0,
-      unit,
-    });
+    newSelectedExercises.splice(index, 1);
     setSelectedExercises(newSelectedExercises);
   };
 
-  // Updates the set values
+  // ---------------------  Add, Delete, Update Sets ------------------------------------
+
   const handleSetChange = (
     index: number,
     setIndex: number,
@@ -111,7 +105,17 @@ export default function CreateLog() {
     }
   };
 
-  // Deletes a set from a selected exercise
+  const handleAddSet = (index: number) => {
+    const newSelectedExercises = [...selectedExercises];
+    newSelectedExercises[index].sets.push({
+      setNumber: 1,
+      reps: 0,
+      weight: 0,
+      unit,
+    });
+    setSelectedExercises(newSelectedExercises);
+  };
+
   const handleDeleteSet = (index: number, setIndex: number) => {
     const newSelectedExercises = [...selectedExercises];
     // Remove the set at setIndex from the selected exercise
@@ -119,14 +123,39 @@ export default function CreateLog() {
     setSelectedExercises(newSelectedExercises);
   };
 
-  // Deletes an exercise from the log
-  const handleDeleteExercise = (index: number) => {
-    const newSelectedExercises = [...selectedExercises];
-    newSelectedExercises.splice(index, 1);
-    setSelectedExercises(newSelectedExercises);
+  // --------------------- Open/Close Modal when Saving Logs --------------------------
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
   };
 
-  // Handles toggle logic that switches between lbs and kg
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  // ---------------------- Open/Close Modal when Choosing From Template --------------
+
+  const handleOpenTemplateModal = () => {
+    setIsTemplateModalOpen(true);
+  };
+
+  const handleCloseTemplateModal = () => {
+    setIsTemplateModalOpen(false);
+  };
+
+  // -------------- Set Template Data from Modal to Generate Logs ----------------------
+
+  const handleTemplateSelection = (templateData: ExerciseActivity[]) => {
+    setSelectedTemplateData(templateData);
+  };
+
+  const handleSetTemplates = () => {
+    setSelectedExercises(selectedTemplateData);
+    setIsTemplateModalOpen(false);
+  };
+
+  // ----------------------------- Toggle Units ----------------------------------------
+
   const toggleUnit = () => {
     const newUnit = unit === "lbs" ? "kg" : "lbs";
     const convertedExercises = selectedExercises.map((exercise) => ({
@@ -143,21 +172,7 @@ export default function CreateLog() {
     localStorage.setItem("weightUnit", newUnit);
   };
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleOpenTemplateModal = () => {
-    setIsTemplateModalOpen(true);
-  };
-
-  const handleCloseTemplateModal = () => {
-    setIsTemplateModalOpen(false);
-  };
+  // -------------------------- Save Log/Template ---------------------------------------
 
   const handleSaveLog = async () => {
     if (session?.user?._id) {
@@ -193,15 +208,6 @@ export default function CreateLog() {
     }
     setIsModalOpen(false);
     isTemplate = false;
-  };
-
-  const handleTemplateSelection = (templateData: ExerciseActivity[]) => {
-    setSelectedTemplateData(templateData);
-  };
-
-  const handleSetTemplates = () => {
-    setSelectedExercises(selectedTemplateData);
-    setIsTemplateModalOpen(false);
   };
 
   const handleSaveAsTemplate = async () => {
