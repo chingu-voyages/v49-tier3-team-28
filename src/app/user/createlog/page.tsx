@@ -71,7 +71,6 @@ export default function CreateLog() {
     };
 
     setSelectedExercises((prev) => [...prev, newExercise]);
-    console.log(selectedExercises);
     setSearchInput(""); // Clear search input after selection
     setSearchResults([]); // Clear search results after selection
 
@@ -139,14 +138,14 @@ export default function CreateLog() {
 
   const handleSaveLog = async () => {
     if (session?.user?._id) {
-      const sessions = [
+      const logData = [
         {
           date: new Date(),
-          exercises: selectedExercises.map((exercise) => {
+          exercises: selectedExercises.map((exerciseActivity) => {
             // Map selected exercises to exerciseSchema
             return {
-              exerciseName: exercise.exerciseName,
-              sets: exercise.sets.map((set, index) => {
+              exerciseName: exerciseActivity.exerciseName,
+              sets: exerciseActivity.sets.map((set, index) => {
                 // Map sets to setSchema
                 return {
                   setNumber: index + 1, // Set number starts from 1
@@ -157,12 +156,15 @@ export default function CreateLog() {
               }),
             };
           }),
+          isTemplate: false,
         },
       ];
 
+      console.log(session.user);
+
       await LoggingClient.saveLog({
         userId: session.user._id,
-        sessions: sessions,
+        logs: logData,
       });
     }
     setIsModalOpen(false);
