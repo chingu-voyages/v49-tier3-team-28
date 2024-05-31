@@ -22,30 +22,6 @@ const convertWeight = (weight: number, unit: string) => {
   }
 };
 
-let mockData = {
-  userId: "665291224e3640a167a73ae5",
-  logs: [
-    {
-      date: "2024-05-31T20:04:02.485Z",
-      name: "Template",
-      exercises: [
-        {
-          exerciseName: "Walking Lunge",
-          sets: [
-            { setNumber: 1, weight: 0, unit: "lbs", reps: 0 },
-            { setNumber: 2, weight: 0, unit: "lbs", reps: 0 },
-          ],
-        },
-        {
-          exerciseName: "Lat Pulldown",
-          sets: [{ setNumber: 1, weight: 0, unit: "lbs", reps: 0 }],
-        },
-      ],
-      isTemplate: true,
-    },
-  ],
-};
-
 export default function CreateLog() {
   const { status, session } = useAuthSession(); // status, session and update are available, see auth-context.tsx
 
@@ -56,14 +32,15 @@ export default function CreateLog() {
     return null; // Ensure the component does not render until redirection
   }
 
-  let templateData = mockData.logs[0].exercises;
-  console.log(mockData.logs[0].exercises);
+  // let templateData = mockData.logs[0].exercises;
+  // console.log(mockData.logs[0].exercises);
 
   const [searchInput, setSearchInput] = useState<string>("");
   const [searchResults, setSearchResults] = useState<Exercise[]>([]);
   const [selectedExercises, setSelectedExercises] = useState<
     ExerciseActivity[]
   >([]);
+  const [selectedTemplateData, setSelectedTemplateData] = useState(null);
   const [unit, setUnit] = useState<string>("lbs");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isTemplateModalOpen, setIsTemplateModalOpen] =
@@ -103,13 +80,7 @@ export default function CreateLog() {
     setSearchInput(""); // Clear search input after selection
     setSearchResults([]); // Clear search results after selection
 
-    console.log(selectedExercises, newExercise);
     return newExercise;
-  };
-
-  const handleSetTemplates = () => {
-    setSelectedExercises(templateData);
-    setIsTemplateModalOpen(false);
   };
 
   // Adds a set to a selected exercise
@@ -220,6 +191,15 @@ export default function CreateLog() {
     }
     setIsModalOpen(false);
     isTemplate = false;
+  };
+
+  const handleTemplateSelection = async (templateData) => {
+    await setSelectedTemplateData(templateData.exercises);
+  };
+
+  const handleSetTemplates = () => {
+    setSelectedExercises(selectedTemplateData);
+    setIsTemplateModalOpen(false);
   };
 
   const handleSaveAsTemplate = async () => {
@@ -390,6 +370,7 @@ export default function CreateLog() {
       <TemplatesModal
         open={isTemplateModalOpen}
         onClose={handleCloseTemplateModal}
+        onTemplateSelect={handleTemplateSelection}
         onGenerate={handleSetTemplates}
       />
     </div>
