@@ -161,6 +161,10 @@ export default function CreateLog() {
     setIsModalOpen(false);
   };
 
+  const handleSaveAsTemplate = () => {
+    console.log("Saving template");
+  };
+
   if (status === "unauthenticated") {
     router.replace("/signin");
     return null; // Ensure the component does not render until redirection
@@ -321,6 +325,7 @@ export default function CreateLog() {
         open={isModalOpen}
         onClose={handleCloseModal}
         onConfirm={handleSaveLog}
+        onSecondaryAction={handleSaveAsTemplate}
       />
     </div>
   );
