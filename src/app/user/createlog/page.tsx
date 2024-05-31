@@ -2,6 +2,7 @@
 import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
 import { ColorToggleButton } from "@/components/buttons/unit-toggle-button/Unit-toggle-button";
 import SaveLogModal from "@/components/modals/SaveLogModal";
+import TemplatesModal from "@/components/modals/TemplatesModal";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { Exercise } from "@/lib/exercises/exercise";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
@@ -23,7 +24,13 @@ const convertWeight = (weight: number, unit: string) => {
 
 export default function CreateLog() {
   const { status, session } = useAuthSession(); // status, session and update are available, see auth-context.tsx
+
   const router = useRouter();
+
+  if (status === "unauthenticated") {
+    router.replace("/signin");
+    return null; // Ensure the component does not render until redirection
+  }
 
   const [searchInput, setSearchInput] = useState<string>("");
   const [searchResults, setSearchResults] = useState<Exercise[]>([]);
@@ -32,6 +39,8 @@ export default function CreateLog() {
   >([]);
   const [unit, setUnit] = useState<string>("lbs");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isTemplateModalOpen, setIsTemplateModalOpen] =
+    useState<boolean>(false);
   let isTemplate = false;
 
   const exercisesArray = Object.values(ExercisesDictionary);
@@ -136,6 +145,14 @@ export default function CreateLog() {
     setIsModalOpen(false);
   };
 
+  const handleOpenTemplateModal = () => {
+    setIsTemplateModalOpen(true);
+  };
+
+  const handleCloseTemplateModal = () => {
+    setIsTemplateModalOpen(false);
+  };
+
   const handleSaveLog = async () => {
     if (session?.user?._id) {
       const logData = [
@@ -177,18 +194,16 @@ export default function CreateLog() {
     handleSaveLog();
   };
 
-  if (status === "unauthenticated") {
-    router.replace("/signin");
-    return null; // Ensure the component does not render until redirection
-  }
-
   return (
     <div className="flex flex-col items-center gap-y-20 justify-center w-screen mt-20 mb-10">
       {/* Header */}
       <h1 className="text-5xl font-bold leading-6 text-center">
         Log Your Workout
       </h1>
-      <BasicRoundedButton label="Choose From Templates" />
+      <BasicRoundedButton
+        label="Choose From Templates"
+        onClick={handleOpenTemplateModal}
+      />
       <div className="flex items-center">
         <div className="flex-1 w-48 border-t-2"></div>
         <h2 className="text-xl text-gray-500 pl-2 pr-2">
@@ -338,6 +353,10 @@ export default function CreateLog() {
         onClose={handleCloseModal}
         onConfirm={handleSaveLog}
         onSecondaryAction={handleSaveAsTemplate}
+      />
+      <TemplatesModal
+        open={isTemplateModalOpen}
+        onClose={handleCloseTemplateModal}
       />
     </div>
   );
