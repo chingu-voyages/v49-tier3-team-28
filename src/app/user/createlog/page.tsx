@@ -109,6 +109,7 @@ export default function CreateLog() {
 
   const handleSetTemplates = () => {
     setSelectedExercises(templateData);
+    setIsTemplateModalOpen(false);
   };
 
   // Adds a set to a selected exercise
@@ -234,7 +235,7 @@ export default function CreateLog() {
       </h1>
       <BasicRoundedButton
         label="Choose From Templates"
-        onClick={handleSetTemplates}
+        onClick={handleOpenTemplateModal}
       />
       <div className="flex items-center">
         <div className="flex-1 w-48 border-t-2"></div>
@@ -389,6 +390,7 @@ export default function CreateLog() {
       <TemplatesModal
         open={isTemplateModalOpen}
         onClose={handleCloseTemplateModal}
+        onGenerate={handleSetTemplates}
       />
     </div>
   );

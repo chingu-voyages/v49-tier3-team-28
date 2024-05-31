@@ -6,9 +6,14 @@ import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounde
 interface TemplateModalProps {
   open: boolean;
   onClose: () => void;
+  onGenerate: () => void;
 }
 
-const TemplatesModal: React.FC<TemplateModalProps> = ({ open, onClose }) => {
+const TemplatesModal: React.FC<TemplateModalProps> = ({
+  open,
+  onClose,
+  onGenerate,
+}) => {
   return (
     <Modal
       open={open}
@@ -26,7 +31,7 @@ const TemplatesModal: React.FC<TemplateModalProps> = ({ open, onClose }) => {
         <div> List of Templates shows up here</div>
         <div className="flex flex-col justify-between h-28">
           <BasicRoundedButton
-            // onClick={onConfirm}
+            onClick={onGenerate}
             label="Generate Log"
           ></BasicRoundedButton>
         </div>
