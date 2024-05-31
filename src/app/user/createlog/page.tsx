@@ -1,23 +1,16 @@
 "use client";
 import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
 import { ColorToggleButton } from "@/components/buttons/unit-toggle-button/Unit-toggle-button";
+import SaveLogModal from "@/components/modals/SaveLogModal";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
+import { Exercise } from "@/lib/exercises/exercise";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
+import { ExerciseActivity } from "@/models/exercise-activity.model";
+import { Set } from "@/models/set.model";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiPlus, FiSearch, FiTrash, FiX } from "react-icons/fi";
 import { LoggingClient } from "../../clients/logging-client/logging-client";
-
-interface Exercise {
-  id: string;
-  label: string;
-  sets: Set[];
-}
-
-interface Set {
-  reps: number;
-  weight: number;
-}
 
 const convertWeight = (weight: number, unit: string) => {
   const conversionRate = 2.20462;
@@ -33,9 +26,13 @@ export default function CreateLog() {
   const router = useRouter();
 
   const [searchInput, setSearchInput] = useState<string>("");
-  const [searchResults, setSearchResults] = useState<any[]>([]);
-  const [selectedExercises, setSelectedExercises] = useState<Exercise[]>([]);
+  const [searchResults, setSearchResults] = useState<Exercise[]>([]);
+  const [selectedExercises, setSelectedExercises] = useState<
+    ExerciseActivity[]
+  >([]);
   const [unit, setUnit] = useState<string>("lbs");
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  let isTemplate = false;
 
   const exercisesArray = Object.values(ExercisesDictionary);
 
@@ -60,19 +57,28 @@ export default function CreateLog() {
   }, []);
 
   // Adds an exercise to the log when selected from the search bar
-  const handleSelectExercise = (exercise: Exercise) => {
-    setSelectedExercises((prev) => [
-      ...prev,
-      { ...exercise, sets: [{ reps: 0, weight: 0 }] },
-    ]);
+  const handleSelectExercise = (exercise: Exercise): ExerciseActivity => {
+    const newExercise: ExerciseActivity = {
+      exerciseName: exercise.label,
+      sets: [{ setNumber: 1, reps: 0, weight: 0, unit }],
+    };
+
+    setSelectedExercises((prev) => [...prev, newExercise]);
     setSearchInput(""); // Clear search input after selection
     setSearchResults([]); // Clear search results after selection
+
+    return newExercise;
   };
 
   // Adds a set to a selected exercise
   const handleAddSet = (index: number) => {
     const newSelectedExercises = [...selectedExercises];
-    newSelectedExercises[index].sets.push({ reps: 0, weight: 0 });
+    newSelectedExercises[index].sets.push({
+      setNumber: 1,
+      reps: 0,
+      weight: 0,
+      unit,
+    });
     setSelectedExercises(newSelectedExercises);
   };
 
@@ -84,8 +90,10 @@ export default function CreateLog() {
     value: number
   ) => {
     const newSelectedExercises = [...selectedExercises];
-    newSelectedExercises[index].sets[setIndex][field] = value;
-    setSelectedExercises(newSelectedExercises);
+    if (field == "reps" || field == "weight") {
+      newSelectedExercises[index].sets[setIndex][field] = value;
+      setSelectedExercises(newSelectedExercises);
+    }
   };
 
   // Deletes a set from a selected exercise
@@ -120,17 +128,24 @@ export default function CreateLog() {
     localStorage.setItem("weightUnit", newUnit);
   };
 
-  // Saves the log into database
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   const handleSaveLog = async () => {
     if (session?.user?._id) {
-      const sessions = [
+      const logData = [
         {
           date: new Date(),
-          exercises: selectedExercises.map((exercise) => {
+          exercises: selectedExercises.map((exerciseActivity) => {
             // Map selected exercises to exerciseSchema
             return {
-              exerciseName: exercise.label,
-              sets: exercise.sets.map((set, index) => {
+              exerciseName: exerciseActivity.exerciseName,
+              sets: exerciseActivity.sets.map((set, index) => {
                 // Map sets to setSchema
                 return {
                   setNumber: index + 1, // Set number starts from 1
@@ -141,14 +156,24 @@ export default function CreateLog() {
               }),
             };
           }),
+          isTemplate: isTemplate,
         },
       ];
 
+      console.log(session.user);
+
       await LoggingClient.saveLog({
         userId: session.user._id,
-        sessions: sessions,
+        logs: logData,
       });
     }
+    setIsModalOpen(false);
+    isTemplate = false;
+  };
+
+  const handleSaveAsTemplate = async () => {
+    isTemplate = true;
+    handleSaveLog();
   };
 
   if (status === "unauthenticated") {
@@ -221,11 +246,11 @@ export default function CreateLog() {
         </div>
         {selectedExercises.map((exercise, index) => (
           <div
-            key={exercise.id}
+            key={index}
             className="rounded-xl mb-4 border border-gray-100 shadow-md relative"
           >
             <h4 className="text-black font-bold p-2 text-center ">
-              {exercise.label}
+              {exercise.exerciseName}
             </h4>
             <button
               onClick={() => handleDeleteExercise(index)}
@@ -302,11 +327,17 @@ export default function CreateLog() {
       {/* Save Button */}
       <div className="flex flex-col gap-y-9">
         <BasicRoundedButton
-          onClick={handleSaveLog}
+          onClick={handleOpenModal}
           label="Save Your Log"
           disabled={selectedExercises.length === 0}
         ></BasicRoundedButton>
       </div>
+      <SaveLogModal
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleSaveLog}
+        onSecondaryAction={handleSaveAsTemplate}
+      />
     </div>
   );
 }
