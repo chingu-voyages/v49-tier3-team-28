@@ -5,20 +5,12 @@ import SaveLogModal from "@/components/modals/SaveLogModal";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { Exercise } from "@/lib/exercises/exercise";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
+import { ExerciseActivity } from "@/models/exercise-activity.model";
+import { Set } from "@/models/set.model";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiPlus, FiSearch, FiTrash, FiX } from "react-icons/fi";
 import { LoggingClient } from "../../clients/logging-client/logging-client";
-
-interface ExerciseActivity {
-  exerciseName: string;
-  sets: Set[];
-}
-
-interface Set {
-  reps: number;
-  weight: number;
-}
 
 const convertWeight = (weight: number, unit: string) => {
   const conversionRate = 2.20462;
@@ -68,7 +60,7 @@ export default function CreateLog() {
   const handleSelectExercise = (exercise: Exercise): ExerciseActivity => {
     const newExercise: ExerciseActivity = {
       exerciseName: exercise.label,
-      sets: [{ reps: 0, weight: 0 }],
+      sets: [{ setNumber: 1, reps: 0, weight: 0, unit }],
     };
 
     setSelectedExercises((prev) => [...prev, newExercise]);
@@ -81,7 +73,12 @@ export default function CreateLog() {
   // Adds a set to a selected exercise
   const handleAddSet = (index: number) => {
     const newSelectedExercises = [...selectedExercises];
-    newSelectedExercises[index].sets.push({ reps: 0, weight: 0 });
+    newSelectedExercises[index].sets.push({
+      setNumber: 1,
+      reps: 0,
+      weight: 0,
+      unit,
+    });
     setSelectedExercises(newSelectedExercises);
   };
 
@@ -93,8 +90,10 @@ export default function CreateLog() {
     value: number
   ) => {
     const newSelectedExercises = [...selectedExercises];
-    newSelectedExercises[index].sets[setIndex][field] = value;
-    setSelectedExercises(newSelectedExercises);
+    if (field == "reps" || field == "weight") {
+      newSelectedExercises[index].sets[setIndex][field] = value;
+      setSelectedExercises(newSelectedExercises);
+    }
   };
 
   // Deletes a set from a selected exercise
