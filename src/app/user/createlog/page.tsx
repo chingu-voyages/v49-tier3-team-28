@@ -141,6 +141,7 @@ export default function CreateLog() {
       const logData = [
         {
           date: new Date(),
+          name: isTemplate ? "Template" : new Date(),
           exercises: selectedExercises.map((exerciseActivity) => {
             // Map selected exercises to exerciseSchema
             return {
