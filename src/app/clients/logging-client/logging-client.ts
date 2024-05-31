@@ -4,10 +4,10 @@ export const LoggingClient = {
    */
   async saveLog({
     userId,
-    sessions,
+    logs,
   }: {
     userId: string;
-    sessions: Array<{
+    logs: Array<{
       date: Date;
       exercises: Array<{
         exerciseName: string;
@@ -18,11 +18,12 @@ export const LoggingClient = {
           reps: number;
         }>;
       }>;
+      isTemplate: boolean;
     }>;
   }): Promise<void> {
     const formData = {
       userId: userId,
-      sessions: sessions,
+      logs: logs,
     };
 
     const jsonData = JSON.stringify(formData);

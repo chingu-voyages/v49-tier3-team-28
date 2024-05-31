@@ -61,7 +61,7 @@ export function SigninForm() {
     const res = await AuthClient.signInUser({
       email: formFieldValues.email,
       password: formFieldValues.password,
-      callbackUrl: "/home", // User is redirected to the landing (home) page once they are signed in.
+      callbackUrl: "/user/home", // User is redirected to the landing (home) page once they are signed in.
       redirect: false,
     });
 

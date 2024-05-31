@@ -78,7 +78,7 @@ export default function SignupForm() {
         email: formFieldValues.email,
         password: formFieldValues.password1,
         isRegistering: true,
-        callbackUrl: "/home", // User is directed to the landing (home) page
+        callbackUrl: "/user/home", // User is directed to the landing (home) page
       });
     } catch (error: any) {
       setAppError({ error: true, message: error });
