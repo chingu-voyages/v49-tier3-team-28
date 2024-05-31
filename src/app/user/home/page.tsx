@@ -6,10 +6,6 @@ import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 
 export default function LandingPage() {
-  const getCurrentDate = () => {
-    return dayjs().format("ddd, MMMM D, YYYY");
-  };
-
   /*
     This is an example of how to use the hook to access the auth sesion, which indicates if user is logged in or not.
     It also has basic user data that we may need to use on the front end (like the email, username, _id).
@@ -30,7 +26,7 @@ export default function LandingPage() {
         <h1 className={`text-5xl leading-6`}>
           Welcome {session?.user?.username}
         </h1>
-        <h3>{getCurrentDate()}</h3>
+        <h3>{dayjs().format("ddd, MMMM D, YYYY")}</h3>
       </div>
       {/* Logging Button */}
       <div className="flex flex-col gap-y-9">
