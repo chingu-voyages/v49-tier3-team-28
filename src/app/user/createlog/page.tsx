@@ -22,6 +22,30 @@ const convertWeight = (weight: number, unit: string) => {
   }
 };
 
+let mockData = {
+  userId: "665291224e3640a167a73ae5",
+  logs: [
+    {
+      date: "2024-05-31T20:04:02.485Z",
+      name: "Template",
+      exercises: [
+        {
+          exerciseName: "Walking Lunge",
+          sets: [
+            { setNumber: 1, weight: 0, unit: "lbs", reps: 0 },
+            { setNumber: 2, weight: 0, unit: "lbs", reps: 0 },
+          ],
+        },
+        {
+          exerciseName: "Lat Pulldown",
+          sets: [{ setNumber: 1, weight: 0, unit: "lbs", reps: 0 }],
+        },
+      ],
+      isTemplate: true,
+    },
+  ],
+};
+
 export default function CreateLog() {
   const { status, session } = useAuthSession(); // status, session and update are available, see auth-context.tsx
 
@@ -31,6 +55,9 @@ export default function CreateLog() {
     router.replace("/signin");
     return null; // Ensure the component does not render until redirection
   }
+
+  let templateData = mockData.logs[0].exercises;
+  console.log(mockData.logs[0].exercises);
 
   const [searchInput, setSearchInput] = useState<string>("");
   const [searchResults, setSearchResults] = useState<Exercise[]>([]);
@@ -76,7 +103,12 @@ export default function CreateLog() {
     setSearchInput(""); // Clear search input after selection
     setSearchResults([]); // Clear search results after selection
 
+    console.log(selectedExercises, newExercise);
     return newExercise;
+  };
+
+  const handleSetTemplates = () => {
+    setSelectedExercises(templateData);
   };
 
   // Adds a set to a selected exercise
@@ -202,7 +234,7 @@ export default function CreateLog() {
       </h1>
       <BasicRoundedButton
         label="Choose From Templates"
-        onClick={handleOpenTemplateModal}
+        onClick={handleSetTemplates}
       />
       <div className="flex items-center">
         <div className="flex-1 w-48 border-t-2"></div>
