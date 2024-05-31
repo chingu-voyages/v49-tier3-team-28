@@ -1,6 +1,7 @@
 "use client";
 import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
 import { ColorToggleButton } from "@/components/buttons/unit-toggle-button/Unit-toggle-button";
+import SaveLogModal from "@/components/modals/SaveLogModal";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { useRouter } from "next/navigation";
@@ -36,6 +37,7 @@ export default function CreateLog() {
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [selectedExercises, setSelectedExercises] = useState<Exercise[]>([]);
   const [unit, setUnit] = useState<string>("lbs");
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const exercisesArray = Object.values(ExercisesDictionary);
 
@@ -120,7 +122,14 @@ export default function CreateLog() {
     localStorage.setItem("weightUnit", newUnit);
   };
 
-  // Saves the log into database
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   const handleSaveLog = async () => {
     if (session?.user?._id) {
       const sessions = [
@@ -149,6 +158,7 @@ export default function CreateLog() {
         sessions: sessions,
       });
     }
+    setIsModalOpen(false);
   };
 
   if (status === "unauthenticated") {
@@ -302,11 +312,16 @@ export default function CreateLog() {
       {/* Save Button */}
       <div className="flex flex-col gap-y-9">
         <BasicRoundedButton
-          onClick={handleSaveLog}
+          onClick={handleOpenModal}
           label="Save Your Log"
           disabled={selectedExercises.length === 0}
         ></BasicRoundedButton>
       </div>
+      <SaveLogModal
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleSaveLog}
+      />
     </div>
   );
 }
