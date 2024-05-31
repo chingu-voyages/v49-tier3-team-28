@@ -1,11 +1,11 @@
 "use client";
 import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
+import { ColorToggleButton } from "@/components/buttons/unit-toggle-button/Unit-toggle-button";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiPlus, FiSearch, FiTrash, FiX } from "react-icons/fi";
-import Switch from "react-switch";
 import { LoggingClient } from "../clients/logging-client/logging-client";
 
 interface Exercise {
@@ -19,18 +19,27 @@ interface Set {
   weight: number;
 }
 
+const convertWeight = (weight: number, unit: string) => {
+  const conversionRate = 2.20462;
+  if (unit === "kg") {
+    return weight / conversionRate;
+  } else {
+    return weight * conversionRate;
+  }
+};
+
 export default function CreateLog() {
   const { status, session } = useAuthSession(); // status, session and update are available, see auth-context.tsx
   const router = useRouter();
 
   const [searchInput, setSearchInput] = useState<string>("");
-  const [searchResults, setSearchResults] = useState<any>([]);
-  console.log(searchResults);
+  const [searchResults, setSearchResults] = useState<any[]>([]);
   const [selectedExercises, setSelectedExercises] = useState<Exercise[]>([]);
-  const [unit, setUnit] = useState("lbs");
+  const [unit, setUnit] = useState<string>("lbs");
 
   const exercisesArray = Object.values(ExercisesDictionary);
 
+  // Updates the search results as the user inputs characters in the search bar
   useEffect(() => {
     if (searchInput) {
       const results = exercisesArray.filter((exercise) =>
@@ -42,6 +51,15 @@ export default function CreateLog() {
     }
   }, [searchInput]);
 
+  // Updates the state of the unit based on localStorage
+  useEffect(() => {
+    const savedUnit = localStorage.getItem("weightUnit");
+    if (savedUnit) {
+      setUnit(savedUnit);
+    }
+  }, []);
+
+  // Adds an exercise to the log when selected from the search bar
   const handleSelectExercise = (exercise: Exercise) => {
     setSelectedExercises((prev) => [
       ...prev,
@@ -51,12 +69,14 @@ export default function CreateLog() {
     setSearchResults([]); // Clear search results after selection
   };
 
+  // Adds a set to a selected exercise
   const handleAddSet = (index: number) => {
     const newSelectedExercises = [...selectedExercises];
     newSelectedExercises[index].sets.push({ reps: 0, weight: 0 });
     setSelectedExercises(newSelectedExercises);
   };
 
+  // Updates the set values
   const handleSetChange = (
     index: number,
     setIndex: number,
@@ -68,6 +88,7 @@ export default function CreateLog() {
     setSelectedExercises(newSelectedExercises);
   };
 
+  // Deletes a set from a selected exercise
   const handleDeleteSet = (index: number, setIndex: number) => {
     const newSelectedExercises = [...selectedExercises];
     // Remove the set at setIndex from the selected exercise
@@ -75,16 +96,31 @@ export default function CreateLog() {
     setSelectedExercises(newSelectedExercises);
   };
 
+  // Deletes an exercise from the log
   const handleDeleteExercise = (index: number) => {
     const newSelectedExercises = [...selectedExercises];
     newSelectedExercises.splice(index, 1);
     setSelectedExercises(newSelectedExercises);
   };
 
+  // Handles toggle logic that switches between lbs and kg
   const toggleUnit = () => {
-    setUnit(unit === "lbs" ? "kg" : "lbs");
+    const newUnit = unit === "lbs" ? "kg" : "lbs";
+    const convertedExercises = selectedExercises.map((exercise) => ({
+      ...exercise,
+      sets: exercise.sets.map((set) => ({
+        ...set,
+        weight: parseInt(convertWeight(set.weight, newUnit).toFixed()),
+      })),
+    }));
+
+    setSelectedExercises(convertedExercises);
+    setUnit(newUnit);
+
+    localStorage.setItem("weightUnit", newUnit);
   };
 
+  // Saves the log into database
   const handleSaveLog = async () => {
     if (session?.user?._id) {
       const sessions = [
@@ -130,8 +166,7 @@ export default function CreateLog() {
       <div className="flex items-center">
         <div className="flex-1 w-48 border-t-2"></div>
         <h2 className="text-xl text-gray-500 pl-2 pr-2">
-          {" "}
-          Or Start Logging By Search{" "}
+          Or Start Logging By Search
         </h2>
         <div className="flex-1 w-48 border-t-2"></div>
       </div>
@@ -172,25 +207,17 @@ export default function CreateLog() {
         )}
       </div>
 
-      {/* Selected Exercises */}
+      {/* Selected Exercises (Exercise Log) */}
       <div className="flex flex-col gap-y-9 w-3/4 px-4">
         <div className="flex justify-end gap-2 w-full">
-          <div>
-            <Switch
-              onChange={toggleUnit}
-              checked={unit === "kg"}
-              onColor="#4CAF50"
-              onHandleColor="#fff"
-              handleDiameter={24}
-              uncheckedIcon={false}
-              checkedIcon={false}
-              boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
-              activeBoxShadow="0px 0px 1px 0px rgba(0, 0, 0, 0.1)"
-              height={16}
-              width={40}
-            />
-          </div>
-          <span>Weighted Unit: {unit === "lbs" ? "lbs" : "kg"}</span>
+          <ColorToggleButton
+            onChange={toggleUnit}
+            alignment={unit}
+            leftLabel="Metric"
+            rightLabel="Imperial"
+            leftValue="lbs"
+            rightValue="kg"
+          />
         </div>
         {selectedExercises.map((exercise, index) => (
           <div
