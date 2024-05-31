@@ -7,7 +7,7 @@ import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiPlus, FiSearch, FiTrash, FiX } from "react-icons/fi";
-import { LoggingClient } from "../clients/logging-client/logging-client";
+import { LoggingClient } from "../../clients/logging-client/logging-client";
 
 interface Exercise {
   id: string;

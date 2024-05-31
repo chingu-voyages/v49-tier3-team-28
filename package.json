@@ -17,6 +17,7 @@
     "@mui/material-nextjs": "^5.15.11",
     "@types/mongoose": "^5.11.97",
     "bcrypt": "^5.1.1",
+    "dayjs": "^1.11.11",
     "mongodb": "^6.6.2",
     "mongoose": "^8.3.5",
     "next": "14.2.3",
