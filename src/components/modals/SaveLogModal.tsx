@@ -27,7 +27,7 @@ const SaveLogModal: React.FC<SaveLogModalProps> = ({
           <FiX />
         </button>
         <img
-          src="images/create-log-page/modal-splash.jpg"
+          src="/images/create-log-page/modal-splash.jpg"
           alt="modal-image"
           style={{ height: "50%" }}
         />
