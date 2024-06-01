@@ -1,7 +1,5 @@
 import { AuthSessionProvider } from "@/lib/contexts/auth-context/auth-context";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import type { Metadata } from "next";
 import "./globals.css";
 import { NextAuthProvider } from "./providers/nextAuth/next-auth-provider";
@@ -21,11 +19,7 @@ export default function RootLayout({
       <body>
         <NextAuthProvider>
           <AuthSessionProvider>
-            <AppRouterCacheProvider>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                {children}
-              </LocalizationProvider>
-            </AppRouterCacheProvider>
+            <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
           </AuthSessionProvider>
         </NextAuthProvider>
       </body>
