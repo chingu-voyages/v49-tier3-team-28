@@ -145,12 +145,14 @@ export default function CreateLog() {
 
   // -------------- Set Template Data from Modal to Generate Logs ----------------------
 
-  const handleTemplateSelection = (templateData: ExerciseActivity[]) => {
+  const handleTemplateSelection = (templateData: ExerciseActivity[] | null) => {
     setSelectedTemplateData(templateData);
   };
 
   const handleSetTemplates = () => {
-    setSelectedExercises(selectedTemplateData);
+    if (selectedTemplateData) {
+      setSelectedExercises(selectedTemplateData);
+    }
     setIsTemplateModalOpen(false);
   };
 

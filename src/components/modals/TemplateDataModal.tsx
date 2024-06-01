@@ -7,7 +7,7 @@ import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounde
 interface TemplateDataModalProps {
   open: boolean;
   onClose: () => void;
-  exerciseData: ExerciseActivity[];
+  exerciseData: ExerciseActivity[] | null;
 }
 
 const TemplateDataModal: React.FC<TemplateDataModalProps> = ({
