@@ -1,3 +1,4 @@
+import { LoggingClient } from "@/app/clients/logging-client/logging-client";
 import {
   DateCalendar,
   LocalizationProvider,
@@ -14,6 +15,15 @@ import { Dayjs } from "dayjs";
 */
 
 export function CalendarLogViewer() {
+  const handleMonthChange = async (date: Dayjs) => {
+    // When the month changes, we need to fetch the logs for that month and year.
+    try {
+      const fetchedLogsByMonthAndYear =
+        await LoggingClient.getLogsByMonthAndYear(date.month(), date.year());
+    } catch (e: any) {
+      // Do something with the error.
+    }
+  };
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateCalendar
@@ -64,10 +74,7 @@ export function CalendarLogViewer() {
             display: "none",
           },
         }}
-        onMonthChange={(date: Dayjs) => {
-          // We need the month and the year to
-          console.log(date.get("year"));
-        }}
+        onMonthChange={handleMonthChange}
       />
     </LocalizationProvider>
   );
