@@ -177,7 +177,11 @@ const TemplatesModal: React.FC<TemplateModalProps> = ({
             ))}
           </div>
           <div className="flex flex-col justify-between h-28">
-            <BasicRoundedButton onClick={onGenerate} label="Generate Log" />
+            <BasicRoundedButton
+              onClick={onGenerate}
+              label="Generate Log"
+              disabled={!selectedTemplate}
+            />
           </div>
         </div>
       </Modal>
