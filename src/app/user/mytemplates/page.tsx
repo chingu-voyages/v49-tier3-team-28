@@ -1,6 +1,7 @@
 "use client";
 import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
 import TemplateCard from "@/components/cards/TemplateCard";
+import Link from "next/link";
 import React from "react";
 
 interface MyTemplatesProps {}
@@ -126,7 +127,9 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
             ))}
         </div>
         <div className="flex flex-col justify-between h-28">
-          <BasicRoundedButton label="Create New Template" />
+          <Link href="/user/createtemplate">
+            <BasicRoundedButton label="Create New Template" />
+          </Link>
         </div>
       </div>
     </div>
