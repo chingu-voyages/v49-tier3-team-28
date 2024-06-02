@@ -4,6 +4,7 @@ import { ColorToggleButton } from "@/components/buttons/unit-toggle-button/Unit-
 import SaveLogModal from "@/components/modals/SaveLogModal";
 import TemplatesModal from "@/components/modals/TemplatesModal";
 import ExerciseTable from "@/components/tables/ExerciseTable";
+import { convertWeight } from "@/helpers/helpers";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { Exercise } from "@/lib/exercises/exercise";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
@@ -13,15 +14,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiPlus, FiSearch, FiX } from "react-icons/fi";
 import { LoggingClient } from "../../clients/logging-client/logging-client";
-
-const convertWeight = (weight: number, unit: string) => {
-  const conversionRate = 2.20462;
-  if (unit === "kg") {
-    return weight / conversionRate;
-  } else {
-    return weight * conversionRate;
-  }
-};
 
 export default function CreateLog() {
   const { status, session } = useAuthSession(); // status, session and update are available, see auth-context.tsx

@@ -3,6 +3,7 @@ import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Ba
 import { ColorToggleButton } from "@/components/buttons/unit-toggle-button/Unit-toggle-button";
 import SuccessModal from "@/components/modals/SuccessModal";
 import ExerciseTable from "@/components/tables/ExerciseTable";
+import { convertWeight } from "@/helpers/helpers";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { Exercise } from "@/lib/exercises/exercise";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
@@ -13,15 +14,6 @@ import { FiPlus, FiSearch, FiX } from "react-icons/fi";
 import { LoggingClient } from "../../clients/logging-client/logging-client";
 
 // TODO: Need to create a redirect route when successfully saving the template
-
-const convertWeight = (weight: number, unit: string) => {
-  const conversionRate = 2.20462;
-  if (unit === "kg") {
-    return weight / conversionRate;
-  } else {
-    return weight * conversionRate;
-  }
-};
 
 export default function CreateTemplate() {
   const { status, session } = useAuthSession();
