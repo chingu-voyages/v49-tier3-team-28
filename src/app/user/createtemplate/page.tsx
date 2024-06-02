@@ -38,12 +38,10 @@ export default function CreateTemplate() {
   const [selectedExercises, setSelectedExercises] = useState<
     ExerciseActivity[]
   >([]);
-  const [selectedTemplateData, setSelectedTemplateData] = useState<
-    ExerciseActivity[] | null
-  >(null);
   const [unit, setUnit] = useState<string>("lbs");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [templateName, setTemplateName] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
   const exercisesArray = Object.values(ExercisesDictionary);
 
@@ -101,7 +99,6 @@ export default function CreateTemplate() {
 
   const handleDeleteSet = (index: number, setIndex: number) => {
     const newSelectedExercises = [...selectedExercises];
-    // Remove the set at setIndex from the selected exercise
     newSelectedExercises[index].sets.splice(setIndex, 1);
     setSelectedExercises(newSelectedExercises);
   };
@@ -127,6 +124,11 @@ export default function CreateTemplate() {
   // -------------------------- Save Log/Template ---------------------------------------
 
   const handleSaveLog = async () => {
+    if (!templateName) {
+      setErrorMessage("Template name can't be empty.");
+      return;
+    }
+
     if (session?.user?._id) {
       const logData = [
         {
@@ -180,6 +182,9 @@ export default function CreateTemplate() {
           placeholder="Enter a name for your template"
           className="border rounded-xl p-2 bg-gray-50 w-full text-center"
         />
+        {errorMessage && (
+          <p className="text-red-500 text-center mt-2">{errorMessage}</p>
+        )}
       </div>
 
       <div className="flex items-center">
