@@ -188,7 +188,6 @@ export default function CreateLog() {
       }
     }
     setIsModalOpen(false);
-    isTemplate = false;
   };
 
   const handleSaveAsTemplate = async () => {
