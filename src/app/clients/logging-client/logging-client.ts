@@ -9,7 +9,7 @@ export const LoggingClient = {
     userId: string;
     logs: Array<{
       createdAt: Date;
-      name: String | Date;
+      name: string | Date;
       exercises: Array<{
         exerciseName: string;
         sets: Array<{
