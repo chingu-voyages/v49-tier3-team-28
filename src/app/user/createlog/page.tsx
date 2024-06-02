@@ -351,7 +351,7 @@ export default function CreateLog() {
       <SaveLogModal
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onConfirm={handleSaveLog}
+        onConfirm={() => handleSaveLog()}
         onSecondaryAction={handleSaveAsTemplate}
       />
       <TemplatesModal
