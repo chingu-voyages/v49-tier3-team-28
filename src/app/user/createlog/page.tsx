@@ -3,6 +3,7 @@ import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Ba
 import { ColorToggleButton } from "@/components/buttons/unit-toggle-button/Unit-toggle-button";
 import SaveLogModal from "@/components/modals/SaveLogModal";
 import TemplatesModal from "@/components/modals/TemplatesModal";
+import ExerciseTable from "@/components/tables/ExerciseTable";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { Exercise } from "@/lib/exercises/exercise";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
@@ -10,7 +11,7 @@ import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Set } from "@/models/set.model";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FiPlus, FiSearch, FiTrash, FiX } from "react-icons/fi";
+import { FiPlus, FiSearch, FiX } from "react-icons/fi";
 import { LoggingClient } from "../../clients/logging-client/logging-client";
 
 const convertWeight = (weight: number, unit: string) => {
@@ -262,6 +263,7 @@ export default function CreateLog() {
             rightValue="kg"
           />
         </div>
+
         {selectedExercises.map((exercise, index) => (
           <div
             key={index}
@@ -276,63 +278,14 @@ export default function CreateLog() {
             >
               <FiX />
             </button>
-            <table className="w-full border-collapse bg-white">
-              <thead>
-                <tr className="text-white text-center bg-orange-500">
-                  <th className="p-left-2 font-bold">Set</th>
-                  <th className="p-2">Reps</th>
-                  <th className="p-2">Weight ({unit})</th>
-                  <th className="p-2"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {exercise.sets.map((set, setIndex) => (
-                  <tr key={setIndex} className="odd:bg-orange-100 text-center">
-                    <td className="p-2 text-center">{setIndex + 1}</td>
-                    <td className="p-2 text-center ">
-                      <input
-                        type="number"
-                        value={set.reps}
-                        onChange={(e) =>
-                          handleSetChange(
-                            index,
-                            setIndex,
-                            "reps",
-                            Number(e.target.value)
-                          )
-                        }
-                        className="w-3/4 p-1 border rounded-xl text-center bg-gray-50"
-                      />
-                    </td>
-                    <td className="p-2">
-                      <input
-                        type="number"
-                        value={set.weight}
-                        onChange={(e) =>
-                          handleSetChange(
-                            index,
-                            setIndex,
-                            "weight",
-                            Number(e.target.value)
-                          )
-                        }
-                        className="w-3/4 p-1 border rounded-xl text-center bg-gray-50"
-                      />
-                    </td>
-                    <td className="p-1">
-                      {exercise.sets.length > 1 && ( // Condition to render the delete button
-                        <button
-                          onClick={() => handleDeleteSet(index, setIndex)}
-                          className=" text-red-500"
-                        >
-                          <FiTrash />
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <ExerciseTable
+              sets={exercise.sets}
+              unit={unit}
+              onSetChange={(setIndex, field, value) =>
+                handleSetChange(index, setIndex, field, value)
+              }
+              onDeleteSet={(setIndex) => handleDeleteSet(index, setIndex)}
+            />
             <button
               onClick={() => handleAddSet(index)}
               className="m-2 p-2 border rounded-xl bg-green-500 text-white font-bold hover:bg-green-600"
