@@ -160,7 +160,6 @@ export default function CreateLog() {
     if (session?.user?._id) {
       const logData = [
         {
-          createdAt: new Date(),
           name: isTemplate ? "Template" : new Date(),
           exercises: selectedExercises.map((exerciseActivity) => {
             // Map selected exercises to exerciseSchema
