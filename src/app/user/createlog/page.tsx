@@ -123,26 +123,6 @@ export default function CreateLog() {
     setSelectedExercises(newSelectedExercises);
   };
 
-  // --------------------- Open/Close Modal when Saving Logs --------------------------
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
-  // ---------------------- Open/Close Modal when Choosing From Template --------------
-
-  const handleOpenTemplateModal = () => {
-    setIsTemplateModalOpen(true);
-  };
-
-  const handleCloseTemplateModal = () => {
-    setIsTemplateModalOpen(false);
-  };
-
   // -------------- Set Template Data from Modal to Generate Logs ----------------------
 
   const handleTemplateSelection = (templateData: ExerciseActivity[] | null) => {
@@ -225,7 +205,7 @@ export default function CreateLog() {
       </h1>
       <BasicRoundedButton
         label="Choose From Templates"
-        onClick={handleOpenTemplateModal}
+        onClick={() => setIsTemplateModalOpen(true)}
       />
       <div className="flex items-center">
         <div className="flex-1 w-48 border-t-2"></div>
@@ -366,20 +346,20 @@ export default function CreateLog() {
       {/* Save Button */}
       <div className="flex flex-col gap-y-9">
         <BasicRoundedButton
-          onClick={handleOpenModal}
+          onClick={() => setIsModalOpen(true)}
           label="Save Your Log"
           disabled={selectedExercises.length === 0}
         ></BasicRoundedButton>
       </div>
       <SaveLogModal
         open={isModalOpen}
-        onClose={handleCloseModal}
+        onClose={() => setIsModalOpen(false)}
         onConfirm={handleSaveLog}
         onSecondaryAction={handleSaveAsTemplate}
       />
       <TemplatesModal
         open={isTemplateModalOpen}
-        onClose={handleCloseTemplateModal}
+        onClose={() => setIsTemplateModalOpen(false)}
         onTemplateSelect={handleTemplateSelection}
         onGenerate={handleSetTemplates}
       />

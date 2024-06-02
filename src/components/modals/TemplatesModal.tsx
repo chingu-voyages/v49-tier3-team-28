@@ -12,6 +12,7 @@ interface TemplateModalProps {
   onTemplateSelect: (template: ExerciseActivity[] | null) => void;
 }
 
+//TODO: remove this mock data once we have backend support
 let mockData = {
   userId: "665291224e3640a167a73ae5",
   logs: [
