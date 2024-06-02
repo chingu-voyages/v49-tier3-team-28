@@ -22,11 +22,16 @@ export default function LandingPage() {
   return (
     <div className="flex flex-col items-center gap-y-36 justify-center w-screen h-screen bg-cover bg-no-repeat bg-center">
       {/* Header */}
-      <div className="flex flex-col gap-y-10">
-        <h1 className={`text-5xl leading-6`}>
-          Welcome {session?.user?.username}
-        </h1>
-        <h3>{dayjs().format("ddd, MMMM D, YYYY")}</h3>
+      <div className="flex w-2/3 justify-between">
+        <div className="flex flex-col gap-y-10">
+          <h1 className={`text-5xl leading-6`}>
+            Welcome {session?.user?.username}
+          </h1>
+          <h3>{dayjs().format("ddd, MMMM D, YYYY")}</h3>
+        </div>
+        <Link href="/user/mytemplates">
+          <BasicRoundedButton label="View Templates" />
+        </Link>
       </div>
       {/* Logging Button */}
       <div className="flex flex-col gap-y-9">
