@@ -25,8 +25,9 @@ const userSchema = new Schema<User>(
       minlength: 6, // Ensures the password is at least 6 characters long
     },
     logs: {
-      type: [logSchema]
-    }
+      type: [logSchema],
+      default: [],
+    },
   },
   { timestamps: true }
 );

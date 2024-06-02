@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
   if (!user)
     return NextResponse.json({ error: "User not found" }, { status: 404 });
 
-  // Right now, we're simply concating the new logs to the existing logs array.
+  // Right now, we're simply concatenating the new logs to the existing logs array.
   user.logs = user.logs.concat(requestBody.logs);
 
   await user.save();
