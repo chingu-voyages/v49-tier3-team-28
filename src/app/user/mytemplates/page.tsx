@@ -1,3 +1,4 @@
+"use client";
 import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
 import TemplateCard from "@/components/cards/TemplateCard";
 import React from "react";
@@ -98,9 +99,14 @@ let mockData = {
 const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
   const templates = mockData.logs.filter((log) => log.isTemplate);
   //   const templates = null; Case for no template
+
+  const handleClick = () => {
+    console.log("Clicked this template");
+  };
+
   return (
     <div>
-      <div className="flex flex-col bg-white p-10 rounded-xl relative justify-evenly items-center text-center">
+      <div className="flex flex-col justify-evenly items-center text-center min-h-screen">
         <h1 className="text-4xl font-bold text-center">
           Choose From Templates
         </h1>
@@ -115,12 +121,12 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
           {templates &&
             templates.map((template, index) => (
               <div key={index} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
-                <TemplateCard data={template} />
+                <TemplateCard onClick={handleClick} data={template} />
               </div>
             ))}
         </div>
         <div className="flex flex-col justify-between h-28">
-          <BasicRoundedButton label="Create Template" />
+          <BasicRoundedButton label="Create New Template" />
         </div>
       </div>
     </div>
