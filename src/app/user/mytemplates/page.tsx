@@ -1,8 +1,10 @@
 "use client";
 import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
 import TemplateCard from "@/components/cards/TemplateCard";
+import TemplateDataModal from "@/components/modals/TemplateDataModal";
+import { ExerciseActivity } from "@/models/exercise-activity.model";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 
 interface MyTemplatesProps {}
 
@@ -101,8 +103,14 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
   const templates = mockData.logs.filter((log) => log.isTemplate);
   //   const templates = null; Case for no template
 
-  const handleClick = () => {
-    console.log("Clicked this template");
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<
+    ExerciseActivity[] | null
+  >(null);
+
+  const handleTemplateClick = (template: ExerciseActivity[]) => {
+    setSelectedTemplate(template);
+    setIsModalOpen(true);
   };
 
   return (
@@ -120,9 +128,12 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
         {/* Templates to Choose From */}
         <div className="flex flex-wrap -mx-2">
           {templates &&
-            templates.map((template, index) => (
-              <div key={index} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
-                <TemplateCard onClick={handleClick} data={template} />
+            templates.map((template, idx) => (
+              <div key={idx} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
+                <TemplateCard
+                  onClick={() => handleTemplateClick(template.exercises)}
+                  data={template}
+                />
               </div>
             ))}
         </div>
@@ -132,6 +143,11 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
           </Link>
         </div>
       </div>
+      <TemplateDataModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        exerciseData={selectedTemplate}
+      />
     </div>
   );
 };

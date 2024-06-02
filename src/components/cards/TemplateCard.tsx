@@ -1,6 +1,6 @@
 import { Log } from "@/models/log.model";
 import React from "react";
-import { FiEdit, FiEye } from "react-icons/fi";
+import { FiEdit } from "react-icons/fi";
 
 // TODO: Update Functionality of View Template and Edit Template Buttons
 
@@ -20,9 +20,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ data, onClick }) => {
       <div>
         <div className="relative font-bold text-lg mb-2 bg-orange-500 p-2 rounded-t-lg text-white">
           {data.name}
-          <button className="absolute top-2 left-2">
-            <FiEye />
-          </button>
+
           <button className="absolute top-2 right-2">
             <FiEdit />
           </button>

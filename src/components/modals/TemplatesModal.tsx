@@ -120,27 +120,16 @@ const TemplatesModal: React.FC<TemplateModalProps> = ({
   >(null);
   const [activeTemplateIdx, setActiveTemplateIdx] = useState<number | null>(
     null
-  ); // State to keep track of the active template
+  );
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
+  // TODO: Delete this when we get backend running
   const templates = mockData.logs.filter((log) => log.isTemplate);
 
   const handleTemplateClick = (template: ExerciseActivity[], idx: number) => {
     setSelectedTemplate(template);
     onTemplateSelect(template);
-    setActiveTemplateIdx(idx); // Set the active template index
-  };
-
-  const handleViewTemplate = () => {
-    handleOpenModal();
-  };
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+    setActiveTemplateIdx(idx);
   };
 
   return (
@@ -172,7 +161,7 @@ const TemplatesModal: React.FC<TemplateModalProps> = ({
               >
                 <div className="text-xl">{template.name}</div>
                 <button className="mr-2 transition-transform duration-300 hover:scale-125">
-                  <FiEye onClick={() => handleViewTemplate()} />
+                  <FiEye onClick={() => setIsModalOpen(true)} />
                 </button>
               </div>
             ))}
@@ -188,7 +177,7 @@ const TemplatesModal: React.FC<TemplateModalProps> = ({
       </Modal>
       <TemplateDataModal
         open={isModalOpen}
-        onClose={handleCloseModal}
+        onClose={() => setIsModalOpen(false)}
         exerciseData={selectedTemplate}
       />
     </div>
