@@ -6,7 +6,7 @@ export const logSchema = new Schema<Log>(
   {
     name: {
       type: String,
-      required: true,
+      optional: true,
       unique: true,
     },
     exercises: {
@@ -15,6 +15,7 @@ export const logSchema = new Schema<Log>(
     },
     isTemplate: {
       type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }
