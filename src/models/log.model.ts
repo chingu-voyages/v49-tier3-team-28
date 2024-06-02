@@ -1,7 +1,7 @@
 import { ExerciseActivity } from "./exercise-activity.model";
 
 export interface Log {
-  name: string;
+  name?: string;
   exercises: ExerciseActivity[];
   isTemplate: boolean;
 }
