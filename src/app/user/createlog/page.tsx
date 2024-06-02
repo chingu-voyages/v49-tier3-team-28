@@ -2,6 +2,7 @@
 import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
 import { ColorToggleButton } from "@/components/buttons/unit-toggle-button/Unit-toggle-button";
 import SaveLogModal from "@/components/modals/SaveLogModal";
+import TemplatesModal from "@/components/modals/TemplatesModal";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { Exercise } from "@/lib/exercises/exercise";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
@@ -25,13 +26,25 @@ export default function CreateLog() {
   const { status, session } = useAuthSession(); // status, session and update are available, see auth-context.tsx
   const router = useRouter();
 
+  if (status === "unauthenticated") {
+    router.replace("/signin");
+    return null; // Ensure the component does not render until redirection
+  }
+
+  // ---------------------------- State Management ------------------------------------
+
   const [searchInput, setSearchInput] = useState<string>("");
   const [searchResults, setSearchResults] = useState<Exercise[]>([]);
   const [selectedExercises, setSelectedExercises] = useState<
     ExerciseActivity[]
   >([]);
+  const [selectedTemplateData, setSelectedTemplateData] = useState<
+    ExerciseActivity[] | null
+  >(null);
   const [unit, setUnit] = useState<string>("lbs");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isTemplateModalOpen, setIsTemplateModalOpen] =
+    useState<boolean>(false);
   let isTemplate = false;
 
   const exercisesArray = Object.values(ExercisesDictionary);
@@ -56,7 +69,8 @@ export default function CreateLog() {
     }
   }, []);
 
-  // Adds an exercise to the log when selected from the search bar
+  // ------------------ Add, Delete, Update Exercises ----------------------------------
+
   const handleSelectExercise = (exercise: Exercise): ExerciseActivity => {
     const newExercise: ExerciseActivity = {
       exerciseName: exercise.label,
@@ -70,19 +84,14 @@ export default function CreateLog() {
     return newExercise;
   };
 
-  // Adds a set to a selected exercise
-  const handleAddSet = (index: number) => {
+  const handleDeleteExercise = (index: number) => {
     const newSelectedExercises = [...selectedExercises];
-    newSelectedExercises[index].sets.push({
-      setNumber: 1,
-      reps: 0,
-      weight: 0,
-      unit,
-    });
+    newSelectedExercises.splice(index, 1);
     setSelectedExercises(newSelectedExercises);
   };
 
-  // Updates the set values
+  // ---------------------  Add, Delete, Update Sets ------------------------------------
+
   const handleSetChange = (
     index: number,
     setIndex: number,
@@ -96,7 +105,17 @@ export default function CreateLog() {
     }
   };
 
-  // Deletes a set from a selected exercise
+  const handleAddSet = (index: number) => {
+    const newSelectedExercises = [...selectedExercises];
+    newSelectedExercises[index].sets.push({
+      setNumber: 1,
+      reps: 0,
+      weight: 0,
+      unit,
+    });
+    setSelectedExercises(newSelectedExercises);
+  };
+
   const handleDeleteSet = (index: number, setIndex: number) => {
     const newSelectedExercises = [...selectedExercises];
     // Remove the set at setIndex from the selected exercise
@@ -104,14 +123,21 @@ export default function CreateLog() {
     setSelectedExercises(newSelectedExercises);
   };
 
-  // Deletes an exercise from the log
-  const handleDeleteExercise = (index: number) => {
-    const newSelectedExercises = [...selectedExercises];
-    newSelectedExercises.splice(index, 1);
-    setSelectedExercises(newSelectedExercises);
+  // -------------- Set Template Data from Modal to Generate Logs ----------------------
+
+  const handleTemplateSelection = (templateData: ExerciseActivity[] | null) => {
+    setSelectedTemplateData(templateData);
   };
 
-  // Handles toggle logic that switches between lbs and kg
+  const handleSetTemplates = () => {
+    if (selectedTemplateData) {
+      setSelectedExercises(selectedTemplateData);
+    }
+    setIsTemplateModalOpen(false);
+  };
+
+  // ----------------------------- Toggle Units ----------------------------------------
+
   const toggleUnit = () => {
     const newUnit = unit === "lbs" ? "kg" : "lbs";
     const convertedExercises = selectedExercises.map((exercise) => ({
@@ -128,19 +154,13 @@ export default function CreateLog() {
     localStorage.setItem("weightUnit", newUnit);
   };
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+  // -------------------------- Save Log/Template ---------------------------------------
 
   const handleSaveLog = async () => {
     if (session?.user?._id) {
       const logData = [
         {
-          date: new Date(),
+          name: isTemplate ? "Template" : new Date(),
           exercises: selectedExercises.map((exerciseActivity) => {
             // Map selected exercises to exerciseSchema
             return {
@@ -176,18 +196,16 @@ export default function CreateLog() {
     handleSaveLog();
   };
 
-  if (status === "unauthenticated") {
-    router.replace("/signin");
-    return null; // Ensure the component does not render until redirection
-  }
-
   return (
     <div className="flex flex-col items-center gap-y-20 justify-center w-screen mt-20 mb-10">
       {/* Header */}
       <h1 className="text-5xl font-bold leading-6 text-center">
         Log Your Workout
       </h1>
-      <BasicRoundedButton label="Choose From Templates" />
+      <BasicRoundedButton
+        label="Choose From Templates"
+        onClick={() => setIsTemplateModalOpen(true)}
+      />
       <div className="flex items-center">
         <div className="flex-1 w-48 border-t-2"></div>
         <h2 className="text-xl text-gray-500 pl-2 pr-2">
@@ -327,16 +345,22 @@ export default function CreateLog() {
       {/* Save Button */}
       <div className="flex flex-col gap-y-9">
         <BasicRoundedButton
-          onClick={handleOpenModal}
+          onClick={() => setIsModalOpen(true)}
           label="Save Your Log"
           disabled={selectedExercises.length === 0}
         ></BasicRoundedButton>
       </div>
       <SaveLogModal
         open={isModalOpen}
-        onClose={handleCloseModal}
+        onClose={() => setIsModalOpen(false)}
         onConfirm={handleSaveLog}
         onSecondaryAction={handleSaveAsTemplate}
+      />
+      <TemplatesModal
+        open={isTemplateModalOpen}
+        onClose={() => setIsTemplateModalOpen(false)}
+        onTemplateSelect={handleTemplateSelection}
+        onGenerate={handleSetTemplates}
       />
     </div>
   );
