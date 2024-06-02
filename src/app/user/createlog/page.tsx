@@ -45,7 +45,6 @@ export default function CreateLog() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isTemplateModalOpen, setIsTemplateModalOpen] =
     useState<boolean>(false);
-  let isTemplate = false;
 
   const exercisesArray = Object.values(ExercisesDictionary);
 
@@ -156,7 +155,7 @@ export default function CreateLog() {
 
   // -------------------------- Save Log/Template ---------------------------------------
 
-  const handleSaveLog = async () => {
+  const handleSaveLog = async (isTemplate: boolean = false) => {
     if (session?.user?._id) {
       const logData = [
         {
@@ -193,8 +192,7 @@ export default function CreateLog() {
   };
 
   const handleSaveAsTemplate = async () => {
-    isTemplate = true;
-    handleSaveLog();
+    handleSaveLog(true);
   };
 
   return (
