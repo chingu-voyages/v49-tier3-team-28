@@ -28,7 +28,7 @@ const ExerciseTable: React.FC<ExerciseTableProps> = ({
     <table className="w-full border-collapse bg-white">
       <thead>
         <tr className="text-white text-center bg-orange-500">
-          <th className="p-left-2 font-bold">Set</th>
+          <th className="p-2 font-bold">Set</th>
           <th className="p-2">Reps</th>
           <th className="p-2">Weight ({unit})</th>
           <th className="p-2"></th>

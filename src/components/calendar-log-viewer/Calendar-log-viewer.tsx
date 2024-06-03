@@ -1,5 +1,6 @@
 import { LoggingClient } from "@/app/clients/logging-client/logging-client";
 import { Log } from "@/models/log.model";
+import { Alert } from "@mui/material";
 import {
   DateCalendar,
   LocalizationProvider,
@@ -22,7 +23,7 @@ export function CalendarLogViewer() {
   >([]); // Store the logs for the current month and year.
   const [highlightedDays, setHighlightedDays] = useState<number[]>([]); // The days that will be highlighted in the calendar.
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   useEffect(() => {
     // When the component mounts, we need to fetch the logs for the current month and year.
     // This is assuming that when the calendar component mounts, it will be the current month and year.
@@ -43,6 +44,7 @@ export function CalendarLogViewer() {
     } catch (e: any) {
       // TODO: Do something with the error.
       console.log(e.message);
+      setErrorMessage(e.message);
     } finally {
       setIsLoading(false);
     }
@@ -105,6 +107,13 @@ export function CalendarLogViewer() {
         }}
         onMonthChange={handleMonthChange}
       />
+      <div>
+        {errorMessage && (
+          <Alert severity="error" variant="outlined" sx={{ marginTop: "10px" }}>
+            {errorMessage}
+          </Alert>
+        )}
+      </div>
     </LocalizationProvider>
   );
 }

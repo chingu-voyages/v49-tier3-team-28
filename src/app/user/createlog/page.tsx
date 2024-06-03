@@ -242,7 +242,7 @@ export default function CreateLog() {
       </div>
 
       {/* Selected Exercises (Exercise Log) */}
-      <div className="flex flex-col gap-y-9 w-3/4 px-4">
+      <div className="flex flex-col gap-y-9 w-full px-4">
         <div className="flex justify-end gap-2 w-full">
           <ColorToggleButton
             onChange={toggleUnit}
@@ -259,12 +259,12 @@ export default function CreateLog() {
             key={index}
             className="rounded-xl mb-4 border border-gray-100 shadow-md relative"
           >
-            <h4 className="text-black font-bold p-2 text-center ">
+            <h4 className="text-white font-bold p-2 defaultButtonColor">
               {exercise.exerciseName}
             </h4>
             <button
               onClick={() => handleDeleteExercise(index)}
-              className="absolute top-2 right-2"
+              className="absolute top-2 right-2 text-white"
             >
               <FiX />
             </button>
