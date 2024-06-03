@@ -34,7 +34,7 @@ export function BasicRoundedButton({
         fontFamily: "Verdana, sans-serif",
         fontWeight: "700",
         borderRadius: "60px",
-        // width: "315px",
+        width: "315px",
         boxShadow: "none",
         ...customMaterialButtonStyles,
       }}
