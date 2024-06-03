@@ -21,4 +21,18 @@ export const LoggingClient = {
 
     console.log("Log saved successfully!");
   },
+  async getTemplates(): Promise<Log[]> {
+    const response = await fetch("/api/user/logs/templates", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    return response.json();
+  },
 };
