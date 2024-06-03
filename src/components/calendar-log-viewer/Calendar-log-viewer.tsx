@@ -1,4 +1,5 @@
 import { LoggingClient } from "@/app/clients/logging-client/logging-client";
+import { Log } from "@/models/log.model";
 import {
   DateCalendar,
   LocalizationProvider,
@@ -6,7 +7,8 @@ import {
   PickersDayProps,
 } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
+import { useEffect, useState } from "react";
 
 // Goals for functionality:
 /* 
@@ -15,20 +17,47 @@ import { Dayjs } from "dayjs";
 */
 
 export function CalendarLogViewer() {
-  const handleMonthChange = async (date: Dayjs) => {
+  const [currentLogsByMonthAndYear, setCurrentLogsByMonthAndYear] = useState<
+    Log[]
+  >([]); // Store the logs for the current month and year.
+  const [highlightedDays, setHighlightedDays] = useState<number[]>([]); // The days that will be highlighted in the calendar.
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    // When the component mounts, we need to fetch the logs for the current month and year.
+    // This is assuming that when the calendar component mounts, it will be the current month and year.
+    fetchLogsByMonthAndYear(new Date().getMonth(), new Date().getFullYear());
+  }, []);
+
+  const fetchLogsByMonthAndYear = async (month: number, year: number) => {
     // When the month changes, we need to fetch the logs for that month and year.
     try {
-      const fetchedLogsByMonthAndYear =
-        await LoggingClient.getLogsByMonthAndYear(date.month(), date.year());
+      setIsLoading(true);
+      const apiDataResponse = await LoggingClient.getLogsByMonthAndYear(
+        month,
+        year
+      );
+
+      setCurrentLogsByMonthAndYear(apiDataResponse.logs);
+      setHighlightedDays(extractHighligtedDaysFromLogs(apiDataResponse.logs));
     } catch (e: any) {
-      // Do something with the error.
+      // TODO: Do something with the error.
+      console.log(e.message);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  const handleMonthChange = async (date: Dayjs) => {
+    // When the month changes, we need to fetch the logs for that month and year.
+    await fetchLogsByMonthAndYear(date.month(), date.year());
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DateCalendar
-        view="day"
         disableFuture
+        disabled={isLoading}
         slots={{
           day: (
             props: PickersDayProps<Dayjs> & { highlightedDays?: number[] }
@@ -58,7 +87,7 @@ export function CalendarLogViewer() {
         }}
         slotProps={{
           day: {
-            highlightedDays: [1, 6, 32],
+            highlightedDays: highlightedDays,
           } as any,
         }}
         sx={{
@@ -78,4 +107,8 @@ export function CalendarLogViewer() {
       />
     </LocalizationProvider>
   );
+}
+
+function extractHighligtedDaysFromLogs(logs: Log[]): number[] {
+  return logs.map((log) => dayjs(log.createdAt).date());
 }
