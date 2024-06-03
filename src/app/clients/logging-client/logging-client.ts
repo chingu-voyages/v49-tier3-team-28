@@ -21,6 +21,16 @@ export const LoggingClient = {
 
     console.log("Log saved successfully!");
   },
+  async getTemplates(): Promise<Log[]> {
+    const response = await fetch("/api/user/logs/templates", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) throw new Error(response.statusText);
+    return response.json();
+  },
   /**
    * Return an array of logs from the requesting user's fitness logs.
    * @param month 0 based month (0 = January, 1 = February, etc.)
@@ -33,7 +43,11 @@ export const LoggingClient = {
         "Content-Type": "application/json",
       },
     });
-    if (!response.ok) throw new Error(response.statusText);
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
     return response.json();
   },
 };

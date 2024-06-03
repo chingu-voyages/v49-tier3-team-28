@@ -1,6 +1,8 @@
+import { LoggingClient } from "@/app/clients/logging-client/logging-client";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
+import { Log } from "@/models/log.model";
 import { Modal } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiEye, FiX } from "react-icons/fi";
 import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
 import TemplateDataModal from "./TemplateDataModal";
@@ -11,103 +13,6 @@ interface TemplateModalProps {
   onGenerate: () => void;
   onTemplateSelect: (template: ExerciseActivity[] | null) => void;
 }
-
-//TODO: remove this mock data once we have backend support
-let mockData = {
-  userId: "665291224e3640a167a73ae5",
-  logs: [
-    {
-      date: "2024-05-31T20:04:02.485Z",
-      name: "Leg Day",
-      exercises: [
-        {
-          exerciseName: "Walking Lunge",
-          sets: [
-            { setNumber: 1, weight: 0, unit: "lbs", reps: 8 },
-            { setNumber: 2, weight: 2, unit: "lbs", reps: 0 },
-          ],
-        },
-        {
-          exerciseName: "Lat Pulldown",
-          sets: [{ setNumber: 1, weight: 0, unit: "lbs", reps: 0 }],
-        },
-      ],
-      isTemplate: true,
-    },
-    {
-      date: "2024-05-31T20:04:02.485Z",
-      name: "Back Day",
-      exercises: [
-        {
-          exerciseName: "Walking Lunge",
-          sets: [
-            { setNumber: 1, weight: 3, unit: "lbs", reps: 8 },
-            { setNumber: 2, weight: 2, unit: "lbs", reps: 4 },
-          ],
-        },
-        {
-          exerciseName: "Lat Pulldown",
-          sets: [{ setNumber: 1, weight: 1, unit: "lbs", reps: 12 }],
-        },
-      ],
-      isTemplate: true,
-    },
-    {
-      date: "2024-05-31T20:04:02.485Z",
-      name: "Template 2",
-      exercises: [
-        {
-          exerciseName: "Walking Lunge",
-          sets: [
-            { setNumber: 1, weight: 3, unit: "lbs", reps: 8 },
-            { setNumber: 2, weight: 2, unit: "lbs", reps: 4 },
-          ],
-        },
-        {
-          exerciseName: "Lat Pulldown",
-          sets: [{ setNumber: 1, weight: 1, unit: "lbs", reps: 12 }],
-        },
-      ],
-      isTemplate: true,
-    },
-    {
-      date: "2024-05-31T20:04:02.485Z",
-      name: "Shoulders",
-      exercises: [
-        {
-          exerciseName: "Walking Lunge",
-          sets: [
-            { setNumber: 1, weight: 3, unit: "lbs", reps: 8 },
-            { setNumber: 2, weight: 2, unit: "lbs", reps: 4 },
-          ],
-        },
-        {
-          exerciseName: "Lat Pulldown",
-          sets: [{ setNumber: 1, weight: 1, unit: "lbs", reps: 12 }],
-        },
-      ],
-      isTemplate: true,
-    },
-    {
-      date: "2024-05-31T20:04:02.485Z",
-      name: "Legs 2",
-      exercises: [
-        {
-          exerciseName: "Walking Lunge",
-          sets: [
-            { setNumber: 1, weight: 3, unit: "lbs", reps: 8 },
-            { setNumber: 2, weight: 2, unit: "lbs", reps: 4 },
-          ],
-        },
-        {
-          exerciseName: "Lat Pulldown",
-          sets: [{ setNumber: 1, weight: 1, unit: "lbs", reps: 12 }],
-        },
-      ],
-      isTemplate: true,
-    },
-  ],
-};
 
 const TemplatesModal: React.FC<TemplateModalProps> = ({
   open,
@@ -122,9 +27,21 @@ const TemplatesModal: React.FC<TemplateModalProps> = ({
     null
   );
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [templates, setTemplates] = useState<Log[]>([]);
 
-  // TODO: Delete this when we get backend running
-  const templates = mockData.logs.filter((log) => log.isTemplate);
+  useEffect(() => {
+    fetchTemplates();
+  }, []);
+
+  const fetchTemplates = async () => {
+    try {
+      const fetchedTemplates = await LoggingClient.getTemplates();
+      setTemplates(fetchedTemplates);
+    } catch (error: any) {
+      // TODO: Error handling
+      console.log("Error fetching templates: ", error.message);
+    }
+  };
 
   const handleTemplateClick = (template: ExerciseActivity[], idx: number) => {
     setSelectedTemplate(template);
@@ -149,7 +66,7 @@ const TemplatesModal: React.FC<TemplateModalProps> = ({
           <h1>Please choose one template to start:</h1>
           {/* Templates to Choose From */}
           <div className="min-h-24 overflow-y-auto w-96 max-h-56">
-            {templates.map((template, idx) => (
+            {templates?.map((template, idx) => (
               <div
                 key={idx}
                 className={`flex justify-between cursor-pointer p-2 border-b ${
