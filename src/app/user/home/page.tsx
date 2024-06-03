@@ -1,6 +1,5 @@
 "use client";
 import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
-import { CalendarLogViewer } from "@/components/calendar-log-viewer/Calendar-log-viewer";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { Link } from "@mui/material";
 import dayjs from "dayjs";
@@ -45,18 +44,20 @@ export default function LandingPage() {
       {/* Metrics */}
       <div className="flex flex-col gap-y-9 w-96">
         <div className="flex justify-between">
-          <h2 className='text-3xl flex justify-center align-center text-center'>Journal Tracker</h2>
+          <h2 className="text-3xl flex justify-center align-center text-center">
+            Journal Tracker
+          </h2>
           <div className="w-30">
             <Link href="/user/viewlogs">
-              <BasicRoundedButton label="View Logs"/>
+              <BasicRoundedButton label="View Logs" />
             </Link>
           </div>
         </div>
-        {/* <div className="flex gap-x-5">
+        <div className="flex gap-x-5">
           <div>Logging Journal</div>
           <div>Favorite Exercise</div>
           <div>Overview</div>
-        </div> */}
+        </div>
       </div>
     </div>
   );
