@@ -60,3 +60,46 @@ export async function DELETE(req: NextRequest, context: any) {
 
   return NextResponse.json({ error: "User not found" }, { status: 404 });
 }
+
+// PUT REQUEST
+export async function PUT(req: NextRequest, context: any) {
+  const session = await getServerSession(authOptions);
+  const { templateId } = context.params;
+
+  if (!session?.user)
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  try {
+    await dbConnect();
+
+    const user = await UserRepository.findById(session.user._id);
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    const templateIndex = user.logs.findIndex((log) => log._id == templateId);
+
+    if (templateIndex === -1) {
+      return NextResponse.json(
+        { error: "Template not found" },
+        { status: 404 }
+      );
+    }
+
+    user.logs[templateIndex] = { ...user.logs[templateIndex], ...req.body };
+
+    await user.save();
+
+    return NextResponse.json(
+      { message: "Template updated successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error updating template:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
