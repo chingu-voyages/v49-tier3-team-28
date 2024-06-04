@@ -12,7 +12,11 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
 import { useEffect, useState } from "react";
 
-export function CalendarLogViewer() {
+interface CalendarLogViewerProps {
+  readonly?: boolean;
+}
+
+export function CalendarLogViewer({ readonly }: CalendarLogViewerProps) {
   const [currentLogsByMonthAndYear, setCurrentLogsByMonthAndYear] = useState<
     Log[]
   >([]);
@@ -87,6 +91,7 @@ export function CalendarLogViewer() {
           </div>
         )}
         <DateCalendar
+          readOnly={readonly}
           disableFuture
           disabled={isLoading}
           value={value}
@@ -146,13 +151,18 @@ export function CalendarLogViewer() {
           </Alert>
         )}
       </div>
-      <div>
-        <h4 className="text-center">{value?.format("ddd MMMM D, YYYY")}</h4>
-      </div>
-      <div>
-        {/* Logs for a selected date appear here */}
-        {renderLogsForDay(value, currentLogsByMonthAndYear)}
-      </div>
+      {!readonly && (
+        <div>
+          <div>
+            <h4 className="text-center">{value?.format("ddd MMMM D, YYYY")}</h4>
+          </div>
+
+          <div>
+            {/* Logs for a selected date appear here */}
+            {renderLogsForDay(value, currentLogsByMonthAndYear)}
+          </div>
+        </div>
+      )}
     </LocalizationProvider>
   );
 }

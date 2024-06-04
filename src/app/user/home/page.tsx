@@ -1,5 +1,6 @@
 "use client";
 import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
+import { CalendarLogViewer } from "@/components/calendar-log-viewer/Calendar-log-viewer";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { Link } from "@mui/material";
 import dayjs from "dayjs";
@@ -30,7 +31,14 @@ export default function LandingPage() {
           <h3>{dayjs().format("ddd, MMMM D, YYYY")}</h3>
         </div>
         <Link href="/user/mytemplates">
-          <BasicRoundedButton label="View Templates" />
+          <BasicRoundedButton
+            label="Manage Templates"
+            buttonClassNames="!w-36"
+            customMaterialButtonStyles={{
+              fontSize: "10px",
+              backgroundColor: "#95A1A8",
+            }}
+          />
         </Link>
       </div>
       {/* Logging Button */}
@@ -49,15 +57,18 @@ export default function LandingPage() {
           </h2>
           <div className="w-30">
             <Link href="/user/viewlogs">
-              <BasicRoundedButton label="View Logs" />
+              <BasicRoundedButton
+                label="View Logs"
+                buttonClassNames="!w-24 !h-8"
+                customMaterialButtonStyles={{
+                  fontSize: "10px",
+                  backgroundColor: "#03BB9B",
+                }}
+              />
             </Link>
           </div>
         </div>
-        <div className="flex gap-x-5">
-          <div>Logging Journal</div>
-          <div>Favorite Exercise</div>
-          <div>Overview</div>
-        </div>
+        <CalendarLogViewer readonly />
       </div>
     </div>
   );
