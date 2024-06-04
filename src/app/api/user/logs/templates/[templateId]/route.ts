@@ -4,13 +4,10 @@ import { UserRepository } from "@/schemas/user.schema";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
-// The GET route that fetches all of the templates for the session user
-// `/api/user/logs/templates`
+// GET REQUEST
 export async function GET(req: NextRequest, context: any) {
   const session = await getServerSession(authOptions);
-  const { params } = context;
-
-  console.log(params.templateId);
+  const { templateId } = context.params;
 
   if (!session?.user)
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -21,10 +18,45 @@ export async function GET(req: NextRequest, context: any) {
 
   if (user) {
     const templates = user?.logs.filter(
-      (log) => log.isTemplate && log.name && log._id == params.templateId
+      (log) => log.isTemplate && log.name && log._id == templateId
     );
 
     return NextResponse.json(templates, { status: 200 });
   }
+  return NextResponse.json({ error: "User not found" }, { status: 404 });
+}
+
+// DELETE REQUEST
+export async function DELETE(req: NextRequest, context: any) {
+  const session = await getServerSession(authOptions);
+  const { templateId } = context.params;
+
+  if (!session?.user)
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  await dbConnect();
+
+  const user = await UserRepository.findById(session.user._id);
+
+  if (user) {
+    const templateIndex = user.logs.findIndex((log) => log._id == templateId);
+
+    if (templateIndex !== -1) {
+      user.logs.splice(templateIndex, 1);
+
+      await user.save();
+
+      return NextResponse.json(
+        { message: "Template deleted successfully" },
+        { status: 200 }
+      );
+    } else {
+      return NextResponse.json(
+        { error: "Template not found" },
+        { status: 404 }
+      );
+    }
+  }
+
   return NextResponse.json({ error: "User not found" }, { status: 404 });
 }
