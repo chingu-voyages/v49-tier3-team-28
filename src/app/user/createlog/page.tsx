@@ -182,11 +182,7 @@ export default function CreateLog() {
         console.error("Error saving log: ", error.message);
       }
     }
-    setIsModalOpen(false);
-  };
-
-  const handleSaveAsTemplate = async () => {
-    handleSaveLog(true);
+    setIsModalOpen(true);
   };
 
   return (
@@ -293,16 +289,15 @@ export default function CreateLog() {
       {/* Save Button */}
       <div className="flex flex-col gap-y-9">
         <BasicRoundedButton
-          onClick={() => setIsModalOpen(true)}
-          label="Save Your Log"
+          onClick={() => handleSaveLog()}
+          label="Save Log"
           disabled={selectedExercises.length === 0}
         ></BasicRoundedButton>
       </div>
       <SaveLogModal
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onConfirm={() => handleSaveLog()}
-        onSecondaryAction={handleSaveAsTemplate}
+        data={selectedExercises}
       />
       <TemplatesModal
         open={isTemplateModalOpen}

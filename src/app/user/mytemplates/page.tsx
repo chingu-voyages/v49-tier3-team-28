@@ -37,6 +37,16 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
     setIsModalOpen(true);
   };
 
+  const handleDeleteTemplate = async (templateId: string) => {
+    try {
+      await LoggingClient.deleteTemplate(templateId);
+      setTemplates(templates.filter((template) => template._id !== templateId));
+    } catch (error: any) {
+      // TODO Error handling
+      console.log("Error deleting template: ", error.message);
+    }
+  };
+
   return (
     <div>
       <div className="flex flex-col justify-evenly items-center text-center min-h-screen">
@@ -56,6 +66,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
               <div key={idx} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
                 <TemplateCard
                   onClick={() => handleTemplateClick(template.exercises)}
+                  onDelete={() => handleDeleteTemplate(template._id)}
                   data={template}
                 />
               </div>
