@@ -21,6 +21,7 @@ export const LoggingClient = {
 
     console.log("Log saved successfully!");
   },
+
   async getTemplates(): Promise<Log[]> {
     const response = await fetch("/api/user/logs/templates", {
       method: "GET",
@@ -34,5 +35,20 @@ export const LoggingClient = {
     }
 
     return response.json();
+  },
+
+  async deleteTemplate(templateId: string): Promise<void> {
+    const response = await fetch(`/api/user/logs/templates/${templateId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    console.log("Template deleted successfully!");
   },
 };
