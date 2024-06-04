@@ -275,7 +275,7 @@ export default function CreateTemplate() {
           disabled={selectedExercises.length === 0}
         ></BasicRoundedButton>
       </div>
-      <SuccessModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <SuccessModal open={isModalOpen} />
     </div>
   );
 }
