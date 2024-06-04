@@ -33,31 +33,26 @@ const TemplateDataModal: React.FC<TemplateDataModalProps> = ({
 
             {/* Exercise Activity */}
             <div className="min-h-96 max-h-96 overflow-y-auto overflow-hidden">
-              {exerciseData.map((exercise, eIdx) => (
-                <div className="rounded-xl mb-4 border border-gray-100 shadow-md relative">
-                  <h4 className="text-black font-bold p-2 text-center ">
-                    {exercise.exerciseName}
-                  </h4>
-                  <table className="w-full border-collapse bg-white">
-                    <thead>
-                      <tr className="text-white text-center bg-orange-500">
-                        <th className="p-left-2 font-bold">Set</th>
-                        <th className="p-2">Reps</th>
-                        <th className="p-2">Weight</th>
-                        <th className="p-2">Unit</th>
-                      </tr>
-                    </thead>
-                    {exercise.sets.map((set, eIdx) => (
-                      <tbody>
-                        <td className="p-2 text-center">{set.setNumber}</td>
-                        <td className="p-2 text-center">{set.reps}</td>
-                        <td className="p-2 text-center">{set.weight}</td>
-                        <td className="p-2 text-center">{set.unit}</td>
-                      </tbody>
-                    ))}
-                  </table>
-                </div>
-              ))}
+              <div className="rounded-xl mb-4 border border-gray-100 shadow-md relative">
+                <table className="w-full border-collapse bg-white">
+                  <thead>
+                    <tr className="text-white text-center bg-orange-500 p-2">
+                      <th className="p-left-2">Exercise Name</th>
+                      <th className="p-left-2"># of Sets</th>
+                    </tr>
+                  </thead>
+                  {exerciseData.map((exercise, eIdx) => (
+                    <tbody>
+                      <td className="p-2 text-center">
+                        {exercise.exerciseName}
+                      </td>
+                      <td className="p-2 text-center">
+                        {exercise.sets.length}
+                      </td>
+                    </tbody>
+                  ))}
+                </table>
+              </div>
             </div>
           </div>
         ) : null}
