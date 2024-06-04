@@ -66,11 +66,19 @@ export function CalendarLogViewer() {
   const handleCalendarDateChange = async (date: Dayjs) => {
     // When the user selects a date, we need to fetch the logs for that date.
     setValue(date);
-    const apiResponse = await LoggingClient.getLogsByMonthAndYear(
-      date.month(),
-      date.year()
-    );
-    setCurrentLogsByMonthAndYear(apiResponse.logs);
+    try {
+      setIsLoading(true);
+      const apiResponse = await LoggingClient.getLogsByMonthAndYear(
+        date.month(),
+        date.year()
+      );
+      setCurrentLogsByMonthAndYear(apiResponse.logs);
+    } catch (error: any) {
+      console.log(error.message);
+      setErrorMessage(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
