@@ -1,5 +1,6 @@
 import { LoggingClient } from "@/app/clients/logging-client/logging-client";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
+import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Modal } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { FiX } from "react-icons/fi";
@@ -9,7 +10,7 @@ import SuccessModal from "./SuccessModal";
 interface SaveAsTemplateModalProps {
   open: boolean;
   onClose: () => void;
-  data: any;
+  data: ExerciseActivity[];
 }
 
 const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
