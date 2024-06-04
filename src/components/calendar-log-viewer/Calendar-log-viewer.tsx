@@ -35,7 +35,6 @@ export function CalendarLogViewer() {
         setCurrentLogsByMonthAndYear(apiDataResponse.logs);
         setHighlightedDays(extractHighligtedDaysFromLogs(apiDataResponse.logs));
       } catch (e: any) {
-        console.log(e.message);
         setErrorMessage(e.message);
       } finally {
         setIsLoading(false);
@@ -56,7 +55,6 @@ export function CalendarLogViewer() {
 
       setHighlightedDays(extractHighligtedDaysFromLogs(apiDataResponse.logs));
     } catch (e: any) {
-      console.log(e.message);
       setErrorMessage(e.message);
     } finally {
       setIsLoading(false);
@@ -74,7 +72,6 @@ export function CalendarLogViewer() {
       );
       setCurrentLogsByMonthAndYear(apiResponse.logs);
     } catch (error: any) {
-      console.log(error.message);
       setErrorMessage(error.message);
     } finally {
       setIsLoading(false);
@@ -169,7 +166,6 @@ function renderLogsForDay(
   logs: Log[]
 ): JSX.Element[] | null {
   // Logs should be the current month's logs stored in the state
-  // we use the exercise table in read-only mode
   if (dateData === null) return null;
 
   const renderedLogData = logs
