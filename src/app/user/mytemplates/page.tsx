@@ -66,7 +66,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
               <div key={idx} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
                 <TemplateCard
                   onClick={() => handleTemplateClick(template.exercises)}
-                  onDelete={() => handleDeleteTemplate(template._id)}
+                  onDelete={() => handleDeleteTemplate(template._id!)}
                   data={template}
                 />
               </div>
