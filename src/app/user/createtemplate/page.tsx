@@ -242,20 +242,14 @@ export default function CreateTemplate() {
             key={index}
             className="rounded-xl mb-4 border border-gray-100 shadow-md relative"
           >
-            <h4 className="text-black font-bold p-2 text-center ">
-              {exercise.exerciseName}
-            </h4>
-            <button
-              onClick={() => handleDeleteExercise(index)}
-              className="absolute top-2 right-2"
-            >
-              <FiX />
-            </button>
             <ExerciseTable
+              exerciseName={exercise.exerciseName}
               sets={exercise.sets}
               unit={unit}
               onDeleteSet={(setIndex) => handleDeleteSet(index, setIndex)}
+              onDeleteExercise={() => handleDeleteExercise(index)}
               onSetChange={() => {}}
+              idx={index}
             />
 
             <button
