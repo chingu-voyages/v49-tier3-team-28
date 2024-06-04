@@ -10,9 +10,11 @@ import { Exercise } from "@/lib/exercises/exercise";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Set } from "@/models/set.model";
+import AddIcon from "@mui/icons-material/Add";
+import { IconButton } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FiPlus, FiSearch, FiX } from "react-icons/fi";
+import { FiSearch, FiX } from "react-icons/fi";
 import { LoggingClient } from "../../clients/logging-client/logging-client";
 
 export default function CreateLog() {
@@ -238,7 +240,7 @@ export default function CreateLog() {
       </div>
 
       {/* Selected Exercises (Exercise Log) */}
-      <div className="flex flex-col gap-y-9 w-3/4 px-4">
+      <div className="flex flex-col gap-y-9 w-full px-4">
         <div className="flex justify-end gap-2 w-full">
           <ColorToggleButton
             onChange={toggleUnit}
@@ -255,29 +257,23 @@ export default function CreateLog() {
             key={index}
             className="rounded-xl mb-4 border border-gray-100 shadow-md relative"
           >
-            <h4 className="text-black font-bold p-2 text-center ">
-              {exercise.exerciseName}
-            </h4>
-            <button
-              onClick={() => handleDeleteExercise(index)}
-              className="absolute top-2 right-2"
-            >
-              <FiX />
-            </button>
             <ExerciseTable
+              exerciseName={exercise.exerciseName}
+              idx={index}
               sets={exercise.sets}
               unit={unit}
               onSetChange={(setIndex, field, value) =>
                 handleSetChange(index, setIndex, field, value)
               }
               onDeleteSet={(setIndex) => handleDeleteSet(index, setIndex)}
+              onDeleteExercise={() => handleDeleteExercise(index)}
             />
-            <button
-              onClick={() => handleAddSet(index)}
-              className="m-2 p-2 border rounded-xl bg-green-500 text-white font-bold hover:bg-green-600"
-            >
-              <FiPlus />
-            </button>
+            <IconButton onClick={() => handleAddSet(index)}>
+              <AddIcon sx={{ color: "#03BB9B" }} />
+              <p className="text-sm font-bold" style={{ color: "#03BB9B" }}>
+                Set
+              </p>
+            </IconButton>
           </div>
         ))}
       </div>

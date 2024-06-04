@@ -35,3 +35,36 @@ export async function POST(req: NextRequest) {
     { status: 200 }
   );
 }
+
+export async function GET(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session)
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  // Get the search parameters from the request. We're expect month and year.
+  const { searchParams } = new URL(req.url);
+  const month = parseInt(searchParams.get("month")!, 10);
+  const year = parseInt(searchParams.get("year")!, 10);
+  if (isNaN(month) || isNaN(year))
+    return NextResponse.json(
+      { error: "Invalid month or year search parameters" },
+      { status: 400 }
+    );
+
+  await dbConnect();
+  const user = await UserRepository.findById(session.user?._id);
+  if (user) {
+    const logs = user.logs.filter(
+      (log) =>
+        log.createdAt!.getMonth() === month &&
+        log.createdAt!.getFullYear() === year
+    );
+
+    // Let's return an object that lets the client know the number of logs found, month and year of the logs.
+    return NextResponse.json(
+      { month, year, logs, count: logs.length },
+      { status: 200 }
+    );
+  }
+  return NextResponse.json({ error: "User not found" }, { status: 404 });
+}
