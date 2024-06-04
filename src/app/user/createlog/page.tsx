@@ -257,15 +257,6 @@ export default function CreateLog() {
             key={index}
             className="rounded-xl mb-4 border border-gray-100 shadow-md relative"
           >
-            {/* <h4 className="text-white text-sm font-bold p-2 defaultButtonColor">
-              {exercise.exerciseName}
-            </h4>
-            <button
-              onClick={() => handleDeleteExercise(index)}
-              className="absolute top-2 right-2 text-white"
-            >
-              <FiX />
-            </button> */}
             <ExerciseTable
               exerciseName={exercise.exerciseName}
               idx={index}
