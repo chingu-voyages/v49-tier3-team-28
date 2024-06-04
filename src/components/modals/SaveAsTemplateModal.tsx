@@ -1,6 +1,7 @@
 import { LoggingClient } from "@/app/clients/logging-client/logging-client";
+import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { Modal } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FiX } from "react-icons/fi";
 import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
 
@@ -15,19 +16,38 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
   onClose,
   data,
 }) => {
-  const handleSaveLog = async (isTemplate: boolean = false) => {
+  const { session } = useAuthSession();
+
+  const [unit, setUnit] = useState<string>("lbs");
+  const [templateName, setTemplateName] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  useEffect(() => {
+    const savedUnit = localStorage.getItem("weightUnit");
+    if (savedUnit) {
+      setUnit(savedUnit);
+    }
+  }, []);
+
+  const handleSaveTemplate = async () => {
+    if (!templateName) {
+      setErrorMessage("Template name can't be empty.");
+      return;
+    }
+
     if (session?.user?._id) {
       const logData = [
         {
+          name: templateName,
           exercises: data.map((exerciseActivity) => {
             return {
               exerciseName: exerciseActivity.exerciseName,
               sets: exerciseActivity.sets.map((set, index) => {
                 return {
                   setNumber: index + 1,
-                  weight: 0,
-                  unit: "lbs",
-                  reps: 0,
+                  weight: set.weight,
+                  unit: unit,
+                  reps: set.reps,
                 };
               }),
             };
@@ -57,11 +77,42 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
         <button className="absolute top-2 right-2" onClick={onClose}>
           <FiX />
         </button>
-        <img
-          src="/images/create-log-page/modal-splash.jpg"
-          alt="modal-image"
-          style={{ height: "50%" }}
-        />
+
+        <div className="px-4 items-center">
+          <input
+            type="text"
+            id="templateName"
+            value={templateName}
+            onChange={(e) => setTemplateName(e.target.value)}
+            placeholder="Template Name"
+            className="border rounded-xl p-2 bg-gray-50 w-full text-center"
+          />
+          {errorMessage && (
+            <p className="text-red-500 text-center mt-2">{errorMessage}</p>
+          )}
+        </div>
+
+        <div>
+          <h1>Please Review Your Template</h1>
+          <div>
+            {data.map((exercise, index) => (
+              <div
+                className="flex justify-between items-center mb-1"
+                key={index}
+              >
+                <div className="text-gray-700">{exercise.exerciseName}</div>
+                <div className="text-gray-500">
+                  Sets: {exercise.sets.length}
+                </div>
+              </div>
+            ))}
+          </div>
+          <p>
+            * Please note that only the exercise name and number of sets will be
+            saved when adding the log as a template.
+          </p>
+        </div>
+
         <div className="flex flex-col">
           <h3>
             You've successfully logged your exercises for today. Keep up the
@@ -70,8 +121,8 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
         </div>
         <div className="flex flex-col justify-between h-28">
           <BasicRoundedButton
-            onClick={() => handleSaveLog()}
-            label="Add Log as Template"
+            onClick={() => handleSaveTemplate()}
+            label="Save Template"
           ></BasicRoundedButton>
         </div>
       </div>
