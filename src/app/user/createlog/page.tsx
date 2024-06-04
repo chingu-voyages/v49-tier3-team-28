@@ -298,6 +298,7 @@ export default function CreateLog() {
         onClose={() => setIsModalOpen(false)}
         onConfirm={() => handleSaveLog()}
         onSecondaryAction={handleSaveAsTemplate}
+        data={selectedExercises}
       />
       <TemplatesModal
         open={isTemplateModalOpen}
