@@ -10,6 +10,7 @@ interface EditTemplateModalProps {
   open: boolean;
   onClose: () => void;
   templateData: ExerciseActivity[] | null;
+  templateNameData: string | null;
   onUpdateTemplate: (updatedTemplateData: any) => void;
 }
 
@@ -17,6 +18,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
   open,
   onClose,
   templateData,
+  templateNameData,
   onUpdateTemplate,
 }) => {
   const [templateName, setTemplateName] = useState<string>("");
@@ -34,6 +36,12 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
   useEffect(() => {
     if (templateData) {
       setSelectedExercises(templateData);
+    }
+  }, [templateData]);
+
+  useEffect(() => {
+    if (templateNameData) {
+      setTemplateName(templateNameData);
     }
   }, [templateData]);
 
@@ -68,10 +76,17 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
   };
 
   return (
-    <Modal open={open} onClose={onClose}>
-      <div className="p-4">
-        <h2 className="text-2xl font-bold mb-4">Edit Template</h2>
-        <div>
+    <Modal
+      open={open}
+      onClose={onClose}
+      className="flex justify-center items-center"
+    >
+      <div className="flex flex-col w-1/2 h-3/4 bg-white p-10 rounded-xl relative justify-evenly items-center text-center">
+        <h2 className="text-2xl font-bold">Edit Template</h2>
+        <button className="absolute top-2 right-2" onClick={onClose}>
+          <FiX />
+        </button>
+        <div className="w-full">
           <input
             type="text"
             id="templateName"
@@ -87,7 +102,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
         </div>
 
         {/* Search Bar */}
-        <div className="relative flex flex-col min-w-80">
+        <div className="relative flex flex-col w-full">
           <div className="relative flex items-center">
             <FiSearch className="absolute left-3" />
             <input
@@ -119,34 +134,38 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
           )}
         </div>
 
-        <div>
-          {selectedExercises.map((exercise, index) => (
-            <div
-              key={index}
-              className="rounded-xl mb-4 border border-gray-100 shadow-md relative"
-            >
-              <h4 className="text-black font-bold p-2 text-center ">
-                {exercise.exerciseName}
-              </h4>
-              <input
-                type="text"
-                value={exercise.sets.length}
-                className="mb-2 p-2 border rounded w-full"
-                placeholder="Exercise Name"
-              />
-
-              <button
-                onClick={() => handleDeleteExercise(index)}
-                className="absolute top-2 right-2"
-              >
-                <FiX />
-              </button>
-            </div>
+        <table className="min-w-full bg-red-100">
+          <thead>
+            <tr className="text-white text-center bg-orange-500">
+              <th className="p-left-2">Exercise Name</th>
+              <th className="p-left-2"># of Sets</th>
+              <th className="p-left-2"></th>
+            </tr>
+          </thead>
+          {selectedExercises.map((exercise, eIdx) => (
+            <tbody className="overflow-y-auto">
+              <td className="p-1">{exercise.exerciseName}</td>
+              <td className="p-1 text-center">
+                <input
+                  type="text"
+                  value={exercise.sets.length}
+                  className="mb-2 mt-2 p-1 border rounded-xl w-1/2 text-center"
+                  placeholder="1"
+                />
+              </td>
+              <td>
+                <button
+                  className="p-right-2"
+                  onClick={() => handleDeleteExercise(eIdx)}
+                >
+                  <FiX />
+                </button>
+              </td>
+            </tbody>
           ))}
-        </div>
+        </table>
 
         <div className="flex justify-end">
-          <BasicRoundedButton label="Cancel" onClick={onClose} />
           <BasicRoundedButton
             label="Save"
             onClick={() => {}}
