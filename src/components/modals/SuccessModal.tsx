@@ -1,4 +1,5 @@
 import { Modal } from "@mui/material";
+import Link from "next/link";
 import React from "react";
 import { FiX } from "react-icons/fi";
 
@@ -7,17 +8,15 @@ interface SuccessModalProps {
   onClose: () => void;
 }
 
-const SuccessModal: React.FC<SuccessModalProps> = ({ open, onClose }) => {
+const SuccessModal: React.FC<SuccessModalProps> = ({ open }) => {
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      className="flex justify-center items-center"
-    >
+    <Modal open={open} className="flex justify-center items-center">
       <div className="flex flex-col w-1/2 h-3/4 bg-white p-10 rounded-xl relative justify-evenly items-center text-center">
-        <button className="absolute top-2 right-2" onClick={onClose}>
-          <FiX />
-        </button>
+        <Link href={"/user/mytemplates"}>
+          <button className="absolute top-2 right-2">
+            <FiX />
+          </button>
+        </Link>
         <img
           src="/images/create-log-page/modal-splash.jpg"
           alt="modal-image"
@@ -29,6 +28,8 @@ const SuccessModal: React.FC<SuccessModalProps> = ({ open, onClose }) => {
             Your exercise template has been saved successfully. You can now
             reuse this template to log your exercises next time!
           </h3>
+          <Link href={"/user/home"}> Return to Home </Link>
+          <Link href={"user/mytemplates"}> View Templates </Link>
         </div>
       </div>
     </Modal>
