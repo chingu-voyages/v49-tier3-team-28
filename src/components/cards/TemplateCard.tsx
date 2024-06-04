@@ -1,15 +1,20 @@
 import { Log } from "@/models/log.model";
 import React from "react";
-import { FiEdit } from "react-icons/fi";
+import { FiEdit, FiMinusCircle } from "react-icons/fi";
 
 // TODO: Update Functionality of View Template and Edit Template Buttons
 
 interface TemplateCardProps {
   data: Log;
   onClick: () => void;
+  onDelete: () => void;
 }
 
-const TemplateCard: React.FC<TemplateCardProps> = ({ data, onClick }) => {
+const TemplateCard: React.FC<TemplateCardProps> = ({
+  data,
+  onClick,
+  onDelete,
+}) => {
   const exercisesToShow = data.exercises.slice(0, 5);
 
   return (
@@ -21,8 +26,17 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ data, onClick }) => {
         <div className="relative font-bold text-lg mb-2 bg-orange-500 p-2 rounded-t-lg text-white">
           {data.name}
 
-          <button className="absolute top-2 right-2">
+          <button className="absolute top-2 left-2">
             <FiEdit />
+          </button>
+          <button
+            className="absolute top-3 right-2 text-red-500 scale-125 hover:scale-150 transform duration-300 ease-out"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete();
+            }}
+          >
+            <FiMinusCircle />
           </button>
         </div>
       </div>
