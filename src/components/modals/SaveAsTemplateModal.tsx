@@ -83,6 +83,7 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
           </button>
 
           <div className="px-4 items-center">
+            <h1> Give Your Template a Name</h1>
             <input
               type="text"
               id="templateName"
