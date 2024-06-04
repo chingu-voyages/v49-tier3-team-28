@@ -7,17 +7,10 @@ import SaveAsTemplateModal from "./SaveAsTemplateModal";
 interface SaveLogModalProps {
   open: boolean;
   onClose: () => void;
-  onConfirm: () => void;
-  onSecondaryAction: () => void;
   data?: any;
 }
 
-const SaveLogModal: React.FC<SaveLogModalProps> = ({
-  open,
-  onClose,
-  onConfirm,
-  data,
-}) => {
+const SaveLogModal: React.FC<SaveLogModalProps> = ({ open, onClose, data }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   return (
@@ -42,12 +35,9 @@ const SaveLogModal: React.FC<SaveLogModalProps> = ({
               You've successfully logged your exercises for today. Keep up the
               fantastic work!
             </h3>
+            <h3>Do you want to save the log as a template as well?</h3>
           </div>
           <div className="flex flex-col justify-between h-28">
-            <BasicRoundedButton
-              onClick={onConfirm}
-              label="Return To Home"
-            ></BasicRoundedButton>
             <BasicRoundedButton
               onClick={() => setIsModalOpen(true)}
               label="Save Log as Template"

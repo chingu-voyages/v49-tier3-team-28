@@ -5,7 +5,6 @@ import { FiX } from "react-icons/fi";
 
 interface SuccessModalProps {
   open: boolean;
-  onClose: () => void;
 }
 
 const SuccessModal: React.FC<SuccessModalProps> = ({ open }) => {
@@ -29,7 +28,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({ open }) => {
             reuse this template to log your exercises next time!
           </h3>
           <Link href={"/user/home"}> Return to Home </Link>
-          <Link href={"user/mytemplates"}> View Templates </Link>
+          <Link href={"/user/mytemplates"}> View Templates </Link>
         </div>
       </div>
     </Modal>
