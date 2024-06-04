@@ -1,5 +1,6 @@
 import { User } from "@/models/user.model";
 import mongoose, { Schema } from "mongoose";
+import { logSchema } from "./log.schema";
 
 /* UserSchema will correspond to the User collection in the MongoDB database. */
 const userSchema = new Schema<User>(
@@ -22,6 +23,10 @@ const userSchema = new Schema<User>(
       type: String,
       required: true,
       minlength: 6, // Ensures the password is at least 6 characters long
+    },
+    logs: {
+      type: [logSchema],
+      default: [],
     },
   },
   { timestamps: true }

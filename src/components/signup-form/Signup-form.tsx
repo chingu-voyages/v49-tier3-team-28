@@ -78,7 +78,7 @@ export default function SignupForm() {
         email: formFieldValues.email,
         password: formFieldValues.password1,
         isRegistering: true,
-        callbackUrl: "/home", // User is directed to the landing (home) page
+        callbackUrl: "/user/home", // User is directed to the landing (home) page
       });
     } catch (error: any) {
       setAppError({ error: true, message: error });
@@ -202,6 +202,7 @@ export default function SignupForm() {
             label="Sign up"
             onClick={signUpUser}
             disabled={isLoading || !allFormFieldsValid(false)}
+            buttonClassNames="defaultButtonColor"
           />
         </div>
         <div className="mt-12">
