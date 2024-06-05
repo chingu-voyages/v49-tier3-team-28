@@ -23,6 +23,11 @@ export function ColorToggleButton({
       value={alignment}
       exclusive
       onChange={onChange}
+      sx={{
+        "& .MuiButtonBase-root": {
+          textTransform: "none",
+        },
+      }}
     >
       <ToggleButton value={leftValue}>{leftLabel}</ToggleButton>
       <ToggleButton value={rightValue}>{rightLabel}</ToggleButton>

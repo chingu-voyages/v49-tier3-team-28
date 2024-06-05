@@ -77,16 +77,17 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
         )}
 
         <div className="flex flex-wrap -mx-2">
-          {templates.map((template, idx) => (
-            <div key={idx} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
-              <TemplateCard
-                onClick={() => handleTemplateClick(template)}
-                onDelete={() => handleDeleteTemplate(template._id)}
-                onEdit={() => handleEditTemplate(template._id)}
-                data={template}
-              />
-            </div>
-          ))}
+          {templates &&
+            templates.map((template, idx) => (
+              <div key={idx} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
+                <TemplateCard
+                  onClick={() => handleTemplateClick(template)}
+                  onDelete={() => handleDeleteTemplate(template._id!)}
+                  onEdit={() => handleEditTemplate(template._id)}
+                  data={template}
+                />
+              </div>
+            ))}
         </div>
         <div className="flex flex-col justify-between h-28">
           <Link href="/user/createtemplate">
