@@ -1,11 +1,13 @@
 import authOptions from "@/app/api/auth/auth-options";
 import dbConnect from "@/lib/mongodb/mongodb";
 import { UserRepository } from "@/schemas/user.schema";
-import { getServerSession } from "next-auth";
+import { Session, getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
-// Helper function to find user and template index
-async function findUserAndTemplate(session, templateId) {
+async function findUserAndTemplate(
+  session: Session | null,
+  templateId: String
+) {
   if (!session?.user) {
     return { status: 401, response: { error: "Unauthorized" } };
   }
@@ -85,12 +87,10 @@ export async function PATCH(req: NextRequest, context: any) {
   }
 
   try {
-    const updatedFields = await req.json(); // Parse JSON body
+    const updatedFields = await req.json();
 
-    // Update only the specified fields in the template
     Object.assign(user.logs[templateIndex], updatedFields);
 
-    // Save the updated user object to the database
     await user.save();
 
     return NextResponse.json(
