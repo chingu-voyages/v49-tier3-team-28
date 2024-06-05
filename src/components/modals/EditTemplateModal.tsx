@@ -77,6 +77,24 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
     setSelectedExercises(newSelectedExercises);
   };
 
+  const handleSetNumberChange = (index: number, newSetNumber: number) => {
+    const updatedExercises = [...selectedExercises];
+    const exercise = updatedExercises[index];
+
+    const setData = (set, i) => ({
+      setNumber: i + 1,
+      reps: 0,
+      weight: 0,
+      unit: "lbs",
+    });
+
+    if (newSetNumber > 0) {
+      exercise.sets = Array.from({ length: newSetNumber }, setData);
+    }
+
+    setSelectedExercises(updatedExercises);
+  };
+
   const handleSave = () => {
     if (!templateName) {
       setErrorMessage("Template name can't be empty.");
@@ -191,10 +209,12 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
                   <td className="p-2">{exercise.exerciseName}</td>
                   <td className="p-2">
                     <input
-                      type="text"
+                      type="number"
                       value={exercise.sets.length}
+                      onChange={(e) =>
+                        handleSetNumberChange(eIdx, Number(e.target.value))
+                      }
                       className="mb-2 mt-2 p-1 border rounded-xl w-1/2 text-center"
-                      placeholder="1"
                     />
                   </td>
                   <td className="p-2">
