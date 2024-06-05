@@ -59,7 +59,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
     }
   }, [searchInput]);
 
-  const handleSelectExercise = (exercise: Exercise): ExerciseActivity => {
+  const handleSelectExercise = (exercise: Exercise) => {
     const newExercise: ExerciseActivity = {
       exerciseName: exercise.label,
       sets: [{ setNumber: 1, reps: 0, weight: 0, unit: "lbs" }],
@@ -68,8 +68,6 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
     setSelectedExercises((prev) => [...prev, newExercise]);
     setSearchInput("");
     setSearchResults([]);
-
-    return newExercise;
   };
 
   const handleDeleteExercise = (index: number) => {

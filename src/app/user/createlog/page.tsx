@@ -65,17 +65,15 @@ export default function CreateLog() {
 
   // ------------------ Add, Delete, Update Exercises ----------------------------------
 
-  const handleSelectExercise = (exercise: Exercise): ExerciseActivity => {
+  const handleSelectExercise = (exercise: Exercise) => {
     const newExercise: ExerciseActivity = {
       exerciseName: exercise.label,
       sets: [{ setNumber: 1, reps: 0, weight: 0, unit }],
     };
 
     setSelectedExercises((prev) => [...prev, newExercise]);
-    setSearchInput(""); // Clear search input after selection
-    setSearchResults([]); // Clear search results after selection
-
-    return newExercise;
+    setSearchInput("");
+    setSearchResults([]);
   };
 
   const handleDeleteExercise = (index: number) => {
