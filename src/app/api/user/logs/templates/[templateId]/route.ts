@@ -4,92 +4,93 @@ import { UserRepository } from "@/schemas/user.schema";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
-// GET REQUEST
+// Helper function to find user and template index
+async function findUserAndTemplate(session, templateId) {
+  if (!session?.user) {
+    return { status: 401, response: { error: "Unauthorized" } };
+  }
+
+  await dbConnect();
+  const user = await UserRepository.findById(session.user._id);
+
+  if (!user) {
+    return { status: 404, response: { error: "User not found" } };
+  }
+
+  const templateIndex = user.logs.findIndex((log) => log._id == templateId);
+
+  if (templateIndex === -1) {
+    return { status: 404, response: { error: "Template not found" } };
+  }
+
+  return { user, templateIndex };
+}
+
+// GET
 export async function GET(req: NextRequest, context: any) {
   const session = await getServerSession(authOptions);
   const { templateId } = context.params;
 
-  if (!session?.user)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { user, templateIndex, status, response } = await findUserAndTemplate(
+    session,
+    templateId
+  );
 
-  await dbConnect();
-
-  const user = await UserRepository.findById(session.user._id);
-
-  if (user) {
-    const templates = user?.logs.filter(
-      (log) => log.isTemplate && log.name && log._id == templateId
-    );
-
-    return NextResponse.json(templates, { status: 200 });
+  if (!user) {
+    return NextResponse.json(response, { status });
   }
-  return NextResponse.json({ error: "User not found" }, { status: 404 });
+
+  const templates = user?.logs.filter(
+    (log) => log.isTemplate && log.name && log._id == templateId
+  );
+
+  return NextResponse.json(templates, { status: 200 });
 }
 
-// DELETE REQUEST
+// DELETE
 export async function DELETE(req: NextRequest, context: any) {
   const session = await getServerSession(authOptions);
   const { templateId } = context.params;
 
-  if (!session?.user)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { user, templateIndex, status, response } = await findUserAndTemplate(
+    session,
+    templateId
+  );
 
-  await dbConnect();
-
-  const user = await UserRepository.findById(session.user._id);
-
-  if (user) {
-    const templateIndex = user.logs.findIndex((log) => log._id == templateId);
-
-    if (templateIndex !== -1) {
-      user.logs.splice(templateIndex, 1);
-
-      await user.save();
-
-      return NextResponse.json(
-        { message: "Template deleted successfully" },
-        { status: 200 }
-      );
-    } else {
-      return NextResponse.json(
-        { error: "Template not found" },
-        { status: 404 }
-      );
-    }
+  if (!user) {
+    return NextResponse.json(response, { status });
   }
 
-  return NextResponse.json({ error: "User not found" }, { status: 404 });
+  user.logs.splice(templateIndex, 1);
+  await user.save();
+
+  return NextResponse.json(
+    { message: "Template deleted successfully" },
+    { status: 200 }
+  );
 }
 
-// PATCH Request
+// PATCH
 export async function PATCH(req: NextRequest, context: any) {
   const session = await getServerSession(authOptions);
   const { templateId } = context.params;
 
-  if (!session?.user)
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const { user, templateIndex, status, response } = await findUserAndTemplate(
+    session,
+    templateId
+  );
+
+  if (!user) {
+    return NextResponse.json(response, { status });
+  }
 
   try {
-    await dbConnect();
+    const updatedFields = await req.json(); // Parse JSON body
 
-    const user = await UserRepository.findById(session.user._id);
-
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
-    const templateIndex = user.logs.findIndex((log) => log._id == templateId);
-
-    if (templateIndex === -1) {
-      return NextResponse.json(
-        { error: "Template not found" },
-        { status: 404 }
-      );
-    }
-
-    const updatedFields = req.body;
+    // Update only the specified fields in the template
     Object.assign(user.logs[templateIndex], updatedFields);
 
+    // Save the updated user object to the database
     await user.save();
 
     return NextResponse.json(

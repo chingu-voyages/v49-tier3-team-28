@@ -76,14 +76,19 @@ export const LoggingClient = {
   },
 
   async updateTemplate(updatedTemplateData: Partial<Log>): Promise<void> {
+    const requestBody = JSON.stringify({
+      name: updatedTemplateData.name,
+      exercises: updatedTemplateData.exercises,
+    });
+
     const response = await fetch(
-      `/api/user/logs/templates/${updatedTemplateData._id}`,
+      `/api/user/logs/templates/${updatedTemplateData.id}`,
       {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(updatedTemplateData),
+        body: requestBody,
       }
     );
 
@@ -91,6 +96,8 @@ export const LoggingClient = {
       throw new Error(response.statusText);
     }
 
-    console.log("Template updated successfully!");
+    const data = await response.json();
+
+    console.log("Template updated successfully!", data);
   },
 };

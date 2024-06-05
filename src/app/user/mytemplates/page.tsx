@@ -27,26 +27,6 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [templates, setTemplates] = useState<Log[]>([]);
 
-  const handleEditTemplate = async (templateId: string) => {
-    const template = templates.find((template) => template._id === templateId);
-    if (template) {
-      setSelectedTemplate(template.exercises);
-      setSelectedTemplateName(template.name);
-      setSelectedTemplateId(template._id);
-      setIsEditModalOpen(true);
-    }
-  };
-
-  const handleUpdateTemplate = async (updatedTemplateData: Partial<Log>) => {
-    try {
-      await LoggingClient.updateTemplate(updatedTemplateData);
-      fetchTemplates();
-      setIsEditModalOpen(false);
-    } catch (error: any) {
-      console.log("Error updating template: ", error.message);
-    }
-  };
-
   useEffect(() => {
     fetchTemplates();
   }, []);
@@ -72,6 +52,28 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
       setTemplates(templates.filter((template) => template._id !== templateId));
     } catch (error: any) {
       console.log("Error deleting template: ", error.message);
+    }
+  };
+
+  const handleEditTemplate = async (templateId: string) => {
+    const template = templates.find((template) => template._id === templateId);
+    if (template) {
+      setSelectedTemplate(template.exercises);
+      setSelectedTemplateName(template.name);
+      setSelectedTemplateId(template._id);
+      setIsEditModalOpen(true);
+    }
+  };
+
+  const handleUpdateTemplate = async (updatedTemplateData: Partial<Log>) => {
+    console.log("handleUpdateTemplate", updatedTemplateData);
+    try {
+      await LoggingClient.updateTemplate(updatedTemplateData);
+      fetchTemplates();
+      setIsModalOpen(false);
+      setIsEditModalOpen(false);
+    } catch (error: any) {
+      console.log("Error updating template: ", error.message);
     }
   };
 
