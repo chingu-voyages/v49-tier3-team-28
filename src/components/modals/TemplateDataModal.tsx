@@ -1,5 +1,6 @@
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Modal } from "@mui/material";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import { FiX } from "react-icons/fi";
 import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
@@ -15,6 +16,14 @@ const TemplateDataModal: React.FC<TemplateDataModalProps> = ({
   onClose,
   exerciseData,
 }) => {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleUseTemplate = (exerciseData: ExerciseActivity[]) => {
+    localStorage.setItem("selectedTemplate", JSON.stringify(exerciseData));
+    router.push("/user/createlog");
+  };
+
   return (
     <Modal
       open={open}
@@ -58,6 +67,12 @@ const TemplateDataModal: React.FC<TemplateDataModalProps> = ({
         ) : null}
         <div className="flex flex-col justify-between h-28 mt-4">
           <BasicRoundedButton onClick={onClose} label="Back to Selection" />
+          {pathname == "/user/mytemplates" && (
+            <BasicRoundedButton
+              onClick={() => handleUseTemplate(exerciseData!)}
+              label="Use Template"
+            />
+          )}
         </div>
       </div>
     </Modal>

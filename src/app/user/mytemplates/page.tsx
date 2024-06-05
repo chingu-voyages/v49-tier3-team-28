@@ -4,14 +4,24 @@ import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Ba
 import TemplateCard from "@/components/cards/TemplateCard";
 import EditTemplateModal from "@/components/modals/EditTemplateModal";
 import TemplateDataModal from "@/components/modals/TemplateDataModal";
+import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Log } from "@/models/log.model";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 interface MyTemplatesProps {}
 
 const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
+  const { status } = useAuthSession(); // status, session and update are available, see auth-context.tsx
+  const router = useRouter();
+
+  if (status === "unauthenticated") {
+    router.replace("/signin");
+    return null; // Ensure the component does not render until redirection
+  }
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedTemplate, setSelectedTemplate] = useState<
     ExerciseActivity[] | null
