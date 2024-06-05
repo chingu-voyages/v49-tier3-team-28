@@ -74,4 +74,28 @@ export const LoggingClient = {
 
     console.log("Template deleted successfully!");
   },
+
+  async updateTemplate(updatedTemplateData: Partial<Log>): Promise<void> {
+    const requestBody = JSON.stringify({
+      name: updatedTemplateData.name,
+      exercises: updatedTemplateData.exercises,
+    });
+
+    const response = await fetch(
+      `/api/user/logs/templates/${updatedTemplateData._id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: requestBody,
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    console.log("Template updated successfully!");
+  },
 };

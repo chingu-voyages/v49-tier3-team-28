@@ -58,7 +58,7 @@ export default function CreateTemplate() {
 
   // ------------------ Add, Delete, Update Exercises ----------------------------------
 
-  const handleSelectExercise = (exercise: Exercise): ExerciseActivity => {
+  const handleSelectExercise = (exercise: Exercise) => {
     const newExercise: ExerciseActivity = {
       exerciseName: exercise.label,
       sets: [{ setNumber: 1, reps: 0, weight: 0, unit }],
@@ -67,8 +67,6 @@ export default function CreateTemplate() {
     setSelectedExercises((prev) => [...prev, newExercise]);
     setSearchInput("");
     setSearchResults([]);
-
-    return newExercise;
   };
 
   const handleDeleteExercise = (index: number) => {
