@@ -156,36 +156,35 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
           </div>
         )}
 
-        <table className="min-w-full">
-          <thead>
-            <tr className="text-white text-center bg-orange-500">
-              <th className="p-left-2">Exercise Name</th>
-              <th className="p-left-2"># of Sets</th>
-              <th className="p-left-2"></th>
-            </tr>
-          </thead>
-          {selectedExercises.map((exercise, eIdx) => (
-            <tbody className="overflow-y-auto">
-              <td className="p-1">{exercise.exerciseName}</td>
-              <td className="p-1 text-center">
-                <input
-                  type="text"
-                  value={exercise.sets.length}
-                  className="mb-2 mt-2 p-1 border rounded-xl w-1/2 text-center"
-                  placeholder="1"
-                />
-              </td>
-              <td>
-                <button
-                  className="p-right-2"
-                  onClick={() => handleDeleteExercise(eIdx)}
-                >
-                  <FiX />
-                </button>
-              </td>
-            </tbody>
-          ))}
-        </table>
+        <div className="max-h-48 overflow-y-auto min-w-full">
+          <table className="min-w-full">
+            <thead>
+              <tr className="text-white text-center bg-orange-500">
+                <th className="p-left-2">Exercise Name</th>
+                <th className="p-left-2"># of Sets</th>
+                <th className="p-left-2"></th>
+              </tr>
+            </thead>
+            {selectedExercises.map((exercise, eIdx) => (
+              <tbody>
+                <td className="p-1">{exercise.exerciseName}</td>
+                <td className="p-1 text-center">
+                  <input
+                    type="text"
+                    value={exercise.sets.length}
+                    className="mb-2 mt-2 p-1 border rounded-xl w-1/2 text-center"
+                    placeholder="1"
+                  />
+                </td>
+                <td className="p-right-10">
+                  <button onClick={() => handleDeleteExercise(eIdx)}>
+                    <FiX />
+                  </button>
+                </td>
+              </tbody>
+            ))}
+          </table>
+        </div>
 
         <div className="flex justify-end">
           <BasicRoundedButton
