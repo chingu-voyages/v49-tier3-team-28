@@ -54,15 +54,6 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
     setSelectedTemplate(template.exercises);
     setSelectedTemplateName(template.name!);
     setIsModalOpen(true);
-
-    console.log(template);
-
-    localStorage.setItem(
-      "selectedTemplate",
-      JSON.stringify(template.exercises)
-    );
-    console.log(localStorage.getItem("selectedTemplate"));
-    router.push("/user/createlog");
   };
 
   const handleDeleteTemplate = async (templateId: string) => {

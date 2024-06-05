@@ -57,11 +57,13 @@ export default function CreateLog() {
 
   // Updates the state of the unit or exercises based on localStorage
   useEffect(() => {
+    // Updates unit from localStorage
     const savedUnit = localStorage.getItem("weightUnit");
     if (savedUnit) {
       setUnit(savedUnit);
     }
 
+    // Updates exercises from localStorage
     const savedExercises = JSON.parse(
       localStorage.getItem("selectedTemplate")!
     );
