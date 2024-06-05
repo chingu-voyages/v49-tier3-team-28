@@ -4,7 +4,7 @@ import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Modal } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { FiSearch, FiX } from "react-icons/fi";
+import { FiPlus, FiSearch, FiX } from "react-icons/fi";
 
 interface EditTemplateModalProps {
   open: boolean;
@@ -21,6 +21,8 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
   templateNameData,
   onUpdateTemplate,
 }) => {
+  // --------------------State --------------------
+
   const [templateName, setTemplateName] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
 
@@ -30,6 +32,8 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
   const [selectedExercises, setSelectedExercises] = useState<
     ExerciseActivity[]
   >([]);
+
+  const [toggleSearchBar, setToggleSearchBar] = useState<boolean>(false);
 
   const exercisesArray = Object.values(ExercisesDictionary);
 
@@ -56,6 +60,8 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
     }
   }, [searchInput]);
 
+  // ----------------------------------------------------------------
+
   const handleSelectExercise = (exercise: Exercise): ExerciseActivity => {
     const newExercise: ExerciseActivity = {
       exerciseName: exercise.label,
@@ -75,6 +81,8 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
     setSelectedExercises(newSelectedExercises);
   };
 
+  // ----------------------------------------------------------------
+
   return (
     <Modal
       open={open}
@@ -86,7 +94,9 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
         <button className="absolute top-2 right-2" onClick={onClose}>
           <FiX />
         </button>
+        {/* Template Name */}
         <div className="w-full">
+          <h1 className="text-xl mb-2">Template Name</h1>
           <input
             type="text"
             id="templateName"
@@ -102,39 +112,51 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
         </div>
 
         {/* Search Bar */}
-        <div className="relative flex flex-col w-full">
-          <div className="relative flex items-center">
-            <FiSearch className="absolute left-3" />
-            <input
-              type="text"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              placeholder="Search for an exercise"
-              className="border rounded-xl pl-10 pr-10 p-2 w-full bg-gray-50"
-            />
-            {searchInput && (
-              <FiX
-                className="absolute right-3 cursor-pointer"
-                onClick={() => setSearchInput("")}
+        {toggleSearchBar ? (
+          <div className="relative flex flex-col w-full">
+            <div className="relative flex items-center">
+              <FiSearch className="absolute left-3" />
+              <input
+                type="text"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                placeholder="Search for an exercise to add"
+                className="border rounded-xl pl-10 pr-10 p-2 w-full bg-gray-50"
               />
+              {searchInput && (
+                <FiX
+                  className="absolute right-3 cursor-pointer"
+                  onClick={() => setSearchInput("")}
+                />
+              )}
+            </div>
+            {searchResults.length > 0 && (
+              <div className="absolute top-full bg-gray-50 left-0 right-0 flex flex-col border rounded shadow-lg z-10 overflow-y-auto max-h-48">
+                {searchResults.map((exercise: Exercise) => (
+                  <div
+                    key={exercise.id}
+                    onClick={() => handleSelectExercise(exercise)}
+                    className="cursor-pointer p-2 border-b hover:bg-orange-500 hover:text-white"
+                  >
+                    {exercise.label}
+                  </div>
+                ))}
+              </div>
             )}
           </div>
-          {searchResults.length > 0 && (
-            <div className="absolute top-full bg-gray-50 left-0 right-0 flex flex-col border rounded shadow-lg z-10 overflow-y-auto max-h-48">
-              {searchResults.map((exercise: Exercise) => (
-                <div
-                  key={exercise.id}
-                  onClick={() => handleSelectExercise(exercise)}
-                  className="cursor-pointer p-2 border-b hover:bg-orange-500 hover:text-white"
-                >
-                  {exercise.label}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        ) : (
+          <div>
+            <button
+              className="flex text-green-500 justify-center w-full text-center"
+              onClick={() => setToggleSearchBar(true)}
+            >
+              <FiPlus />
+              <p>Add Exercise</p>
+            </button>
+          </div>
+        )}
 
-        <table className="min-w-full bg-red-100">
+        <table className="min-w-full">
           <thead>
             <tr className="text-white text-center bg-orange-500">
               <th className="p-left-2">Exercise Name</th>
