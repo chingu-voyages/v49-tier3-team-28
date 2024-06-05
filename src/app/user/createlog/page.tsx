@@ -55,12 +55,20 @@ export default function CreateLog() {
     }
   }, [searchInput]);
 
-  // Updates the state of the unit based on localStorage
+  // Updates the state of the unit or exercises based on localStorage
   useEffect(() => {
     const savedUnit = localStorage.getItem("weightUnit");
     if (savedUnit) {
       setUnit(savedUnit);
     }
+
+    const savedExercises = JSON.parse(
+      localStorage.getItem("selectedTemplate")!
+    );
+    if (savedExercises) {
+      setSelectedExercises(savedExercises);
+    }
+    localStorage.removeItem("selectedTemplate");
   }, []);
 
   // ------------------ Add, Delete, Update Exercises ----------------------------------
