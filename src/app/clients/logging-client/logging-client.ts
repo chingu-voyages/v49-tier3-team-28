@@ -96,8 +96,6 @@ export const LoggingClient = {
       throw new Error(response.statusText);
     }
 
-    const data = await response.json();
-
-    console.log("Template updated successfully!", data);
+    console.log("Template updated successfully!");
   },
 };

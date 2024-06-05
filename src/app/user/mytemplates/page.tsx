@@ -66,7 +66,6 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
   };
 
   const handleUpdateTemplate = async (updatedTemplateData: Partial<Log>) => {
-    console.log("handleUpdateTemplate", updatedTemplateData);
     try {
       await LoggingClient.updateTemplate(updatedTemplateData);
       fetchTemplates();

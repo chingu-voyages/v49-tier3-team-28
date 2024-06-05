@@ -117,7 +117,6 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
       isTemplate: true,
     };
 
-    // console.log(updatedTemplateData);
     onUpdateTemplate(updatedTemplateData);
   };
 
