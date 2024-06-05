@@ -3,6 +3,7 @@ import { Exercise } from "@/lib/exercises/exercise";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Log } from "@/models/log.model";
+import { Set } from "@/models/set.model";
 import { Modal } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { FiPlus, FiSearch, FiX } from "react-icons/fi";
@@ -81,7 +82,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
     const updatedExercises = [...selectedExercises];
     const exercise = updatedExercises[index];
 
-    const setData = (set, i) => ({
+    const setData = (set: Set, i: number) => ({
       setNumber: i + 1,
       reps: 0,
       weight: 0,
@@ -229,11 +230,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
         </div>
 
         <div className="flex justify-end">
-          <BasicRoundedButton
-            label="Save"
-            onClick={handleSave}
-            className="ml-2"
-          />
+          <BasicRoundedButton label="Save" onClick={handleSave} />
         </div>
       </div>
     </Modal>
