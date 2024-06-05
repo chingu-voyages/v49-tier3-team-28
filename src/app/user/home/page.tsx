@@ -2,6 +2,7 @@
 import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
 import { CalendarLogViewer } from "@/components/calendar-log-viewer/Calendar-log-viewer";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Link } from "@mui/material";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
@@ -21,54 +22,78 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="flex flex-col items-center gap-y-36 justify-center w-screen h-screen bg-cover bg-no-repeat bg-center">
+    <div className="flex flex-col items-center gap-y-12 justify-center w-screen bg-cover bg-no-repeat bg-center pr-4 mt-8">
       {/* Header */}
-      <div className="flex w-2/3 justify-between">
-        <div className="flex flex-col gap-y-10">
-          <h1 className={`text-5xl leading-6`}>
-            Welcome {session?.user?.username}
+      <div>
+        <div className="flex justify-between">
+          <h1
+            className={`text-xl leading-7 futuraFont font-bold uppercase self-center py-6`}
+          >
+            Welcome, {session?.user?.username}
           </h1>
-          <h3>{dayjs().format("ddd, MMMM D, YYYY")}</h3>
-        </div>
-        <Link href="/user/mytemplates">
-          <BasicRoundedButton
-            label="Manage Templates"
-            buttonClassNames="!w-36"
-            customMaterialButtonStyles={{
-              fontSize: "10px",
-              backgroundColor: "#95A1A8",
-            }}
-          />
-        </Link>
-      </div>
-      {/* Logging Button */}
-      <div className="flex flex-col gap-y-9">
-        <div className="w-80">
-          <Link href="/user/createlog">
-            <BasicRoundedButton label="Start Logging" />
+          <Link href="/user/mytemplates" className="self-center">
+            <BasicRoundedButton
+              label="Manage Templates"
+              buttonClassNames="!w-36"
+              customMaterialButtonStyles={{
+                fontSize: "12px",
+                fontFamily: "Roboto",
+                lineHeight: "15px",
+                backgroundColor: "#95A1A8",
+              }}
+            />
           </Link>
         </div>
-      </div>
-      {/* Metrics */}
-      <div className="flex flex-col gap-y-9 w-96">
-        <div className="flex justify-between">
-          <h2 className="text-3xl flex justify-center align-center text-center">
-            Journal Tracker
-          </h2>
-          <div className="w-30">
-            <Link href="/user/viewlogs">
+        <div>
+          <h3 className="verdanaFont text-sm leading-4">
+            {dayjs().format("ddd, MMMM D, YYYY")}
+          </h3>
+        </div>
+        {/* Logging Button */}
+        <div className="flex flex-col mt-8">
+          <div className="w-full">
+            <Link href="/user/createlog">
               <BasicRoundedButton
-                label="View Logs"
-                buttonClassNames="!w-24 !h-8"
-                customMaterialButtonStyles={{
-                  fontSize: "10px",
-                  backgroundColor: "#03BB9B",
-                }}
+                label="Start Logging"
+                buttonClassNames="defaultButtonColor h-14 !justify-between !w-full"
+                endIcon={
+                  <ArrowForwardIcon
+                    sx={{
+                      background: "white",
+                      color: "#143452",
+                      borderRadius: "50%",
+
+                      "&.MuiSvgIcon-root": {
+                        fontSize: "48px",
+                      },
+                    }}
+                  />
+                }
               />
             </Link>
           </div>
         </div>
-        <CalendarLogViewer readonly />
+        {/* Metrics */}
+        <div className="flex flex-col gap-y-9 w-96 mt-8">
+          <div className="flex justify-between">
+            <h1 className="futuraFont text-base font-bold uppercase">
+              Journal Tracker
+            </h1>
+            <div className="w-30">
+              <Link href="/user/viewlogs">
+                <BasicRoundedButton
+                  label="View Logs"
+                  buttonClassNames="!w-24 !h-8"
+                  customMaterialButtonStyles={{
+                    fontSize: "10px",
+                    backgroundColor: "#03BB9B",
+                  }}
+                />
+              </Link>
+            </div>
+          </div>
+          <CalendarLogViewer readonly />
+        </div>
       </div>
     </div>
   );

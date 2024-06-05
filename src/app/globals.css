@@ -56,3 +56,14 @@ body {
   background-color: var(--light-faint-grey);
 }
 
+.futuraFont {
+  font-family: futura-pt-condensed, sans-serif;
+}
+
+.robotoFont {
+  font-family: 'Roboto', sans-serif;
+}
+
+.verdanaFont {
+  font-family: 'Verdana', sans-serif;
+}
