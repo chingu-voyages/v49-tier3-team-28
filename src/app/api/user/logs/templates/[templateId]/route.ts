@@ -6,26 +6,38 @@ import { NextRequest, NextResponse } from "next/server";
 
 async function findUserAndTemplate(
   session: Session | null,
-  templateId: String
+  templateId: string
 ) {
   if (!session?.user) {
-    return { status: 401, response: { error: "Unauthorized" } };
+    return {
+      response: NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
+      user: null,
+    };
   }
 
   await dbConnect();
   const user = await UserRepository.findById(session.user._id);
 
   if (!user) {
-    return { status: 404, response: { error: "User not found" } };
+    return {
+      response: NextResponse.json({ error: "User not found" }, { status: 404 }),
+      user: null,
+    };
   }
 
   const templateIndex = user.logs.findIndex((log) => log._id == templateId);
 
   if (templateIndex === -1) {
-    return { status: 404, response: { error: "Template not found" } };
+    return {
+      response: NextResponse.json(
+        { error: "Template not found" },
+        { status: 404 }
+      ),
+      user: null,
+    };
   }
 
-  return { user, templateIndex };
+  return { user, templateIndex, response: null };
 }
 
 // GET
@@ -33,16 +45,13 @@ export async function GET(req: NextRequest, context: any) {
   const session = await getServerSession(authOptions);
   const { templateId } = context.params;
 
-  const { user, templateIndex, status, response } = await findUserAndTemplate(
-    session,
-    templateId
-  );
+  const result = await findUserAndTemplate(session, templateId);
 
-  if (!user) {
-    return NextResponse.json(response, { status });
+  if (!result.user) {
+    return result.response;
   }
 
-  const templates = user?.logs.filter(
+  const templates = result.user.logs.filter(
     (log) => log.isTemplate && log.name && log._id == templateId
   );
 
@@ -54,17 +63,14 @@ export async function DELETE(req: NextRequest, context: any) {
   const session = await getServerSession(authOptions);
   const { templateId } = context.params;
 
-  const { user, templateIndex, status, response } = await findUserAndTemplate(
-    session,
-    templateId
-  );
+  const result = await findUserAndTemplate(session, templateId);
 
-  if (!user) {
-    return NextResponse.json(response, { status });
+  if (!result.user) {
+    return result.response;
   }
 
-  user.logs.splice(templateIndex, 1);
-  await user.save();
+  result.user.logs.splice(result.templateIndex, 1);
+  await result.user.save();
 
   return NextResponse.json(
     { message: "Template deleted successfully" },
@@ -77,21 +83,16 @@ export async function PATCH(req: NextRequest, context: any) {
   const session = await getServerSession(authOptions);
   const { templateId } = context.params;
 
-  const { user, templateIndex, status, response } = await findUserAndTemplate(
-    session,
-    templateId
-  );
+  const result = await findUserAndTemplate(session, templateId);
 
-  if (!user) {
-    return NextResponse.json(response, { status });
+  if (!result.user) {
+    return result.response;
   }
 
   try {
     const updatedFields = await req.json();
-
-    Object.assign(user.logs[templateIndex], updatedFields);
-
-    await user.save();
+    Object.assign(result.user.logs[result.templateIndex], updatedFields);
+    await result.user.save();
 
     return NextResponse.json(
       { message: "Template updated successfully" },
