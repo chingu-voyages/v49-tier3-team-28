@@ -67,3 +67,15 @@ body {
 .verdanaFont {
   font-family: 'Verdana', sans-serif;
 }
+
+.blueGray {
+  background-color: #2F4858;
+}
+
+.lightTanOrange {
+  background-color: #FFF5EA;
+}
+
+.colorWhite {
+  color: white;
+}
