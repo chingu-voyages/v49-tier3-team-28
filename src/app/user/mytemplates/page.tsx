@@ -42,7 +42,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
 
   const handleTemplateClick = (template: Log) => {
     setSelectedTemplate(template.exercises);
-    setSelectedTemplateName(template.name);
+    setSelectedTemplateName(template.name!);
     setIsModalOpen(true);
   };
 
@@ -59,8 +59,8 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
     const template = templates.find((template) => template._id === templateId);
     if (template) {
       setSelectedTemplate(template.exercises);
-      setSelectedTemplateName(template.name);
-      setSelectedTemplateId(template._id);
+      setSelectedTemplateName(template.name!);
+      setSelectedTemplateId(template._id!);
       setIsEditModalOpen(true);
     }
   };
@@ -95,7 +95,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
               <TemplateCard
                 onClick={() => handleTemplateClick(template)}
                 onDelete={() => handleDeleteTemplate(template._id!)}
-                onEdit={() => handleEditTemplate(template._id)}
+                onEdit={() => handleEditTemplate(template._id!)}
                 data={template}
               />
             </div>

@@ -103,7 +103,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
     }
 
     const updatedTemplateData = {
-      id: templateId,
+      _id: templateId!,
       name: templateName,
       exercises: selectedExercises.map((exerciseActivity) => ({
         exerciseName: exerciseActivity.exerciseName,
@@ -117,7 +117,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
       isTemplate: true,
     };
 
-    console.log(updatedTemplateData);
+    // console.log(updatedTemplateData);
     onUpdateTemplate(updatedTemplateData);
   };
 

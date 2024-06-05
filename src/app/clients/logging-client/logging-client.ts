@@ -82,7 +82,7 @@ export const LoggingClient = {
     });
 
     const response = await fetch(
-      `/api/user/logs/templates/${updatedTemplateData.id}`,
+      `/api/user/logs/templates/${updatedTemplateData._id}`,
       {
         method: "PATCH",
         headers: {
