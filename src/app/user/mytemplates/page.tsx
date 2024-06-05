@@ -19,22 +19,33 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
   const [selectedTemplateName, setSelectedTemplateName] = useState<
     string | null
   >(null);
+
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(
+    null
+  );
+
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [templates, setTemplates] = useState<Log[]>([]);
 
   const handleEditTemplate = async (templateId: string) => {
     const template = templates.find((template) => template._id === templateId);
     if (template) {
       setSelectedTemplate(template.exercises);
       setSelectedTemplateName(template.name);
+      setSelectedTemplateId(template._id);
       setIsEditModalOpen(true);
     }
   };
 
-  const handleUpdateTemplate = async (updatedTemplateData: any) => {
-    console.log(updatedTemplateData);
+  const handleUpdateTemplate = async (updatedTemplateData: Partial<Log>) => {
+    try {
+      await LoggingClient.updateTemplate(updatedTemplateData);
+      fetchTemplates();
+      setIsEditModalOpen(false);
+    } catch (error: any) {
+      console.log("Error updating template: ", error.message);
+    }
   };
-
-  const [templates, setTemplates] = useState<Log[]>([]);
 
   useEffect(() => {
     fetchTemplates();
@@ -73,21 +84,20 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
         {templates.length > 0 ? (
           <h1>Please choose one template to start:</h1>
         ) : (
-          <h1> There are currently no templates. Create one below</h1>
+          <h1>There are currently no templates. Create one below</h1>
         )}
 
         <div className="flex flex-wrap -mx-2">
-          {templates &&
-            templates.map((template, idx) => (
-              <div key={idx} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
-                <TemplateCard
-                  onClick={() => handleTemplateClick(template)}
-                  onDelete={() => handleDeleteTemplate(template._id!)}
-                  onEdit={() => handleEditTemplate(template._id)}
-                  data={template}
-                />
-              </div>
-            ))}
+          {templates.map((template, idx) => (
+            <div key={idx} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
+              <TemplateCard
+                onClick={() => handleTemplateClick(template)}
+                onDelete={() => handleDeleteTemplate(template._id!)}
+                onEdit={() => handleEditTemplate(template._id)}
+                data={template}
+              />
+            </div>
+          ))}
         </div>
         <div className="flex flex-col justify-between h-28">
           <Link href="/user/createtemplate">
@@ -103,9 +113,10 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
       <EditTemplateModal
         open={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
-        templateData={selectedTemplate ? selectedTemplate : null}
+        templateData={selectedTemplate}
         onUpdateTemplate={handleUpdateTemplate}
-        templateNameData={selectedTemplateName ? selectedTemplateName : null}
+        templateNameData={selectedTemplateName}
+        templateId={selectedTemplateId}
       />
     </div>
   );

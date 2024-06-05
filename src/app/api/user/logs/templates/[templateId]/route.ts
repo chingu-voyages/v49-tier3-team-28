@@ -61,8 +61,8 @@ export async function DELETE(req: NextRequest, context: any) {
   return NextResponse.json({ error: "User not found" }, { status: 404 });
 }
 
-// PUT REQUEST
-export async function PUT(req: NextRequest, context: any) {
+// PATCH Request
+export async function PATCH(req: NextRequest, context: any) {
   const session = await getServerSession(authOptions);
   const { templateId } = context.params;
 
@@ -87,7 +87,8 @@ export async function PUT(req: NextRequest, context: any) {
       );
     }
 
-    user.logs[templateIndex] = { ...user.logs[templateIndex], ...req.body };
+    const updatedFields = req.body;
+    Object.assign(user.logs[templateIndex], updatedFields);
 
     await user.save();
 

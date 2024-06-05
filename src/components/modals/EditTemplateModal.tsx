@@ -2,6 +2,7 @@ import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Ba
 import { Exercise } from "@/lib/exercises/exercise";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
+import { Log } from "@/models/log.model";
 import { Modal } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { FiPlus, FiSearch, FiX } from "react-icons/fi";
@@ -11,7 +12,8 @@ interface EditTemplateModalProps {
   onClose: () => void;
   templateData: ExerciseActivity[] | null;
   templateNameData: string | null;
-  onUpdateTemplate: (updatedTemplateData: any) => void;
+  onUpdateTemplate: (updatedTemplateData: Partial<Log>) => void;
+  templateId: string | null;
 }
 
 const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
@@ -20,19 +22,15 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
   templateData,
   templateNameData,
   onUpdateTemplate,
+  templateId,
 }) => {
-  // --------------------State --------------------
-
   const [templateName, setTemplateName] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
-
   const [searchInput, setSearchInput] = useState<string>("");
   const [searchResults, setSearchResults] = useState<Exercise[]>([]);
-
   const [selectedExercises, setSelectedExercises] = useState<
     ExerciseActivity[]
   >([]);
-
   const [toggleSearchBar, setToggleSearchBar] = useState<boolean>(false);
 
   const exercisesArray = Object.values(ExercisesDictionary);
@@ -47,7 +45,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
     if (templateNameData) {
       setTemplateName(templateNameData);
     }
-  }, [templateData]);
+  }, [templateNameData]);
 
   useEffect(() => {
     if (searchInput) {
@@ -59,8 +57,6 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
       setSearchResults([]);
     }
   }, [searchInput]);
-
-  // ----------------------------------------------------------------
 
   const handleSelectExercise = (exercise: Exercise): ExerciseActivity => {
     const newExercise: ExerciseActivity = {
@@ -81,7 +77,30 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
     setSelectedExercises(newSelectedExercises);
   };
 
-  // ----------------------------------------------------------------
+  const handleSave = () => {
+    if (!templateName) {
+      setErrorMessage("Template name can't be empty.");
+      return;
+    }
+
+    const updatedTemplateData = {
+      id: templateId,
+      name: templateName,
+      exercises: selectedExercises.map((exerciseActivity) => ({
+        exerciseName: exerciseActivity.exerciseName,
+        sets: exerciseActivity.sets.map((set, index) => ({
+          setNumber: index + 1,
+          weight: 0,
+          unit: set.unit,
+          reps: 0,
+        })),
+      })),
+      isTemplate: true,
+    };
+
+    console.log(updatedTemplateData);
+    onUpdateTemplate(updatedTemplateData);
+  };
 
   return (
     <Modal
@@ -94,6 +113,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
         <button className="absolute top-2 right-2" onClick={onClose}>
           <FiX />
         </button>
+
         {/* Template Name */}
         <div className="w-full">
           <h1 className="text-xl mb-2">Template Name</h1>
@@ -105,7 +125,6 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
             placeholder="Enter a name for your template"
             className="border rounded-xl p-2 bg-gray-50 w-full text-center"
           />
-
           {errorMessage && (
             <p className="text-red-500 text-center mt-2">{errorMessage}</p>
           )}
@@ -156,40 +175,43 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
           </div>
         )}
 
-        <div className="max-h-48 overflow-y-auto min-w-full">
+        {/* Exercise Table */}
+        <div className="w-full max-h-48 overflow-y-auto">
           <table className="min-w-full">
             <thead>
               <tr className="text-white text-center bg-orange-500">
-                <th className="p-left-2">Exercise Name</th>
-                <th className="p-left-2"># of Sets</th>
-                <th className="p-left-2"></th>
+                <th className="p-2">Exercise Name</th>
+                <th className="p-2"># of Sets</th>
+                <th className="p-2"></th>
               </tr>
             </thead>
-            {selectedExercises.map((exercise, eIdx) => (
-              <tbody>
-                <td className="p-1">{exercise.exerciseName}</td>
-                <td className="p-1 text-center">
-                  <input
-                    type="text"
-                    value={exercise.sets.length}
-                    className="mb-2 mt-2 p-1 border rounded-xl w-1/2 text-center"
-                    placeholder="1"
-                  />
-                </td>
-                <td className="p-right-10">
-                  <button onClick={() => handleDeleteExercise(eIdx)}>
-                    <FiX />
-                  </button>
-                </td>
-              </tbody>
-            ))}
+            <tbody>
+              {selectedExercises.map((exercise, eIdx) => (
+                <tr key={eIdx} className="text-center">
+                  <td className="p-2">{exercise.exerciseName}</td>
+                  <td className="p-2">
+                    <input
+                      type="text"
+                      value={exercise.sets.length}
+                      className="mb-2 mt-2 p-1 border rounded-xl w-1/2 text-center"
+                      placeholder="1"
+                    />
+                  </td>
+                  <td className="p-2">
+                    <button onClick={() => handleDeleteExercise(eIdx)}>
+                      <FiX />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
 
         <div className="flex justify-end">
           <BasicRoundedButton
             label="Save"
-            onClick={() => {}}
+            onClick={handleSave}
             className="ml-2"
           />
         </div>

@@ -75,17 +75,17 @@ export const LoggingClient = {
     console.log("Template deleted successfully!");
   },
 
-  async updateTemplate(
-    templateId: string,
-    updatedTemplateData: Partial<Log>
-  ): Promise<void> {
-    const response = await fetch(`/api/user/logs/templates/${templateId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedTemplateData),
-    });
+  async updateTemplate(updatedTemplateData: Partial<Log>): Promise<void> {
+    const response = await fetch(
+      `/api/user/logs/templates/${updatedTemplateData._id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedTemplateData),
+      }
+    );
 
     if (!response.ok) {
       throw new Error(response.statusText);
