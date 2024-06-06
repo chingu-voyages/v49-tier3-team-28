@@ -3,7 +3,7 @@ import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Ba
 import { CalendarLogViewer } from "@/components/calendar-log-viewer/Calendar-log-viewer";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { Link } from "@mui/material";
+import { CircularProgress, Link } from "@mui/material";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
 
@@ -21,6 +21,12 @@ export default function LandingPage() {
     return router.replace("/signin");
   }
 
+  if (status === "loading")
+    return (
+      <div className="flex justify-center" style={{ marginTop: "40%" }}>
+        <CircularProgress />;
+      </div>
+    );
   return (
     <div className="flex flex-col items-center gap-y-12 justify-center w-screen bg-cover bg-no-repeat bg-center pr-4 mt-8">
       {/* Header */}
