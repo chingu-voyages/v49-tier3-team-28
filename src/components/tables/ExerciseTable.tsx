@@ -59,8 +59,8 @@ const ExerciseTable: React.FC<ExerciseTableProps> = ({
                     onChange={(e) => handleInputChange(setIndex, "weight", e)}
                     className="w-20 p-1 border rounded-xl text-center bg-gray-50"
                   />
-                  <div>
-                    <p className="px-2 self-center">{unit}</p>
+                  <div className="self-center">
+                    <p className="px-2">{unit}</p>
                   </div>
                 </div>
               </td>

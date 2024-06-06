@@ -119,16 +119,16 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
   };
 
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      className="flex justify-center items-center"
-    >
-      <div className="flex flex-col w-1/2 h-3/4 bg-white p-10 rounded-xl relative justify-evenly items-center text-center">
-        <h2 className="text-2xl font-bold">Edit Template</h2>
-        <button className="absolute top-2 right-2" onClick={onClose}>
-          <FiX />
-        </button>
+    <Modal open={open} onClose={onClose} className="P-4">
+      <div className="flex flex-col w-1/2 h-3/4 bg-white p-10 rounded-xl relative justify-evenly w-full ">
+        <div className="flex justify-between">
+          <h1 className="text-3xl font-bold futuraFont uppercase self-center">
+            Edit Template
+          </h1>
+          <button onClick={onClose}>
+            <FiX className="size-8 text-white blueGray rounded-full ml-2 p-2 hover:bg-stone-500" />
+          </button>
+        </div>
 
         {/* Template Name */}
         <div className="w-full">
@@ -139,7 +139,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
             value={templateName}
             onChange={(e) => setTemplateName(e.target.value)}
             placeholder="Enter a name for your template"
-            className="border rounded-xl p-2 bg-gray-50 w-full text-center"
+            className="p-2 bg-gray-50 w-full robotoFont h-16 text-xl hover:bg-neutral-300"
           />
           {errorMessage && (
             <p className="text-red-500 text-center mt-2">{errorMessage}</p>

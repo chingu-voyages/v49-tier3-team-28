@@ -73,25 +73,26 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
 
   return (
     <div>
-      <Modal
-        open={open}
-        onClose={onClose}
-        className="flex justify-center items-center"
-      >
-        <div className="flex flex-col w-1/2 h-3/4 bg-white p-10 rounded-xl relative justify-evenly items-center text-center">
-          <button className="absolute top-2 right-2" onClick={onClose}>
-            <FiX />
-          </button>
+      <Modal open={open} onClose={onClose} className="p-4">
+        <div className="flex flex-col w-1/2 h-3/4 bg-white p-10 rounded-xl relative justify-evenly w-full ">
+          <div className="flex justify-between">
+            <h1 className="text-3xl font-bold futuraFont uppercase self-center">
+              Add log as template
+            </h1>
+            <button onClick={onClose}>
+              <FiX className="size-8 text-white blueGray rounded-full ml-2 p-2 hover:bg-stone-500" />
+            </button>
+          </div>
 
-          <div className="px-4 items-center">
-            <h1> Give Your Template a Name</h1>
+          <div>
+            <h1 className="verdanaFont text-base">Give your yemplate a name</h1>
             <input
               type="text"
               id="templateName"
               value={templateName}
               onChange={(e) => setTemplateName(e.target.value)}
               placeholder="Template Name"
-              className="border rounded-xl p-2 bg-gray-50 w-full text-center"
+              className="p-2 bg-gray-50 w-full robotoFont h-16 text-xl hover:bg-neutral-300"
             />
             {errorMessage && (
               <p className="text-red-500 text-center mt-2">{errorMessage}</p>
@@ -99,37 +100,39 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
           </div>
 
           <div>
-            <h1>Please Review Your Template</h1>
+            <h1 className="futuraFont font-medium text-xl">
+              Please Review Your Template:
+            </h1>
             <div>
               {data.map((exercise, index) => (
-                <div
-                  className="flex justify-between items-center mb-1"
-                  key={index}
-                >
-                  <div className="text-gray-700">{exercise.exerciseName}</div>
-                  <div className="text-gray-500">
-                    Sets: {exercise.sets.length}
+                <>
+                  <div
+                    className="flex justify-between items-center mb-1 defaultButtonColor p-2"
+                    key={index}
+                  >
+                    <p className="text-white verdanaFont">
+                      {exercise.exerciseName}
+                    </p>
                   </div>
-                </div>
+                  <div className="paleSalmon p-2">
+                    <p className="text-black">
+                      <b>{exercise.sets.length}</b> Sets
+                    </p>
+                  </div>
+                </>
               ))}
             </div>
-            <p>
+            <p className="verdanaFont text-xs mt-4 p-1">
               * Please note that only the exercise name and number of sets will
               be saved when adding the log as a template.
             </p>
           </div>
-
-          <div className="flex flex-col">
-            <h3>
-              You've successfully logged your exercises for today. Keep up the
-              fantastic work!
-            </h3>
-          </div>
           <div className="flex flex-col justify-between h-28">
             <BasicRoundedButton
               onClick={() => handleSaveTemplate()}
-              label="Save Template"
-            ></BasicRoundedButton>
+              label="Save as a Template"
+              buttonClassNames="defaultButtonColor"
+            />
           </div>
         </div>
       </Modal>
