@@ -1,9 +1,10 @@
 import { LoggingClient } from "@/app/clients/logging-client/logging-client";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Log } from "@/models/log.model";
-import { Modal } from "@mui/material";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import { IconButton, Modal } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { FiEye, FiX } from "react-icons/fi";
+import { FiX } from "react-icons/fi";
 import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
 import TemplateDataModal from "./TemplateDataModal";
 
@@ -51,42 +52,57 @@ const TemplatesModal: React.FC<TemplateModalProps> = ({
 
   return (
     <div>
-      <Modal
-        open={open}
-        onClose={onClose}
-        className="flex justify-center items-center"
-      >
-        <div className="flex flex-col w-1/2 h-3/4 bg-white p-10 rounded-xl relative justify-evenly items-center text-center">
-          <h1 className="text-4xl font-bold text-center">
-            Choose From Templates
+      <Modal open={open} onClose={onClose} className="p-4">
+        <div className="flex flex-col w-1/2 h-3/4 bg-white p-10 rounded-xl relative justify-evenly w-full">
+          <div className="flex justify-between leading-7">
+            <h1 className="text-3xl font-bold futuraFont uppercase self-center">
+              Choose From Templates
+            </h1>
+            <button
+              onClick={() => {
+                setActiveTemplateIdx(null);
+                setSelectedTemplate(null);
+                onClose();
+              }}
+            >
+              <FiX className="size-8 text-white blueGray rounded-full ml-2 p-2 hover:bg-stone-500" />
+            </button>
+          </div>
+          <h1 className="futuraFont text-xl font-medium">
+            Please choose one template to start:
           </h1>
-          <button className="absolute top-2 right-2" onClick={onClose}>
-            <FiX />
-          </button>
-          <h1>Please choose one template to start:</h1>
           {/* Templates to Choose From */}
-          <div className="min-h-24 overflow-y-auto w-96 max-h-56">
+          <div className="min-h-24 overflow-y-auto w-96 max-h-58 w-full">
             {templates?.map((template, idx) => (
               <div
                 key={idx}
-                className={`flex justify-between cursor-pointer p-2 border-b ${
+                className={`flex justify-between cursor-pointer p-2 border-b lightTanOrange mt-5 ${
                   activeTemplateIdx === idx
-                    ? "bg-orange-500 text-white"
-                    : "bg-orange-100 hover:bg-orange-500 hover:text-white"
+                    ? "defaultButtonColor colorWhite"
+                    : ""
                 }`}
-                onClick={() => handleTemplateClick(template.exercises, idx)}
+                onClick={() => handleTemplateClick(template.exercises, idx)} // this should send a whole log instead of exercises
               >
-                <div className="text-xl">{template.name}</div>
-                <button className="mr-2 transition-transform duration-300 hover:scale-125">
-                  <FiEye onClick={() => setIsModalOpen(true)} />
-                </button>
+                <div
+                  className={`text-base font-light leading-6 verdanaFont self-center ${
+                    activeTemplateIdx === idx && "font-bold"
+                  } `}
+                >
+                  {template.name}
+                </div>
+                <IconButton
+                  className="mr-2 transition-transform duration-300 hover:scale-125"
+                  onClick={() => setIsModalOpen(true)}
+                >
+                  <FormatListBulletedIcon className="blueGray rounded-full text-white p-1 !size-8" />
+                </IconButton>
               </div>
             ))}
           </div>
-          <div className="flex flex-col justify-between h-28">
+          <div className="flex justify-center h-28">
             <BasicRoundedButton
               onClick={onGenerate}
-              label="Generate Log"
+              label="Start logging"
               disabled={!selectedTemplate}
             />
           </div>
