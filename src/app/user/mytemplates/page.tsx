@@ -13,6 +13,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FiX } from "react-icons/fi";
+
 interface MyTemplatesProps {}
 
 const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
@@ -51,6 +52,9 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
 
   const [isBusy, setIsBusy] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const templatesPerPage = 6;
 
   useEffect(() => {
     fetchTemplates();
@@ -120,6 +124,34 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
     }
   };
 
+  const indexOfLastTemplate = currentPage * templatesPerPage;
+  const indexOfFirstTemplate = indexOfLastTemplate - templatesPerPage;
+  const currentTemplates = templates.slice(
+    indexOfFirstTemplate,
+    indexOfLastTemplate
+  );
+
+  const totalPages = Math.ceil(templates.length / templatesPerPage);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const paginationButtons = [];
+  for (let i = 1; i <= totalPages; i++) {
+    paginationButtons.push(
+      <button
+        key={i}
+        onClick={() => handlePageChange(i)}
+        className={`px-3 py-1 mx-1 border rounded-xl ${
+          i === currentPage ? "bg-orange-500 text-white" : ""
+        }`}
+      >
+        {i}
+      </button>
+    );
+  }
+
   if (isBusy) {
     return (
       <div className="flex justify-center" style={{ marginTop: "40%" }}>
@@ -153,8 +185,9 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
             </div>
           )}
         </div>
+        <div className="flex justify-center mt-4 mb-4">{paginationButtons}</div>
         <div className="flex flex-wrap -mx-2">
-          {templates.map((template, idx) => (
+          {currentTemplates.map((template, idx) => (
             <div key={idx} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
               <TemplateCard
                 onClick={() => handleTemplateClick(template)}
@@ -167,6 +200,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
             </div>
           ))}
         </div>
+        <div className="flex justify-center mb-4">{paginationButtons}</div>
         <div className="flex justify-center h-28">
           <Link href="/user/createtemplate">
             <BasicRoundedButton label="Create New Template" />
