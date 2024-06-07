@@ -20,6 +20,9 @@ const TemplateDataModal: React.FC<TemplateDataModalProps> = ({
   const pathname = usePathname();
 
   const handleUseTemplate = (exerciseData: ExerciseActivity[]) => {
+    if (localStorage.getItem("draft")) {
+      localStorage.removeItem("draft");
+    }
     localStorage.setItem("selectedTemplate", JSON.stringify(exerciseData));
     router.push("/user/createlog");
   };
