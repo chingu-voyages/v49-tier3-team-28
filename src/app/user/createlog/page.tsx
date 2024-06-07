@@ -85,9 +85,9 @@ export default function CreateLog() {
       setSelectedExercises(savedExercises);
     } else {
       const draft = JSON.parse(localStorage.getItem("draft")!); // Check for saved draft
-      if (draft) {
-        setIsContinueDraftModalOpen(true);
-      }
+      !draft
+        ? setIsContinueDraftModalOpen(false)
+        : setIsContinueDraftModalOpen(true);
     }
 
     localStorage.removeItem("selectedTemplate");
@@ -235,7 +235,11 @@ export default function CreateLog() {
           Log Your Workout
         </h1>
         <button
-          onClick={() => setIsSaveDraftModalOpen(true)} // Open the save draft modal on click
+          onClick={() =>
+            selectedExercises.length > 0
+              ? setIsSaveDraftModalOpen(true)
+              : router.push("/user/home")
+          }
         >
           <FiX className="size-8 text-white blueGray rounded-full ml-2 p-2 hover:bg-stone-500" />
         </button>
