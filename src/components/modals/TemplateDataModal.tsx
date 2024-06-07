@@ -79,6 +79,7 @@ const TemplateDataModal: React.FC<TemplateDataModalProps> = ({
             <BasicRoundedButton
               onClick={() => handleUseTemplate(exerciseData!)}
               label="Use Template"
+              buttonClassNames="!w-full"
             />
           )}
         </div>

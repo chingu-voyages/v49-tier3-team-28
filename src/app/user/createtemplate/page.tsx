@@ -8,9 +8,11 @@ import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { Exercise } from "@/lib/exercises/exercise";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
+import AddIcon from "@mui/icons-material/Add";
+import { Divider, IconButton } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { FiPlus, FiSearch, FiX } from "react-icons/fi";
+import { FiSearch, FiX } from "react-icons/fi";
 import { LoggingClient } from "../../clients/logging-client/logging-client";
 
 // TODO: Need to create a redirect route when successfully saving the template
@@ -115,7 +117,7 @@ export default function CreateTemplate() {
   // -------------------------- Save Log/Template ---------------------------------------
 
   const handleSaveLog = async () => {
-    if (!templateName) {
+    if (!templateName || templateName.trim() === "") {
       setErrorMessage("Template name can't be empty.");
       return;
     }
@@ -123,7 +125,7 @@ export default function CreateTemplate() {
     if (session?.user?._id) {
       const logData = [
         {
-          name: templateName,
+          name: templateName.trim(),
           exercises: selectedExercises.map((exerciseActivity) => {
             return {
               exerciseName: exerciseActivity.exerciseName,
@@ -154,44 +156,46 @@ export default function CreateTemplate() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-y-20 justify-center w-screen mt-20 mb-10">
+    <div className="flex flex-col justify-center w-screen mt-8 mb-10 p-4">
       {/* Header */}
-      <h1 className="text-5xl font-bold leading-6 text-center">
-        Create a Workout Template
-      </h1>
-
-      <div className="flex items-center">
-        <div className="flex-1 w-48 border-t-2"></div>
-        <h2 className="text-xl text-gray-500 pl-2 pr-2">
-          Start by giving your template a name
-        </h2>
-        <div className="flex-1 w-48 border-t-2"></div>
+      <div className="flex justify-between">
+        <h1 className="text-3xl font-bold futuraFont uppercase self-center">
+          Create a Workout Template
+        </h1>
+        <button>
+          <FiX className="size-8 text-white blueGray rounded-full ml-2 p-2 hover:bg-stone-500" />
+        </button>
       </div>
 
-      <div className="px-4 items-center w-1/2">
+      <div className="flex mt-8">
+        <h2 className="verdanaFont text-base">Give your template a name</h2>
+      </div>
+
+      <div className="mt-2">
         <input
           type="text"
           id="templateName"
           value={templateName}
+          maxLength={50}
           onChange={(e) => setTemplateName(e.target.value)}
-          placeholder="Enter a name for your template"
-          className="border rounded-xl p-2 bg-gray-50 w-full text-center"
+          placeholder="Template Name"
+          className="p-2 bg-gray-50 w-full robotoFont h-16 text-xl hover:bg-neutral-300"
         />
         {errorMessage && (
-          <p className="text-red-500 text-center mt-2">{errorMessage}</p>
+          <p className="text-red-500 text-center mt-4">{errorMessage}</p>
         )}
       </div>
-
-      <div className="flex items-center">
-        <div className="flex-1 w-48 border-t-2"></div>
-        <h2 className="text-xl text-gray-500 pl-2 pr-2">
+      <div className="mt-2">
+        <Divider className="blueGray" />
+      </div>
+      <div className="mt-8">
+        <h2 className="verdanaFont text-base">
           Search for exercises to add to your template
         </h2>
-        <div className="flex-1 w-48 border-t-2"></div>
       </div>
 
       {/* Search Bar */}
-      <div className="relative flex flex-col min-w-80">
+      <div className="relative flex flex-col min-w-80 mt-4">
         <div className="relative flex items-center">
           <FiSearch className="absolute left-3" />
           <input
@@ -208,6 +212,7 @@ export default function CreateTemplate() {
             />
           )}
         </div>
+
         {searchResults.length > 0 && (
           <div className="absolute top-full bg-gray-50 left-0 right-0 flex flex-col border rounded shadow-lg z-10 overflow-y-auto max-h-48">
             {searchResults.map((exercise: Exercise) => (
@@ -222,19 +227,23 @@ export default function CreateTemplate() {
           </div>
         )}
       </div>
-
+      <div className="mt-2">
+        <Divider className="blueGray" />
+      </div>
       {/* Selected Exercises (Exercise Log) */}
-      <div className="flex flex-col gap-y-9 w-3/4 px-4">
-        <div className="flex justify-end gap-2 w-full">
-          <ColorToggleButton
-            onChange={toggleUnit}
-            alignment={unit}
-            leftLabel="Metric"
-            rightLabel="Imperial"
-            leftValue="lbs"
-            rightValue="kg"
-          />
-        </div>
+      <div className="flex flex-col mt-8">
+        {selectedExercises.length > 0 && (
+          <div className="flex justify-end gap-2 w-full mb-1">
+            <ColorToggleButton
+              onChange={toggleUnit}
+              alignment={unit}
+              leftLabel="Metric"
+              rightLabel="Imperial"
+              leftValue="lbs"
+              rightValue="kg"
+            />
+          </div>
+        )}
         {selectedExercises.map((exercise, index) => (
           <div
             key={index}
@@ -249,22 +258,26 @@ export default function CreateTemplate() {
               onSetChange={() => {}}
               idx={index}
             />
-
-            <button
-              onClick={() => handleAddSet(index)}
-              className="m-2 p-2 border rounded-xl bg-green-500 text-white font-bold hover:bg-green-600"
-            >
-              <FiPlus />
-            </button>
+            <IconButton onClick={() => handleAddSet(index)}>
+              <AddIcon sx={{ color: "#03BB9B" }} />
+              <p className="text-sm font-bold" style={{ color: "#03BB9B" }}>
+                Set
+              </p>
+            </IconButton>
           </div>
         ))}
       </div>
       {/* Save Button */}
-      <div className="flex flex-col gap-y-9">
+      <div className="flex justify-center gap-y-9 mt-8">
         <BasicRoundedButton
           onClick={handleSaveLog}
           label="Save Template"
-          disabled={selectedExercises.length === 0}
+          buttonClassNames="defaultButtonColor"
+          disabled={
+            selectedExercises.length === 0 ||
+            !templateName ||
+            templateName.trim() === ""
+          }
         ></BasicRoundedButton>
       </div>
       <SuccessModal open={isModalOpen} />
