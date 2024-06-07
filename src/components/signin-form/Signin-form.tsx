@@ -202,7 +202,7 @@ export function SigninForm() {
           <h1 className="font-normal leading-7 text-xs">
             New to our site?{" "}
             <Link
-              href="/login"
+              href="/signup"
               className="lightBlueGreenTealHyperlink font-bold text-xs"
             >
               Sign up now

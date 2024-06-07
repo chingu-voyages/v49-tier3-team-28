@@ -218,7 +218,7 @@ export default function SignupForm() {
           <h1 className="font-normal leading-7 text-xs">
             Already have an account?{" "}
             <a
-              href="/login"
+              href="/signin"
               className="lightBlueGreenTealHyperlink font-bold text-xs"
             >
               Login here
