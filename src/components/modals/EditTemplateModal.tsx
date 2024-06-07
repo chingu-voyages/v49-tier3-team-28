@@ -136,6 +136,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
           <input
             type="text"
             id="templateName"
+            maxLength={50}
             value={templateName}
             onChange={(e) => setTemplateName(e.target.value)}
             placeholder="Enter a name for your template"
