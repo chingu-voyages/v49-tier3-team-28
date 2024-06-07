@@ -12,7 +12,8 @@ import { Button, CircularProgress } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { FiX } from "react-icons/fi";
+import { FiSearch, FiX } from "react-icons/fi";
+
 interface MyTemplatesProps {}
 
 const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
@@ -43,6 +44,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
 
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [templates, setTemplates] = useState<Log[]>([]);
+  const [filteredTemplates, setFilteredTemplates] = useState<Log[]>([]);
 
   const [templateDataToDelete, setTemplateDataDelete] = useState<{
     name: string;
@@ -54,16 +56,28 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
   const [updateTemplateErrorMessage, setUpdateTemplateErrorMessage] = useState<
     string | null
   >(null);
+
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const templatesPerPage = 6;
+
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
   useEffect(() => {
     fetchTemplates();
   }, []);
+
+  useEffect(() => {
+    handleSearch();
+  }, [searchQuery, templates]);
 
   const fetchTemplates = async () => {
     try {
       setIsBusy(true);
       const fetchedTemplates = await LoggingClient.getTemplates();
       setTemplates(fetchedTemplates);
+      setFilteredTemplates(fetchedTemplates); // Initialize filteredTemplates
     } catch (error: any) {
+      setErrorMessage("Error fetching templates");
       console.log("Error fetching templates: ", error.message);
     } finally {
       setIsBusy(false);
@@ -89,7 +103,11 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
       setIsBusy(true);
       await LoggingClient.deleteTemplate(templateId);
       setTemplates(templates.filter((template) => template._id !== templateId));
+      setFilteredTemplates(
+        filteredTemplates.filter((template) => template._id !== templateId)
+      );
     } catch (error: any) {
+      setErrorMessage("Error deleting template");
       console.log("Error deleting template: ", error.message);
     } finally {
       setIsBusy(false);
@@ -124,6 +142,42 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
     }
   };
 
+  const handleSearch = () => {
+    const lowercasedQuery = searchQuery.toLowerCase();
+    const filtered = templates.filter((template) =>
+      template.name?.toLowerCase().includes(lowercasedQuery)
+    );
+    setFilteredTemplates(filtered);
+  };
+
+  const indexOfLastTemplate = currentPage * templatesPerPage;
+  const indexOfFirstTemplate = indexOfLastTemplate - templatesPerPage;
+  const currentTemplates = filteredTemplates.slice(
+    indexOfFirstTemplate,
+    indexOfLastTemplate
+  );
+
+  const totalPages = Math.ceil(filteredTemplates.length / templatesPerPage);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const paginationButtons = [];
+  for (let i = 1; i <= totalPages; i++) {
+    paginationButtons.push(
+      <button
+        key={i}
+        onClick={() => handlePageChange(i)}
+        className={`px-3 py-1 mx-1 border rounded-xl ${
+          i === currentPage ? "bg-orange-500 text-white" : ""
+        }`}
+      >
+        {i}
+      </button>
+    );
+  }
+
   if (isBusy) {
     return (
       <div className="flex justify-center" style={{ marginTop: "40%" }}>
@@ -141,7 +195,25 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
           </h1>
           <FiX className="size-8 text-white blueGray rounded-full ml-2 p-2 hover:bg-stone-500" />
         </div>
-        {templates.length > 0 ? (
+
+        <div className="relative flex items-center mt-4 mb-4">
+          <FiSearch className="absolute left-3" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search for a template"
+            className="border rounded-xl pl-10 pr-10 p-2 w-full bg-gray-50"
+          />
+          {searchQuery && (
+            <FiX
+              className="absolute right-3 cursor-pointer"
+              onClick={() => setSearchQuery("")}
+            />
+          )}
+        </div>
+
+        {filteredTemplates.length > 0 ? (
           <h1 className="futuraFont font-medium text-xl py-2">
             Please choose one template to start
           </h1>
@@ -157,8 +229,9 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
             </div>
           )}
         </div>
+        <div className="flex justify-center mt-4 mb-4">{paginationButtons}</div>
         <div className="flex flex-wrap -mx-2">
-          {templates.map((template, idx) => (
+          {currentTemplates.map((template, idx) => (
             <div key={idx} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
               <TemplateCard
                 onClick={() => handleTemplateClick(template)}
@@ -171,6 +244,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
             </div>
           ))}
         </div>
+        <div className="flex justify-center mb-4">{paginationButtons}</div>
         <div className="flex justify-center h-28">
           <Link href="/user/createtemplate">
             <BasicRoundedButton label="Create New Template" />
@@ -216,6 +290,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
             onClick={() => {
               templateDataToDelete?.id &&
                 handleDeleteTemplate(templateDataToDelete.id);
+              setIsConfirmDeleteTemplateModalOpen(false);
             }}
           >
             Delete
