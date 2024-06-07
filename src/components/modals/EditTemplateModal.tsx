@@ -15,6 +15,7 @@ interface EditTemplateModalProps {
   templateNameData: string | null;
   onUpdateTemplate: (updatedTemplateData: Partial<Log>) => void;
   templateId: string | null;
+  updateTemplateError: string | null;
 }
 
 const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
@@ -24,6 +25,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
   templateNameData,
   onUpdateTemplate,
   templateId,
+  updateTemplateError,
 }) => {
   const [templateName, setTemplateName] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -132,7 +134,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
 
         {/* Template Name */}
         <div className="w-full">
-          <h1 className="text-xl mb-2">Template Name</h1>
+          <h1 className="text-lg mb-2 text-stone-500">Template Name</h1>
           <input
             type="text"
             id="templateName"
@@ -144,6 +146,11 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
           />
           {errorMessage && (
             <p className="text-red-500 text-center mt-2">{errorMessage}</p>
+          )}
+          {updateTemplateError && (
+            <p className="text-red-500 text-center mt-2">
+              {updateTemplateError}
+            </p>
           )}
         </div>
 

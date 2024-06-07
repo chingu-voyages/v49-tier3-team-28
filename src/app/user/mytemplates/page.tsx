@@ -51,7 +51,9 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
 
   const [isBusy, setIsBusy] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
+  const [updateTemplateErrorMessage, setUpdateTemplateErrorMessage] = useState<
+    string | null
+  >(null);
   useEffect(() => {
     fetchTemplates();
   }, []);
@@ -113,8 +115,10 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
       setIsEditModalOpen(false);
       setIsConfirmDeleteTemplateModalOpen(false);
       setTemplateDataDelete(null);
+      setUpdateTemplateErrorMessage(null);
     } catch (error: any) {
-      console.log("Error updating template: ", error.message);
+      setUpdateTemplateErrorMessage(error.message);
+      console.log("Error updating template: ", error);
     } finally {
       setIsBusy(false);
     }
@@ -185,6 +189,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
         onUpdateTemplate={handleUpdateTemplate}
         templateNameData={selectedTemplateName}
         templateId={selectedTemplateId}
+        updateTemplateError={updateTemplateErrorMessage}
       />
       <ConfirmDeleteDialog
         title={`Delete '${templateDataToDelete?.name}'`}

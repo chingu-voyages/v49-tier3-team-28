@@ -1,5 +1,6 @@
 import authOptions from "@/app/api/auth/auth-options";
 import dbConnect from "@/lib/mongodb/mongodb";
+import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { UserRepository } from "@/schemas/user.schema";
 import { Session, getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
@@ -90,7 +91,25 @@ export async function PATCH(req: NextRequest, context: any) {
   }
 
   try {
-    const updatedFields = await req.json();
+    const updatedFields = (await req.json()) as {
+      name: string;
+      exercises: ExerciseActivity[];
+    };
+
+    if (
+      result.user.logs.some(
+        (l) =>
+          l.name === updatedFields.name && l.isTemplate && l._id != templateId
+      )
+    ) {
+      return NextResponse.json(
+        {
+          error: `Template with name "${updatedFields.name}" already exists.`,
+        },
+        { status: 400 }
+      );
+    }
+
     Object.assign(result.user.logs[result.templateIndex], updatedFields);
     await result.user.save();
 
