@@ -17,9 +17,12 @@ const SaveDraftModal: React.FC<SaveDraftModalProps> = ({
 }) => {
   return (
     <Modal open={open} onClose={onClose}>
-      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-        <div className="bg-white p-8 rounded-lg w-full max-w-md shadow-lg text-center relative">
-          <button onClick={onClose} className="absolute top-2 right-2">
+      <div className="bg-white fixed inset-0 flex items-center justify-center bg-opacity-50">
+        <div className="p-8 bg-white rounded-lg w-full max-w-md shadow-lg text-center relative">
+          <button
+            onClick={onClose}
+            className="absolute top-5 right-5 scale-150"
+          >
             <FiX />
           </button>
           <h2 className="text-2xl font-bold mb-4">Are you sure?</h2>
@@ -28,9 +31,12 @@ const SaveDraftModal: React.FC<SaveDraftModalProps> = ({
             leaving?
           </p>
           <div className="flex justify-between flex-col items-center h-28">
-            <BasicRoundedButton onClick={onSaveDraft} label="Save and Exit">
-              Save and Exit
-            </BasicRoundedButton>
+            <BasicRoundedButton
+              onClick={onSaveDraft}
+              label="Save and Exit"
+              buttonClassNames="defaultButtonColor"
+            />
+
             <Link href="/user/home">
               <BasicRoundedButton
                 onClick={() => {
@@ -39,9 +45,8 @@ const SaveDraftModal: React.FC<SaveDraftModalProps> = ({
                   }
                 }}
                 label="Leave Without Saving"
-              >
-                Leave Without Saving
-              </BasicRoundedButton>
+                buttonClassNames="secondaryButtonColor"
+              />
             </Link>
           </div>
         </div>
