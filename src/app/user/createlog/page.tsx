@@ -1,6 +1,7 @@
 "use client";
 import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
 import { ColorToggleButton } from "@/components/buttons/unit-toggle-button/Unit-toggle-button";
+import ContinueDraftModal from "@/components/modals/ContinueDraftModal";
 import SaveDraftModal from "@/components/modals/SaveDraftModal"; // Import the new modal
 import SaveLogModal from "@/components/modals/SaveLogModal";
 import TemplatesModal from "@/components/modals/TemplatesModal";
@@ -45,6 +46,8 @@ export default function CreateLog() {
   const [isUserSearching, setIsUserSearching] = useState<boolean>(false);
   const [isSaveDraftModalOpen, setIsSaveDraftModalOpen] =
     useState<boolean>(false); // State for Save Draft modal
+  const [isContinueDraftModalOpen, setIsContinueDraftModalOpen] =
+    useState<boolean>(false); // State for Save Draft modal
 
   const exercisesArray = Object.values(ExercisesDictionary);
 
@@ -83,7 +86,7 @@ export default function CreateLog() {
     } else {
       const draft = JSON.parse(localStorage.getItem("draft")!); // Check for saved draft
       if (draft) {
-        setSelectedExercises(draft);
+        setIsContinueDraftModalOpen(true);
       }
     }
 
@@ -354,12 +357,25 @@ export default function CreateLog() {
       <SaveDraftModal
         open={isSaveDraftModalOpen}
         onClose={() => {
+          if (localStorage.getItem("draft")) {
+            localStorage.removeItem("draft");
+          }
           setIsSaveDraftModalOpen(false);
+        }}
+        onSaveDraft={handleSaveDraft}
+      />
+      <ContinueDraftModal
+        open={isContinueDraftModalOpen}
+        onClose={() => {
+          setIsContinueDraftModalOpen(false);
           if (localStorage.getItem("draft")) {
             localStorage.removeItem("draft");
           }
         }}
-        onSaveDraft={handleSaveDraft}
+        onSaveDraft={() => {
+          setSelectedExercises(JSON.parse(localStorage.getItem("draft")!));
+          setIsContinueDraftModalOpen(false);
+        }}
       />
     </div>
   );
