@@ -1,5 +1,6 @@
 import { postLogsValidator } from "@/app/validators/user/logs/post-logs-validator";
 import dbConnect from "@/lib/mongodb/mongodb";
+import { Log } from "@/models/log.model";
 import { UserRepository } from "@/schemas/user.schema";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
@@ -26,7 +27,17 @@ export async function POST(req: NextRequest) {
   if (!user)
     return NextResponse.json({ error: "User not found" }, { status: 404 });
 
-  // Right now, we're simply concatenating the new logs to the existing logs array.
+  for (const log of requestBody.logs as Log[]) {
+    if (user.logs.some((l) => l.name === log.name)) {
+      return NextResponse.json(
+        `Log with name ${log.name} already exists for this user`,
+        {
+          status: 400,
+        }
+      );
+    }
+  }
+
   user.logs = user.logs.concat(requestBody.logs);
 
   await user.save();
