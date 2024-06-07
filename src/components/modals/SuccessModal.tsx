@@ -11,12 +11,14 @@ const SuccessModal: React.FC<SuccessModalProps> = ({ open }) => {
   return (
     <Modal open={open} className="p-4">
       <div className="flex flex-col w-1/2 h-3/4 bg-white p-6 rounded-xl relative justify-evenly w-full">
-        <Image
-          src="/images/create-log-page/modal-splash.jpg"
-          width={500}
-          height={500}
-          alt="modal-image"
-        />
+        <div className="flex justify-center">
+          <Image
+            src="/images/create-log-page/modal-splash.jpg"
+            width={250}
+            height={250}
+            alt="modal-image"
+          />
+        </div>
         <div>
           <h1 className="text-2xl verdanaFont text-center">SUCCESS!</h1>
           <h3 className="robotoFont text-sm text-justify">

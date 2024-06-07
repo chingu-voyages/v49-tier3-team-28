@@ -1,4 +1,5 @@
 import { Modal } from "@mui/material";
+import Image from "next/image";
 import React, { useState } from "react";
 import { FiX } from "react-icons/fi";
 import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
@@ -20,11 +21,14 @@ const SaveLogModal: React.FC<SaveLogModalProps> = ({ open, onClose, data }) => {
           <button className="absolute top-2 right-2" onClick={onClose}>
             <FiX />
           </button>
-          <img
-            src="/images/create-log-page/modal-splash.jpg"
-            alt="modal-image"
-            style={{ height: "50%" }}
-          />
+          <div className="flex justify-center">
+            <Image
+              src="/images/create-log-page/modal-splash.jpg"
+              alt="modal-image"
+              width={250}
+              height={250}
+            />
+          </div>
           <div className="flex flex-col">
             <h1 className="text-2xl verdanaFont text-center darkCharcoal">
               GREAT JOB!
