@@ -12,7 +12,7 @@ import { Button, CircularProgress } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { FiX } from "react-icons/fi";
+import { FiSearch, FiX } from "react-icons/fi";
 
 interface MyTemplatesProps {}
 
@@ -44,6 +44,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
 
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [templates, setTemplates] = useState<Log[]>([]);
+  const [filteredTemplates, setFilteredTemplates] = useState<Log[]>([]);
 
   const [templateDataToDelete, setTemplateDataDelete] = useState<{
     name: string;
@@ -56,15 +57,22 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const templatesPerPage = 6;
 
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
   useEffect(() => {
     fetchTemplates();
   }, []);
+
+  useEffect(() => {
+    handleSearch();
+  }, [searchQuery, templates]);
 
   const fetchTemplates = async () => {
     try {
       setIsBusy(true);
       const fetchedTemplates = await LoggingClient.getTemplates();
       setTemplates(fetchedTemplates);
+      setFilteredTemplates(fetchedTemplates); // Initialize filteredTemplates
     } catch (error: any) {
       console.log("Error fetching templates: ", error.message);
     } finally {
@@ -91,6 +99,9 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
       setIsBusy(true);
       await LoggingClient.deleteTemplate(templateId);
       setTemplates(templates.filter((template) => template._id !== templateId));
+      setFilteredTemplates(
+        filteredTemplates.filter((template) => template._id !== templateId)
+      );
     } catch (error: any) {
       console.log("Error deleting template: ", error.message);
     } finally {
@@ -124,14 +135,22 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
     }
   };
 
+  const handleSearch = () => {
+    const lowercasedQuery = searchQuery.toLowerCase();
+    const filtered = templates.filter((template) =>
+      template.name?.toLowerCase().includes(lowercasedQuery)
+    );
+    setFilteredTemplates(filtered);
+  };
+
   const indexOfLastTemplate = currentPage * templatesPerPage;
   const indexOfFirstTemplate = indexOfLastTemplate - templatesPerPage;
-  const currentTemplates = templates.slice(
+  const currentTemplates = filteredTemplates.slice(
     indexOfFirstTemplate,
     indexOfLastTemplate
   );
 
-  const totalPages = Math.ceil(templates.length / templatesPerPage);
+  const totalPages = Math.ceil(filteredTemplates.length / templatesPerPage);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -169,7 +188,25 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
           </h1>
           <FiX className="size-8 text-white blueGray rounded-full ml-2 p-2 hover:bg-stone-500" />
         </div>
-        {templates.length > 0 ? (
+
+        <div className="relative flex items-center mt-4 mb-4">
+          <FiSearch className="absolute left-3" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search for a template"
+            className="border rounded-xl pl-10 pr-10 p-2 w-full bg-gray-50"
+          />
+          {searchQuery && (
+            <FiX
+              className="absolute right-3 cursor-pointer"
+              onClick={() => setSearchQuery("")}
+            />
+          )}
+        </div>
+
+        {filteredTemplates.length > 0 ? (
           <h1 className="futuraFont font-medium text-xl py-2">
             Please choose one template to start
           </h1>
