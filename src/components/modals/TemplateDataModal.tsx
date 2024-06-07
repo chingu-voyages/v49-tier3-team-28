@@ -45,7 +45,10 @@ const TemplateDataModal: React.FC<TemplateDataModalProps> = ({
             {/* Exercise Activity */}
             <div className="min-h-96 max-h-96 overflow-y-auto overflow-hidden">
               {exerciseData.map((exercise, eIdx) => (
-                <div className="rounded-xl mb-4 border border-gray-100 shadow-md relative">
+                <div
+                  key={(exercise as any).id}
+                  className="rounded-xl mb-4 border border-gray-100 shadow-md relative"
+                >
                   <h4 className="text-white font-bold p-2 defaultButtonColor">
                     {exercise.exerciseName}
                   </h4>
