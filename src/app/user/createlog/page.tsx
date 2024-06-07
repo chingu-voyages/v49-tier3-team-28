@@ -1,6 +1,7 @@
 "use client";
 import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
 import { ColorToggleButton } from "@/components/buttons/unit-toggle-button/Unit-toggle-button";
+import SaveDraftModal from "@/components/modals/SaveDraftModal"; // Import the new modal
 import SaveLogModal from "@/components/modals/SaveLogModal";
 import TemplatesModal from "@/components/modals/TemplatesModal";
 import ExerciseTable from "@/components/tables/ExerciseTable";
@@ -12,7 +13,6 @@ import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Set } from "@/models/set.model";
 import AddIcon from "@mui/icons-material/Add";
 import { CircularProgress, IconButton } from "@mui/material";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiSearch, FiX } from "react-icons/fi";
@@ -43,6 +43,8 @@ export default function CreateLog() {
     useState<boolean>(false);
 
   const [isUserSearching, setIsUserSearching] = useState<boolean>(false);
+  const [isSaveDraftModalOpen, setIsSaveDraftModalOpen] =
+    useState<boolean>(false); // State for Save Draft modal
 
   const exercisesArray = Object.values(ExercisesDictionary);
 
@@ -74,11 +76,17 @@ export default function CreateLog() {
 
     // Updates exercises from localStorage
     const savedExercises = JSON.parse(
-      localStorage.getItem("selectedTemplate")!
+      localStorage.getItem("selectedTemplate")! //Checks from template selection
     );
     if (savedExercises) {
       setSelectedExercises(savedExercises);
+    } else {
+      const draft = JSON.parse(localStorage.getItem("draft")!); // Check for saved draft
+      if (draft) {
+        setSelectedExercises(draft);
+      }
     }
+
     localStorage.removeItem("selectedTemplate");
   }, []);
 
@@ -165,6 +173,13 @@ export default function CreateLog() {
     localStorage.setItem("weightUnit", newUnit);
   };
 
+  // ---------------------------- Handle Save Draft -------------------------------------
+
+  const handleSaveDraft = () => {
+    localStorage.setItem("draft", JSON.stringify(selectedExercises));
+    router.push("/user/home");
+  };
+
   // -------------------------- Save Log/Template ---------------------------------------
 
   const handleSaveLog = async (isTemplate: boolean = false) => {
@@ -216,12 +231,11 @@ export default function CreateLog() {
         <h1 className="text-3xl font-bold futuraFont uppercase self-center">
           Log Your Workout
         </h1>
-        <Link href="/user/home">
-          {/* TODO: User exiting out of logging - we want to take some other action */}
-          <button>
-            <FiX className="size-8 text-white blueGray rounded-full ml-2 p-2 hover:bg-stone-500" />
-          </button>
-        </Link>
+        <button
+          onClick={() => setIsSaveDraftModalOpen(true)} // Open the save draft modal on click
+        >
+          <FiX className="size-8 text-white blueGray rounded-full ml-2 p-2 hover:bg-stone-500" />
+        </button>
       </div>
       {!isUserSearching && (
         <BasicRoundedButton
@@ -336,6 +350,11 @@ export default function CreateLog() {
         onClose={() => setIsTemplateModalOpen(false)}
         onTemplateSelect={handleTemplateSelection}
         onGenerate={handleSetTemplates}
+      />
+      <SaveDraftModal
+        open={isSaveDraftModalOpen}
+        onClose={() => setIsSaveDraftModalOpen(false)}
+        onSaveDraft={handleSaveDraft}
       />
     </div>
   );
