@@ -373,7 +373,7 @@ export default function CreateLog() {
             localStorage.removeItem("draft");
           }
         }}
-        onSaveDraft={() => {
+        onContinueDraft={() => {
           setSelectedExercises(JSON.parse(localStorage.getItem("draft")!));
           setIsContinueDraftModalOpen(false);
         }}
