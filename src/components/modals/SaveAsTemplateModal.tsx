@@ -85,7 +85,7 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
           </div>
 
           <div>
-            <h1 className="verdanaFont text-base">Give your yemplate a name</h1>
+            <h1 className="verdanaFont text-base">Give your template a name</h1>
             <input
               type="text"
               id="templateName"
