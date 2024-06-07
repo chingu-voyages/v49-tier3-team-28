@@ -211,6 +211,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
             onClick={() => {
               templateDataToDelete?.id &&
                 handleDeleteTemplate(templateDataToDelete.id);
+              setIsConfirmDeleteTemplateModalOpen(false);
             }}
           >
             Delete
