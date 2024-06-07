@@ -16,8 +16,8 @@ const ContinueDraftModal: React.FC<ContinueDraftModalProps> = ({
 }) => {
   return (
     <Modal open={open} onClose={onClose}>
-      <div className="bg-white fixed inset-0 flex items-center justify-center bg-opacity-50">
-        <div className="p-8 bg-white rounded-lg w-full max-w-md shadow-lg text-center relative">
+      <div className="bg-white fixed inset-0 flex items-center justify-center bg-opacity-70">
+        <div className="m-4 pt-8 pb-8 bg-white rounded-xl w-full max-w-md sm:w-3/4 shadow-lg text-center relative h-fill-available">
           <button
             onClick={onClose}
             className="absolute top-5 right-5 scale-150"
