@@ -2,6 +2,7 @@ import { Modal } from "@mui/material";
 import Link from "next/link";
 import React from "react";
 import { FiX } from "react-icons/fi";
+import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
 
 interface SaveDraftModalProps {
   open: boolean;
@@ -26,24 +27,21 @@ const SaveDraftModal: React.FC<SaveDraftModalProps> = ({
             You have unsaved exercise data. Do you want to save it before
             leaving?
           </p>
-          <div className="flex justify-between flex-col">
-            <button
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              onClick={onSaveDraft}
-            >
+          <div className="flex justify-between flex-col items-center h-28">
+            <BasicRoundedButton onClick={onSaveDraft} label="Save and Exit">
               Save and Exit
-            </button>
-            <Link href="/user/home" passHref>
-              <button
-                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+            </BasicRoundedButton>
+            <Link href="/user/home">
+              <BasicRoundedButton
                 onClick={() => {
                   if (localStorage.getItem("draft")) {
                     localStorage.removeItem("draft");
                   }
                 }}
+                label="Leave Without Saving"
               >
                 Leave Without Saving
-              </button>
+              </BasicRoundedButton>
             </Link>
           </div>
         </div>
