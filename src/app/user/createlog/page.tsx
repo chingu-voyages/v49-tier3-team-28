@@ -361,9 +361,6 @@ export default function CreateLog() {
       <SaveDraftModal
         open={isSaveDraftModalOpen}
         onClose={() => {
-          if (localStorage.getItem("draft")) {
-            localStorage.removeItem("draft");
-          }
           setIsSaveDraftModalOpen(false);
         }}
         onSaveDraft={handleSaveDraft}
