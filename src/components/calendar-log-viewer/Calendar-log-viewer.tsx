@@ -204,7 +204,7 @@ const renderExerciseTables = (ex: ExerciseActivity[]) => {
               <tbody>
                 {exercise.sets.map((set, setIndex) => (
                   <tr
-                    key={setIndex}
+                    key={(set as any).id}
                     className="odd:bg-orange-100 text-center text-sm"
                   >
                     <td className="p-2 text-center">{setIndex + 1}</td>
