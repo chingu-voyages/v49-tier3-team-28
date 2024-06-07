@@ -232,16 +232,18 @@ export default function CreateTemplate() {
       </div>
       {/* Selected Exercises (Exercise Log) */}
       <div className="flex flex-col mt-8">
-        <div className="flex justify-end gap-2 w-full">
-          <ColorToggleButton
-            onChange={toggleUnit}
-            alignment={unit}
-            leftLabel="Metric"
-            rightLabel="Imperial"
-            leftValue="lbs"
-            rightValue="kg"
-          />
-        </div>
+        {selectedExercises.length > 0 && (
+          <div className="flex justify-end gap-2 w-full mb-1">
+            <ColorToggleButton
+              onChange={toggleUnit}
+              alignment={unit}
+              leftLabel="Metric"
+              rightLabel="Imperial"
+              leftValue="lbs"
+              rightValue="kg"
+            />
+          </div>
+        )}
         {selectedExercises.map((exercise, index) => (
           <div
             key={index}
