@@ -192,7 +192,7 @@ function renderLogsForDay(
 const renderExerciseTables = (ex: ExerciseActivity[]) => {
   return (
     <div className="p-4">
-      {ex.map((exercise, index) => {
+      {ex.map((exercise) => {
         return (
           <>
             <div>
