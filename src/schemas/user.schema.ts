@@ -8,7 +8,6 @@ const userSchema = new Schema<User>(
     username: {
       type: String,
       required: true,
-      unique: true,
       trim: true, // Removes whitespace from both ends
     },
     email: {
@@ -27,6 +26,11 @@ const userSchema = new Schema<User>(
     logs: {
       type: [logSchema],
       default: [],
+    },
+    oAuth: {
+      type: Boolean,
+      required: true,
+      default: false,
     },
   },
   { timestamps: true }

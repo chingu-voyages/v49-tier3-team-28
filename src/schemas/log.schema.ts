@@ -7,7 +7,7 @@ export const logSchema = new Schema<Log>(
     name: {
       type: String,
       optional: true,
-      unique: true,
+      trim: true,
     },
     exercises: {
       type: [exerciseActivitySchema],

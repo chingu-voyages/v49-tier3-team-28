@@ -65,13 +65,14 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
         await LoggingClient.saveLog({
           logs: logData,
         });
+        setIsModalOpen(true);
       } catch (error: any) {
-        setErrorMessage(`Error saving template: ${error.message}`);
+        setErrorMessage(error.message);
+        return;
       } finally {
         setIsLoading(false);
       }
     }
-    setIsModalOpen(true);
   };
 
   if (isLoading) {

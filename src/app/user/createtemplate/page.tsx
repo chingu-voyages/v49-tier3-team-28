@@ -144,12 +144,13 @@ export default function CreateTemplate() {
       ];
 
       try {
+        setErrorMessage("");
         await LoggingClient.saveLog({
           logs: logData,
         });
       } catch (error: any) {
-        //TODO: we need some UI feedback to show the user that the log was not saved
-        console.error("Error saving log: ", error.message);
+        setErrorMessage(error.message);
+        return;
       }
     }
     setIsModalOpen(true);
