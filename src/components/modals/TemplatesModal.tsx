@@ -53,7 +53,7 @@ const TemplatesModal: React.FC<TemplateModalProps> = ({
   return (
     <div>
       <Modal open={open} onClose={onClose}>
-        <div className=" m-4 flex flex-col bg-white p-8 rounded-xl relative justify-evenly h-fill-available">
+        <div className=" m-4 flex flex-col bg-white p-8 rounded-3xl relative justify-evenly h-fill-available">
           <div className="flex justify-between leading-7">
             <h1 className="text-3xl font-bold futuraFont uppercase">
               Choose From Templates

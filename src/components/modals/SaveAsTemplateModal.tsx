@@ -86,7 +86,7 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
     <div>
       <Modal open={open} onClose={onClose}>
         <div className="bg-white fixed inset-0 flex items-center justify-center bg-opacity-70">
-          <div className="flex flex-col justify-between m-4 pt-8 pb-8 bg-white rounded-3xl w-full max-w-md shadow-lg text-center relative">
+          <div className="flex flex-col justify-between m-4 pt-8 pb-8 bg-white rounded-3xl w-full max-w-md shadow-lg text-center relative h-fill-available">
             <div className="flex justify-between">
               <h1 className="text-3xl font-bold futuraFont uppercase self-center ml-4">
                 Add log as template
@@ -97,7 +97,7 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
             </div>
 
             <div>
-              <h1 className="verdanaFont text-base">
+              <h1 className="verdanaFont text-base mt-2">
                 Give your template a name
               </h1>
               <input
@@ -107,7 +107,7 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
                 maxLength={50}
                 onChange={(e) => setTemplateName(e.target.value)}
                 placeholder="Template Name"
-                className="p-2 bg-gray-50 w-full robotoFont h-16 text-xl hover:bg-neutral-300"
+                className="mt-2 w-4/5 bg-gray-50 robotoFont h-16 text-xl hover:bg-neutral-300 text-center"
               />
               {errorMessage && (
                 <p className="text-red-500 mt-2 font-light text-sm">

@@ -121,8 +121,8 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
   };
 
   return (
-    <Modal open={open} onClose={onClose} className="P-4">
-      <div className="flex flex-col w-1/2 h-3/4 bg-white p-10 rounded-xl relative justify-evenly w-full ">
+    <Modal open={open} onClose={onClose}>
+      <div className="flex flex-col bg-white pl-8 pr-8 rounded-xl relative justify-evenly h-fill-available ml-4 mr-4 mt-20 mb-10">
         <div className="flex justify-between">
           <h1 className="text-3xl font-bold futuraFont uppercase self-center">
             Edit Template
@@ -133,7 +133,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
         </div>
 
         {/* Template Name */}
-        <div className="w-full">
+        <div className="w-full text-center">
           <h1 className="text-lg mb-2 text-stone-500">Template Name</h1>
           <input
             type="text"
