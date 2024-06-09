@@ -7,4 +7,5 @@ export interface User {
   password: string;
   logs: Log[];
   createdAt: Date;
+  oAuth: boolean;
 }

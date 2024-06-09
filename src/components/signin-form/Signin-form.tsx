@@ -78,6 +78,19 @@ export function SigninForm() {
     setIsLoading(false);
   };
 
+  const signInUserWithGoogle = async () => {
+    setIsLoading(true);
+
+    const res = await AuthClient.signInWithGoogle();
+
+    if (!res.success) {
+      setAppError({ error: true, message: res.errorMessage! });
+      setIsLoading(false);
+      return;
+    }
+    setIsLoading(false);
+  };
+
   const { status } = useAuthSession();
 
   if (status === "authenticated") {
@@ -191,7 +204,7 @@ export function SigninForm() {
         </div>
         <div className="mt-12">
           <GoogleAuthButton
-            onClick={() => console.log("Google auth button clicked")}
+            onClick={signInUserWithGoogle}
             authType="signin"
             disabled={isLoading}
           />
@@ -202,7 +215,7 @@ export function SigninForm() {
           <h1 className="font-normal leading-7 text-xs">
             New to our site?{" "}
             <Link
-              href="/login"
+              href="/signup"
               className="lightBlueGreenTealHyperlink font-bold text-xs"
             >
               Sign up now

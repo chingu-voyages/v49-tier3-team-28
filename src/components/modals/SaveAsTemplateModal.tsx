@@ -1,7 +1,7 @@
 import { LoggingClient } from "@/app/clients/logging-client/logging-client";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
-import { Modal } from "@mui/material";
+import { CircularProgress, Modal } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { FiX } from "react-icons/fi";
 import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
@@ -24,6 +24,7 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
   const [templateName, setTemplateName] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const savedUnit = localStorage.getItem("weightUnit");
@@ -33,7 +34,7 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
   }, []);
 
   const handleSaveTemplate = async () => {
-    if (!templateName) {
+    if (!templateName || templateName.trim() === "") {
       setErrorMessage("Template name can't be empty.");
       return;
     }
@@ -60,17 +61,27 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
       ];
 
       try {
+        setIsLoading(true);
         await LoggingClient.saveLog({
           logs: logData,
         });
+        setIsModalOpen(true);
       } catch (error: any) {
-        //TODO: we need some UI feedback to show the user that the log was not saved
-        console.error("Error saving log: ", error.message);
+        setErrorMessage(error.message);
+        return;
+      } finally {
+        setIsLoading(false);
       }
     }
-    setIsModalOpen(true);
   };
 
+  if (isLoading) {
+    return (
+      <div className="absolute left-1/2 inset-y-1/4">
+        <CircularProgress />
+      </div>
+    );
+  }
   return (
     <div>
       <Modal open={open} onClose={onClose}>
@@ -85,7 +96,7 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
               </button>
             </div>
 
-            <div className="ml-4 mr-4">
+            <div>
               <h1 className="verdanaFont text-base">
                 Give your template a name
               </h1>
@@ -93,12 +104,15 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
                 type="text"
                 id="templateName"
                 value={templateName}
+                maxLength={50}
                 onChange={(e) => setTemplateName(e.target.value)}
                 placeholder="Template Name"
-                className="p-2 bg-gray-50 w-full robotoFont h-16 text-xl hover:bg-neutral-300 rounded-xl"
+                className="p-2 bg-gray-50 w-full robotoFont h-16 text-xl hover:bg-neutral-300"
               />
               {errorMessage && (
-                <p className="text-red-500 text-center mt-2">{errorMessage}</p>
+                <p className="text-red-500 mt-2 font-light text-sm">
+                  {errorMessage}
+                </p>
               )}
             </div>
 
@@ -130,11 +144,13 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
                 will be saved when adding the log as a template.
               </p>
             </div>
+
             <div className="flex flex-col justify-between h-28 self-center">
               <BasicRoundedButton
                 onClick={() => handleSaveTemplate()}
                 label="Save as a Template"
                 buttonClassNames="defaultButtonColor"
+                disabled={templateName?.length === 0}
               />
             </div>
           </div>

@@ -87,6 +87,20 @@ export default function SignupForm() {
     }
   };
 
+  const signUpUserWithGoogle = async () => {
+    setIsLoading(true);
+
+    const res = await AuthClient.signInWithGoogle();
+
+    if (!res.success) {
+      setAppError({ error: true, message: res.errorMessage! });
+      setIsLoading(false);
+      return;
+    }
+
+    setIsLoading(false);
+  };
+
   return (
     <div className={`mt-6`}>
       <h1 className={"font-bold leading-7 text-xl uppercase mt-14 p-5"}>
@@ -207,7 +221,7 @@ export default function SignupForm() {
         </div>
         <div className="mt-12">
           <GoogleAuthButton
-            onClick={() => console.log("Google auth button clicked")}
+            onClick={signUpUserWithGoogle}
             authType="signup"
             disabled={isLoading}
           />
@@ -218,7 +232,7 @@ export default function SignupForm() {
           <h1 className="font-normal leading-7 text-xs">
             Already have an account?{" "}
             <a
-              href="/login"
+              href="/signin"
               className="lightBlueGreenTealHyperlink font-bold text-xs"
             >
               Login here

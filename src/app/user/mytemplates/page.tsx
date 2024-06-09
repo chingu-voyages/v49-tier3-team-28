@@ -53,6 +53,9 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
 
   const [isBusy, setIsBusy] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [updateTemplateErrorMessage, setUpdateTemplateErrorMessage] = useState<
+    string | null
+  >(null);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const templatesPerPage = 6;
@@ -74,6 +77,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
       setTemplates(fetchedTemplates);
       setFilteredTemplates(fetchedTemplates); // Initialize filteredTemplates
     } catch (error: any) {
+      setErrorMessage("Error fetching templates");
       console.log("Error fetching templates: ", error.message);
     } finally {
       setIsBusy(false);
@@ -103,6 +107,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
         filteredTemplates.filter((template) => template._id !== templateId)
       );
     } catch (error: any) {
+      setErrorMessage("Error deleting template");
       console.log("Error deleting template: ", error.message);
     } finally {
       setIsBusy(false);
@@ -128,8 +133,10 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
       setIsEditModalOpen(false);
       setIsConfirmDeleteTemplateModalOpen(false);
       setTemplateDataDelete(null);
+      setUpdateTemplateErrorMessage(null);
     } catch (error: any) {
-      console.log("Error updating template: ", error.message);
+      setUpdateTemplateErrorMessage(error.message);
+      console.log("Error updating template: ", error);
     } finally {
       setIsBusy(false);
     }
@@ -256,6 +263,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
         onUpdateTemplate={handleUpdateTemplate}
         templateNameData={selectedTemplateName}
         templateId={selectedTemplateId}
+        updateTemplateError={updateTemplateErrorMessage}
       />
       <ConfirmDeleteDialog
         title={`Delete '${templateDataToDelete?.name}'`}
