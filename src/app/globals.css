@@ -2,22 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 /* This is for the Futura font taken from Adobe Typekit */
-@import url('https://use.typekit.net/eoe3hsu.css'); 
+@import url("https://use.typekit.net/eoe3hsu.css");
 
 /* This is the Rowdies font from google fonts */
-@import url('https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap");
 :root {
   font-family: futura-pt, sans-serif;
   margin: 0;
-  --background-color: 'white';
-  --main-text-color: 'black';
+  --background-color: "white";
+  --main-text-color: "black";
   --orange: #fb7210;
   --dark-teal: #005246;
   --sky-blue: #c4fcf0;
   --light-teal: #4c8077;
   --smoke-grey: rgba(43, 67, 81, 0.5);
   --light-blue-green-teal: #00bb9a;
-  --light-faint-grey: #F2F2F2;
+  --light-faint-grey: #f2f2f2;
   --light-dark-grey: #808080;
   --white: #ffffff;
 }
@@ -32,7 +32,7 @@
 
 body {
   color: var(--main-text-color);
-  background: var(--background-color)
+  background: var(--background-color);
 }
 
 @layer utilities {
@@ -51,8 +51,43 @@ body {
   background-color: var(--orange) !important;
 }
 
+.secondaryButtonColor {
+  background-color: var(--light-dark-grey) !important;
+}
+
 /* Background color of text input fields */
 .faintGreyInputColor {
   background-color: var(--light-faint-grey);
 }
 
+.futuraFont {
+  font-family: futura-pt-condensed, sans-serif;
+}
+
+.robotoFont {
+  font-family: "Roboto", sans-serif;
+}
+
+.verdanaFont {
+  font-family: "Verdana", sans-serif;
+}
+
+.blueGray {
+  background-color: #2f4858;
+}
+
+.lightTanOrange {
+  background-color: #fff5ea;
+}
+
+.colorWhite {
+  color: white;
+}
+
+.darkCharcoal {
+  color: #2d2b2e;
+}
+
+.paleSalmon {
+  background-color: #fff5ea;
+}

@@ -26,7 +26,20 @@ export async function POST(req: NextRequest) {
   if (!user)
     return NextResponse.json({ error: "User not found" }, { status: 404 });
 
-  // Right now, we're simply concatenating the new logs to the existing logs array.
+  for (const log of requestBody.logs) {
+    if (
+      user.logs.some(
+        (userLog) => userLog.name === log.name && userLog.isTemplate
+      )
+    ) {
+      return NextResponse.json(
+        {
+          error: "Template name already exists. Please choose a unique name.",
+        },
+        { status: 400 }
+      );
+    }
+  }
   user.logs = user.logs.concat(requestBody.logs);
 
   await user.save();

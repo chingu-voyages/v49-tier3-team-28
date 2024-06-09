@@ -22,7 +22,8 @@ export const LoggingClient = {
     });
 
     if (!response.ok) {
-      throw new Error(response.statusText);
+      const errorMessage = await response.json();
+      throw new Error(errorMessage.error);
     }
 
     console.log("Log saved successfully!");
@@ -73,5 +74,30 @@ export const LoggingClient = {
     }
 
     console.log("Template deleted successfully!");
+  },
+
+  async updateTemplate(updatedTemplateData: Partial<Log>): Promise<void> {
+    const requestBody = JSON.stringify({
+      name: updatedTemplateData.name,
+      exercises: updatedTemplateData.exercises,
+    });
+
+    const response = await fetch(
+      `/api/user/logs/templates/${updatedTemplateData._id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: requestBody,
+      }
+    );
+
+    if (!response.ok) {
+      const errorMessage = await response.json();
+      throw new Error(errorMessage.error);
+    }
+
+    console.log("Template updated successfully!");
   },
 };

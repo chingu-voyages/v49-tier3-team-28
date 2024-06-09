@@ -5,7 +5,6 @@ export const setSchema = new Schema<Set>({
   setNumber: {
     type: Number,
     required: true,
-    unique: true,
   },
   weight: {
     type: Number,

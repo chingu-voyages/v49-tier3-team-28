@@ -8,12 +8,14 @@ interface TemplateCardProps {
   data: Log;
   onClick: () => void;
   onDelete: () => void;
+  onEdit: () => void;
 }
 
 const TemplateCard: React.FC<TemplateCardProps> = ({
   data,
   onClick,
   onDelete,
+  onEdit,
 }) => {
   const exercisesToShow = data.exercises.slice(0, 5);
 
@@ -23,10 +25,15 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
       onClick={onClick}
     >
       <div>
-        <div className="relative font-bold text-lg mb-2 bg-orange-500 p-2 rounded-t-lg text-white">
-          {data.name}
-
-          <button className="absolute top-2 left-2">
+        <div className=" flex justify-center relative text-lg mb-2 bg-orange-500 p-2  text-white">
+          <p className="verdanaFont">{data.name}</p>
+          <button
+            className="p-1 absolute top-2 left-2 text-white scale-125 hover:scale-150 transform duration-300 ease-out"
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit();
+            }}
+          >
             <FiEdit />
           </button>
           <button

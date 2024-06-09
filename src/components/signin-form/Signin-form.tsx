@@ -3,6 +3,7 @@
 import { AuthClient } from "@/app/clients/auth-client/auth-client";
 import { signinFormValidator } from "@/app/validators/signin/signin-form.validator";
 import { extractValidationErrors } from "@/app/validators/utils/extract-validation-errors/extract-validation-errors";
+import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { CircularProgress, FormControlLabel, Switch } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -76,6 +77,25 @@ export function SigninForm() {
     router.push(res.redirectUrl!);
     setIsLoading(false);
   };
+
+  const signInUserWithGoogle = async () => {
+    setIsLoading(true);
+
+    const res = await AuthClient.signInWithGoogle();
+
+    if (!res.success) {
+      setAppError({ error: true, message: res.errorMessage! });
+      setIsLoading(false);
+      return;
+    }
+    setIsLoading(false);
+  };
+
+  const { status } = useAuthSession();
+
+  if (status === "authenticated") {
+    router.replace("/user/home");
+  }
 
   return (
     <div className="mt-6">
@@ -184,7 +204,7 @@ export function SigninForm() {
         </div>
         <div className="mt-12">
           <GoogleAuthButton
-            onClick={() => console.log("Google auth button clicked")}
+            onClick={signInUserWithGoogle}
             authType="signin"
             disabled={isLoading}
           />
@@ -195,7 +215,7 @@ export function SigninForm() {
           <h1 className="font-normal leading-7 text-xs">
             New to our site?{" "}
             <Link
-              href="/login"
+              href="/signup"
               className="lightBlueGreenTealHyperlink font-bold text-xs"
             >
               Sign up now

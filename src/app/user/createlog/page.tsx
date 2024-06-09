@@ -1,6 +1,8 @@
 "use client";
 import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
 import { ColorToggleButton } from "@/components/buttons/unit-toggle-button/Unit-toggle-button";
+import ContinueDraftModal from "@/components/modals/ContinueDraftModal";
+import SaveDraftModal from "@/components/modals/SaveDraftModal"; // Import the new modal
 import SaveLogModal from "@/components/modals/SaveLogModal";
 import TemplatesModal from "@/components/modals/TemplatesModal";
 import ExerciseTable from "@/components/tables/ExerciseTable";
@@ -11,7 +13,7 @@ import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Set } from "@/models/set.model";
 import AddIcon from "@mui/icons-material/Add";
-import { IconButton } from "@mui/material";
+import { CircularProgress, IconButton } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiSearch, FiX } from "react-icons/fi";
@@ -41,6 +43,12 @@ export default function CreateLog() {
   const [isTemplateModalOpen, setIsTemplateModalOpen] =
     useState<boolean>(false);
 
+  const [isUserSearching, setIsUserSearching] = useState<boolean>(false);
+  const [isSaveDraftModalOpen, setIsSaveDraftModalOpen] =
+    useState<boolean>(false); // State for Save Draft modal
+  const [isContinueDraftModalOpen, setIsContinueDraftModalOpen] =
+    useState<boolean>(false); // State for Save Draft modal
+
   const exercisesArray = Object.values(ExercisesDictionary);
 
   // Updates the search results as the user inputs characters in the search bar
@@ -53,29 +61,49 @@ export default function CreateLog() {
     } else {
       setSearchResults([]);
     }
+
+    if (searchInput.length > 0 || selectedExercises.length > 0) {
+      setIsUserSearching(true);
+    } else {
+      setIsUserSearching(false);
+    }
   }, [searchInput]);
 
-  // Updates the state of the unit based on localStorage
+  // Updates the state of the unit or exercises based on localStorage
   useEffect(() => {
+    // Updates unit from localStorage
     const savedUnit = localStorage.getItem("weightUnit");
     if (savedUnit) {
       setUnit(savedUnit);
     }
+
+    // Updates exercises from localStorage
+    const savedExercises = JSON.parse(
+      localStorage.getItem("selectedTemplate")! //Checks from template selection
+    );
+    if (savedExercises) {
+      setSelectedExercises(savedExercises);
+    } else {
+      const draft = JSON.parse(localStorage.getItem("draft")!); // Check for saved draft
+      !draft
+        ? setIsContinueDraftModalOpen(false)
+        : setIsContinueDraftModalOpen(true);
+    }
+
+    localStorage.removeItem("selectedTemplate");
   }, []);
 
   // ------------------ Add, Delete, Update Exercises ----------------------------------
 
-  const handleSelectExercise = (exercise: Exercise): ExerciseActivity => {
+  const handleSelectExercise = (exercise: Exercise) => {
     const newExercise: ExerciseActivity = {
       exerciseName: exercise.label,
       sets: [{ setNumber: 1, reps: 0, weight: 0, unit }],
     };
 
     setSelectedExercises((prev) => [...prev, newExercise]);
-    setSearchInput(""); // Clear search input after selection
-    setSearchResults([]); // Clear search results after selection
-
-    return newExercise;
+    setSearchInput("");
+    setSearchResults([]);
   };
 
   const handleDeleteExercise = (index: number) => {
@@ -148,6 +176,13 @@ export default function CreateLog() {
     localStorage.setItem("weightUnit", newUnit);
   };
 
+  // ---------------------------- Handle Save Draft -------------------------------------
+
+  const handleSaveDraft = () => {
+    localStorage.setItem("draft", JSON.stringify(selectedExercises));
+    router.push("/user/home");
+  };
+
   // -------------------------- Save Log/Template ---------------------------------------
 
   const handleSaveLog = async (isTemplate: boolean = false) => {
@@ -185,23 +220,47 @@ export default function CreateLog() {
     setIsModalOpen(true);
   };
 
-  return (
-    <div className="flex flex-col items-center gap-y-20 justify-center w-screen mt-20 mb-10">
-      {/* Header */}
-      <h1 className="text-5xl font-bold leading-6 text-center">
-        Log Your Workout
-      </h1>
-      <BasicRoundedButton
-        label="Choose From Templates"
-        onClick={() => setIsTemplateModalOpen(true)}
-      />
-      <div className="flex items-center">
-        <div className="flex-1 w-48 border-t-2"></div>
-        <h2 className="text-xl text-gray-500 pl-2 pr-2">
-          Or Start Logging By Search
-        </h2>
-        <div className="flex-1 w-48 border-t-2"></div>
+  if (status === "loading")
+    return (
+      <div className="flex justify-center" style={{ marginTop: "40%" }}>
+        <CircularProgress />;
       </div>
+    );
+
+  return (
+    <div className="flex flex-col gap-y-20 justify-center w-screen mt-20 mb-10 p-4">
+      {/* Header */}
+      <div className="flex justify-between">
+        <h1 className="text-3xl font-bold futuraFont uppercase self-center">
+          Log Your Workout
+        </h1>
+        <button
+          onClick={() =>
+            selectedExercises.length > 0
+              ? setIsSaveDraftModalOpen(true)
+              : router.push("/user/home")
+          }
+        >
+          <FiX className="size-8 text-white blueGray rounded-full ml-2 p-2 hover:bg-stone-500" />
+        </button>
+      </div>
+      {!isUserSearching && (
+        <BasicRoundedButton
+          buttonClassNames="self-center defaultButtonColor"
+          label="Choose From Templates"
+          onClick={() => setIsTemplateModalOpen(true)}
+        />
+      )}
+
+      {!isUserSearching && (
+        <div className="flex items-center">
+          <div className="flex-1 w-48 border-t-2"></div>
+          <h2 className="text-sm text-gray-500 pl-2 pr-2 verdanaFont">
+            Or start Logging by Search
+          </h2>
+          <div className="flex-1 w-48 border-t-2"></div>
+        </div>
+      )}
 
       {/* Search Bar */}
       <div className="relative flex flex-col min-w-80">
@@ -230,7 +289,7 @@ export default function CreateLog() {
               <div
                 key={exercise.id}
                 onClick={() => handleSelectExercise(exercise)}
-                className="cursor-pointer p-2 border-b hover:bg-orange-500 hover:text-white"
+                className="cursor-pointer p-2 border-b hover:bg-orange-500 hover:text-white robotoFont"
               >
                 {exercise.label}
               </div>
@@ -238,53 +297,56 @@ export default function CreateLog() {
           </div>
         )}
       </div>
+      {selectedExercises.length > 0 && (
+        <>
+          <div className="flex flex-col gap-y-9 w-full px-4">
+            <div className="flex justify-end gap-2 w-full">
+              <ColorToggleButton
+                onChange={toggleUnit}
+                alignment={unit}
+                leftLabel="Metric"
+                rightLabel="Imperial"
+                leftValue="lbs"
+                rightValue="kg"
+              />
+            </div>
 
-      {/* Selected Exercises (Exercise Log) */}
-      <div className="flex flex-col gap-y-9 w-full px-4">
-        <div className="flex justify-end gap-2 w-full">
-          <ColorToggleButton
-            onChange={toggleUnit}
-            alignment={unit}
-            leftLabel="Metric"
-            rightLabel="Imperial"
-            leftValue="lbs"
-            rightValue="kg"
-          />
-        </div>
-
-        {selectedExercises.map((exercise, index) => (
-          <div
-            key={index}
-            className="rounded-xl mb-4 border border-gray-100 shadow-md relative"
-          >
-            <ExerciseTable
-              exerciseName={exercise.exerciseName}
-              idx={index}
-              sets={exercise.sets}
-              unit={unit}
-              onSetChange={(setIndex, field, value) =>
-                handleSetChange(index, setIndex, field, value)
-              }
-              onDeleteSet={(setIndex) => handleDeleteSet(index, setIndex)}
-              onDeleteExercise={() => handleDeleteExercise(index)}
-            />
-            <IconButton onClick={() => handleAddSet(index)}>
-              <AddIcon sx={{ color: "#03BB9B" }} />
-              <p className="text-sm font-bold" style={{ color: "#03BB9B" }}>
-                Set
-              </p>
-            </IconButton>
+            {selectedExercises.map((exercise, index) => (
+              <div
+                key={index}
+                className="rounded-xl mb-4 border border-gray-100 shadow-md relative"
+              >
+                <ExerciseTable
+                  exerciseName={exercise.exerciseName}
+                  idx={index}
+                  sets={exercise.sets}
+                  unit={unit}
+                  onSetChange={(setIndex, field, value) =>
+                    handleSetChange(index, setIndex, field, value)
+                  }
+                  onDeleteSet={(setIndex) => handleDeleteSet(index, setIndex)}
+                  onDeleteExercise={() => handleDeleteExercise(index)}
+                />
+                <IconButton onClick={() => handleAddSet(index)}>
+                  <AddIcon sx={{ color: "#03BB9B" }} />
+                  <p className="text-sm font-bold" style={{ color: "#03BB9B" }}>
+                    Set
+                  </p>
+                </IconButton>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      {/* Save Button */}
-      <div className="flex flex-col gap-y-9">
-        <BasicRoundedButton
-          onClick={() => handleSaveLog()}
-          label="Save Log"
-          disabled={selectedExercises.length === 0}
-        ></BasicRoundedButton>
-      </div>
+
+          <div className="flex flex-col gap-y-9">
+            <BasicRoundedButton
+              onClick={() => handleSaveLog()}
+              buttonClassNames="self-center defaultButtonColor"
+              label="Save Log"
+              disabled={selectedExercises.length === 0}
+            ></BasicRoundedButton>
+          </div>
+        </>
+      )}
       <SaveLogModal
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -295,6 +357,26 @@ export default function CreateLog() {
         onClose={() => setIsTemplateModalOpen(false)}
         onTemplateSelect={handleTemplateSelection}
         onGenerate={handleSetTemplates}
+      />
+      <SaveDraftModal
+        open={isSaveDraftModalOpen}
+        onClose={() => {
+          setIsSaveDraftModalOpen(false);
+        }}
+        onSaveDraft={handleSaveDraft}
+      />
+      <ContinueDraftModal
+        open={isContinueDraftModalOpen}
+        onClose={() => {
+          setIsContinueDraftModalOpen(false);
+          if (localStorage.getItem("draft")) {
+            localStorage.removeItem("draft");
+          }
+        }}
+        onContinueDraft={() => {
+          setSelectedExercises(JSON.parse(localStorage.getItem("draft")!));
+          setIsContinueDraftModalOpen(false);
+        }}
       />
     </div>
   );
