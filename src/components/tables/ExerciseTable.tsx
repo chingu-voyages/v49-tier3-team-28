@@ -36,7 +36,7 @@ const ExerciseTable: React.FC<ExerciseTableProps> = ({
 
   const handleBlur = (setIndex: number, field: keyof Set, e: React.ChangeEvent<HTMLInputElement>) => {
 
-    let value = parseFloat(e.target.value.replace(/^0+/, "")) || 0
+    const value = parseFloat(e.target.value.replace(/^0+/, "")) || 0
 
     onSetChange(setIndex, field, value)
   }
