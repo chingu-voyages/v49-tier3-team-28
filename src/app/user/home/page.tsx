@@ -28,7 +28,7 @@ export default function LandingPage() {
       </div>
     );
   return (
-    <div className="flex flex-col items-center gap-y-12 justify-center w-screen bg-cover bg-no-repeat bg-center pr-4 mt-8">
+    <div className="flex flex-col items-center gap-y-12 justify-center w-screen bg-cover bg-no-repeat bg-center mt-8">
       {/* Header */}
       <div>
         <div className="flex justify-between">
@@ -50,6 +50,7 @@ export default function LandingPage() {
             />
           </Link>
         </div>
+
         <div>
           <h3 className="verdanaFont text-sm leading-4">
             {dayjs().format("ddd, MMMM D, YYYY")}

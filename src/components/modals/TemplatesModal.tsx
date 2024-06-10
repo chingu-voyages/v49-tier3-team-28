@@ -52,10 +52,10 @@ const TemplatesModal: React.FC<TemplateModalProps> = ({
 
   return (
     <div>
-      <Modal open={open} onClose={onClose} className="p-4">
-        <div className="flex flex-col w-1/2 h-3/4 bg-white p-10 rounded-xl relative justify-evenly w-full">
+      <Modal open={open} onClose={onClose}>
+        <div className=" m-4 flex flex-col bg-white p-8 rounded-3xl relative justify-evenly h-fill-available">
           <div className="flex justify-between leading-7">
-            <h1 className="text-3xl font-bold futuraFont uppercase self-center">
+            <h1 className="text-3xl font-bold futuraFont uppercase">
               Choose From Templates
             </h1>
             <button
@@ -65,12 +65,13 @@ const TemplatesModal: React.FC<TemplateModalProps> = ({
                 onClose();
               }}
             >
-              <FiX className="size-8 text-white blueGray rounded-full ml-2 p-2 hover:bg-stone-500" />
+              <FiX className="size-8 text-white blueGray rounded-full p-2 hover:bg-stone-500 absolute top-8 right-4" />
             </button>
           </div>
-          <h1 className="futuraFont text-xl font-medium">
+          <h1 className="futuraFont text-xl font-medium mt-4 mb-4">
             Please choose one template to start:
           </h1>
+
           {/* Templates to Choose From */}
           <div className="min-h-24 overflow-y-auto w-96 max-h-58 w-full">
             {templates?.map((template, idx) => (
@@ -99,7 +100,9 @@ const TemplatesModal: React.FC<TemplateModalProps> = ({
               </div>
             ))}
           </div>
-          <div className="flex justify-center h-28">
+
+          {/* Start logging Button */}
+          <div className="flex justify-center mt-4">
             <BasicRoundedButton
               onClick={onGenerate}
               label="Start logging"

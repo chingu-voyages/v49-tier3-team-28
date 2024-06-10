@@ -9,8 +9,8 @@ interface SuccessModalProps {
 
 const SuccessModal: React.FC<SuccessModalProps> = ({ open }) => {
   return (
-    <Modal open={open} className="p-4">
-      <div className="flex flex-col w-1/2 h-3/4 bg-white p-6 rounded-xl relative justify-evenly w-full">
+    <Modal open={open}>
+      <div className="flex flex-col gap-4 bg-white p-6 rounded-3xl relative justify-evenly h-fill-available ml-4 mr-4 mt-10 mb-10">
         <div className="flex justify-center">
           <Image
             src="/images/create-log-page/modal-splash.jpg"
@@ -21,19 +21,19 @@ const SuccessModal: React.FC<SuccessModalProps> = ({ open }) => {
         </div>
         <div>
           <h1 className="text-2xl verdanaFont text-center">SUCCESS!</h1>
-          <h3 className="robotoFont text-sm text-justify">
-            Your exercise template has been saved successfully.<br></br> You can
-            now re-use this template to log your exercises next time!
+          <h3 className="robotoFont text-sm text-center mb-4">
+            Your exercise template has been saved successfully. You can now
+            re-use this template to log your exercises next time!
           </h3>
-          <div className="mt-2 flex flex-col gap-2 px-4">
+          <div className="mt-2 flex flex-col gap-4 px-4">
             <Link
-              className="rounded-3xl bg-slate-300 p-2 text-center"
+              className="rounded-3xl bg-slate-500 p-2 text-white font-semibold text-center hover:bg-slate-600"
               href={"/user/home"}
             >
               Return to Home
             </Link>
             <Link
-              className="rounded-3xl bg-slate-300 p-2 text-center"
+              className="rounded-3xl bg-orange-500 p-2 text-white font-semibold text-center hover:bg-orange-600"
               href={"/user/mytemplates"}
             >
               View Templates
