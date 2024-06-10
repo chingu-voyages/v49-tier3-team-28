@@ -29,7 +29,7 @@ const ExerciseTable: React.FC<ExerciseTableProps> = ({
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
 
-    let newValue = parseFloat(e.target.value)
+    const newValue = parseFloat(e.target.value)
 
     onSetChange(setIndex, field, newValue);
   };
