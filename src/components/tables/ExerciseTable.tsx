@@ -13,22 +13,34 @@ interface ExerciseTableProps {
 }
 
 const ExerciseTable: React.FC<ExerciseTableProps> = ({
-  exerciseName,
   sets,
+  exerciseName,
   unit,
-  onSetChange,
   onDeleteSet,
+  onSetChange,
   onDeleteExercise,
   idx,
 }) => {
+
+
   const handleInputChange = (
     setIndex: number,
     field: keyof Set,
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const newValue = parseFloat(e.target.value);
+
+    let newValue = parseFloat(e.target.value)
+
     onSetChange(setIndex, field, newValue);
   };
+
+  const handleBlur = (setIndex: number, field: keyof Set, e: React.ChangeEvent<HTMLInputElement>) => {
+
+    let value = parseFloat(e.target.value.replace(/^0+/, "")) || 0
+
+    onSetChange(setIndex, field, value)
+  }
+
 
   return (
     <>
@@ -55,9 +67,11 @@ const ExerciseTable: React.FC<ExerciseTableProps> = ({
                 <div className="flex">
                   <input
                     type="number"
-                    value={set.weight}
+                    value={set.weight.toString()}
                     onChange={(e) => handleInputChange(setIndex, "weight", e)}
                     className="w-20 p-1 border rounded-xl text-center bg-gray-50"
+                    placeholder="0"
+                    onBlur={(e) => handleBlur(setIndex, "weight", e)}
                   />
                   <div className="self-center">
                     <p className="px-2">{unit}</p>
@@ -68,9 +82,11 @@ const ExerciseTable: React.FC<ExerciseTableProps> = ({
                 <div className="flex">
                   <input
                     type="number"
-                    value={set.reps}
+                    value={set.reps.toString()}
                     onChange={(e) => handleInputChange(setIndex, "reps", e)}
                     className="w-20 p-1 border rounded-xl text-center bg-gray-50"
+                    placeholder="0"
+                    onBlur={(e) => handleBlur(setIndex, "reps", e)}
                   />
                   <p className="px-2 self-center">reps</p>
                 </div>
