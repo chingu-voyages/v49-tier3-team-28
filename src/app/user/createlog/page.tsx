@@ -304,8 +304,8 @@ export default function CreateLog() {
               <ColorToggleButton
                 onChange={toggleUnit}
                 alignment={unit}
-                leftLabel="Metric"
-                rightLabel="Imperial"
+                leftLabel="Imperial"
+                rightLabel="Metric"
                 leftValue="lbs"
                 rightValue="kg"
               />

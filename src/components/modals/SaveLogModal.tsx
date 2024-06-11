@@ -1,4 +1,5 @@
 import { Modal } from "@mui/material";
+import Link from "next/link";
 import React, { useState } from "react";
 import { FiX } from "react-icons/fi";
 import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
@@ -18,9 +19,9 @@ const SaveLogModal: React.FC<SaveLogModalProps> = ({ open, onClose, data }) => {
       <Modal open={open} onClose={onClose}>
         <div className="bg-white fixed inset-0 flex items-center justify-center bg-opacity-70">
           <div className="flex flex-col justify-between m-4 mt-20 mb-20 pt-8 pb-8 bg-white rounded-3xl w-full max-w-md shadow-lg text-center relative h-fill-available">
-            <button className="absolute top-4 right-4" onClick={onClose}>
+            <Link href="/user/home" className="absolute top-4 right-4">
               <FiX className="scale-150" />
-            </button>
+            </Link>
             <img
               src="/images/create-log-page/modal-splash.jpg"
               alt="modal-image"

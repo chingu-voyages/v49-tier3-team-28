@@ -1,13 +1,27 @@
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { SxProps, Theme } from "@mui/system";
 
 interface ColorToggleButtonProps {
-  onChange: () => void;
+  onChange: (
+    event: React.MouseEvent<HTMLElement>,
+    newAlignment: string
+  ) => void;
   alignment: string;
   leftLabel: string;
   rightLabel: string;
   leftValue: string;
   rightValue: string;
 }
+
+const toggleButtonGroupSx: SxProps<Theme> = {
+  "& .MuiToggleButton-root": {
+    textTransform: "none",
+    "&.Mui-selected": {
+      backgroundColor: "#03BB9B",
+      color: "white",
+    },
+  },
+};
 
 export function ColorToggleButton({
   onChange,
@@ -19,15 +33,10 @@ export function ColorToggleButton({
 }: ColorToggleButtonProps) {
   return (
     <ToggleButtonGroup
-      color="success"
       value={alignment}
       exclusive
       onChange={onChange}
-      sx={{
-        "& .MuiButtonBase-root": {
-          textTransform: "none",
-        },
-      }}
+      sx={toggleButtonGroupSx}
     >
       <ToggleButton value={leftValue}>{leftLabel}</ToggleButton>
       <ToggleButton value={rightValue}>{rightLabel}</ToggleButton>
