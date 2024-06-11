@@ -18,19 +18,21 @@ const SaveDraftModal: React.FC<SaveDraftModalProps> = ({
   return (
     <Modal open={open} onClose={onClose}>
       <div className="bg-white fixed inset-0 flex items-center justify-center bg-opacity-70">
-        <div className="m-4 mt-20 mb-40 pt-8 pb-8 bg-white rounded-3xl w-full max-w-md shadow-lg text-center relative h-fill-available">
+        <div className="m-4 pt-8 pb-8 mb-80 modalBgColor rounded-3xl w-full max-w-md shadow-lg text-center relative max-h-min">
           <button
             onClick={onClose}
-            className="absolute top-5 right-5 scale-150"
+            className="absolute top-8 right-6 scale-150 darkCharcoal"
           >
             <FiX />
           </button>
-          <h2 className="text-2xl font-bold mb-4">Are you sure?</h2>
-          <p className="text-lg mb-8">
+          <h1 className="text-xl verdanaFont ml-10 text-left darkCharcoal ">
+            Are You Sure?
+          </h1>
+          <p className="robotoFont text-sm m-10 text-gray-500 text-left">
             You have unsaved exercise data. Do you want to save it before
             leaving?
           </p>
-          <div className="flex justify-between flex-col items-center h-28">
+          <div className="flex justify-between flex-col items-center gap-4">
             <BasicRoundedButton
               onClick={onSaveDraft}
               label="Save and Exit"

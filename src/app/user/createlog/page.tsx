@@ -228,7 +228,7 @@ export default function CreateLog() {
     );
 
   return (
-    <div className="flex flex-col gap-y-20 justify-center w-screen mt-10 mb-10 p-4">
+    <div className="flex flex-col gap-y-10 justify-center w-screen mt-4 p-4">
       {/* Header */}
       <div className="flex justify-between">
         <h1 className="text-3xl font-bold futuraFont uppercase self-center">
@@ -304,8 +304,8 @@ export default function CreateLog() {
               <ColorToggleButton
                 onChange={toggleUnit}
                 alignment={unit}
-                leftLabel="Metric"
-                rightLabel="Imperial"
+                leftLabel="Imperial"
+                rightLabel="Metric"
                 leftValue="lbs"
                 rightValue="kg"
               />
