@@ -92,6 +92,32 @@ body {
   background-color: #fff5ea;
 }
 
+.modalOuterContainer {
+  position: fixed;
+  inset: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  --tw-bg-opacity: 0.7;
+}
+
+.modalInnerContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1rem;
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  border-radius: 1.5rem;
+  width: 100%;
+  max-width: 28rem;
+  text-align: center;
+  max-height: min-content;
+}
+
 .modalBgColor {
   background-color: #f2f2f2;
 }

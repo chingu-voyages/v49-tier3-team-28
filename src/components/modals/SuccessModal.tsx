@@ -1,4 +1,5 @@
 import { Modal } from "@mui/material";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -10,8 +11,13 @@ interface SuccessModalProps {
 
 const SuccessModal: React.FC<SuccessModalProps> = ({ open }) => {
   return (
-    <Modal open={open}>
-      <div className="flex flex-col gap-4 modalBgColor p-6 rounded-3xl relative justify-evenly max-h-min ml-4 mr-4 mt-10 mb-10">
+    <Modal open={open} className="modalOuterContainer">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3 }}
+        className="modalInnerContainer modalBgColor shadow-lg relative"
+      >
         <div className="flex justify-center">
           <Image
             src="/success.svg"
@@ -45,7 +51,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({ open }) => {
             </Link>
           </div>
         </div>
-      </div>
+      </motion.div>
     </Modal>
   );
 };

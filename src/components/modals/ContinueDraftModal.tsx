@@ -1,4 +1,5 @@
 import { Modal } from "@mui/material";
+import { motion } from "framer-motion";
 import React from "react";
 import { FiX } from "react-icons/fi";
 import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
@@ -15,38 +16,46 @@ const ContinueDraftModal: React.FC<ContinueDraftModalProps> = ({
   onContinueDraft,
 }) => {
   return (
-    <Modal open={open} onClose={onClose}>
-      <div className="bg-white fixed inset-0 flex items-center justify-center bg-opacity-70">
-        <div className="m-4 mt-10 mb-10 pt-8 pb-8 modalBgColor rounded-3xl w-full max-w-md sm:w-3/4 shadow-lg text-center relative max-h-min flex flex-col justify-center items-center">
-          <button
-            onClick={onClose}
-            className="absolute top-8 right-6 scale-150 darkCharcoal"
-          >
-            <FiX />
-          </button>
-          <img src="/incomplete.svg" alt="modal-image" className="mb-4" />
-          <h1 className="text-xl verdanaFont text-center darkCharcoal">
-            Incomplete Exercise Log
-          </h1>
-          <h3 className="robotoFont text-sm m-10 text-gray-500">
-            Keep logging your exercise to track your progress, stay motivated,
-            and reach your goals.
-          </h3>
-          <div className="flex gap-4 flex-col items-center">
-            <BasicRoundedButton
-              onClick={onContinueDraft}
-              label="Continue Editing"
-              buttonClassNames="defaultButtonColor"
-            />
+    <Modal open={open} onClose={onClose} className="modalOuterContainer">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.8 }}
+        transition={{ duration: 0.3 }}
+        className="modalInnerContainer modalBgColor shadow-lg relative"
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-8 right-6 scale-150 darkCharcoal"
+        >
+          <FiX />
+        </button>
+        <img
+          src="/incomplete.svg"
+          alt="modal-image"
+          className="mb-4 self-center"
+        />
+        <h1 className="text-xl verdanaFont text-center darkCharcoal">
+          Incomplete Exercise Log
+        </h1>
+        <h3 className="robotoFont text-sm m-10 text-gray-500">
+          Keep logging your exercise to track your progress, stay motivated, and
+          reach your goals.
+        </h3>
+        <div className="flex gap-4 flex-col items-center">
+          <BasicRoundedButton
+            onClick={onContinueDraft}
+            label="Continue Editing"
+            buttonClassNames="defaultButtonColor"
+          />
 
-            <BasicRoundedButton
-              onClick={onClose}
-              label="Create New Log"
-              buttonClassNames="secondaryButtonColor"
-            />
-          </div>
+          <BasicRoundedButton
+            onClick={onClose}
+            label="Create New Log"
+            buttonClassNames="secondaryButtonColor"
+          />
         </div>
-      </div>
+      </motion.div>
     </Modal>
   );
 };

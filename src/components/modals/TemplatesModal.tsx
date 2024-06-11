@@ -3,6 +3,7 @@ import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Log } from "@/models/log.model";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import { IconButton, Modal } from "@mui/material";
+import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { FiX } from "react-icons/fi";
 import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
@@ -53,64 +54,74 @@ const TemplatesModal: React.FC<TemplateModalProps> = ({
   return (
     <div>
       <Modal open={open} onClose={onClose}>
-        <div className="flex flex-col bg-white p-8 relative justify-evenly h-fill-available">
-          <div className="flex justify-between leading-7">
-            <h1 className="text-3xl font-bold futuraFont uppercase">
-              Choose From Templates
-            </h1>
-            <button
-              onClick={() => {
-                setActiveTemplateIdx(null);
-                setSelectedTemplate(null);
-                onClose();
-              }}
+        <AnimatePresence>
+          {open && (
+            <motion.div
+              initial={{ opacity: 0, y: "-100vh" }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: "-100vh" }}
+              transition={{ duration: 0.3 }}
+              className="flex flex-col bg-white p-8 relative h-fill-available"
             >
-              <FiX className="size-8 text-white blueGray rounded-full p-2 hover:bg-stone-500 absolute top-8 right-4" />
-            </button>
-          </div>
-          <h1 className="futuraFont text-xl font-medium mt-4 mb-4">
-            Please choose one template to start:
-          </h1>
-
-          {/* Templates to Choose From */}
-          <div className="min-h-24 overflow-y-auto w-96 max-h-58 w-full">
-            {templates?.map((template, idx) => (
-              <div
-                key={idx}
-                className={`flex justify-between cursor-pointer p-2 border-b lightTanOrange mt-5 ${
-                  activeTemplateIdx === idx
-                    ? "defaultButtonColor colorWhite"
-                    : ""
-                }`}
-                onClick={() => handleTemplateClick(template.exercises, idx)} // this should send a whole log instead of exercises
-              >
-                <div
-                  className={`text-base font-light leading-6 verdanaFont self-center ${
-                    activeTemplateIdx === idx && "font-bold"
-                  } `}
+              <div className="flex justify-between">
+                <h1 className="text-3xl font-bold futuraFont uppercase">
+                  Choose From Templates
+                </h1>
+                <button
+                  onClick={() => {
+                    setActiveTemplateIdx(null);
+                    setSelectedTemplate(null);
+                    onClose();
+                  }}
                 >
-                  {template.name}
-                </div>
-                <IconButton
-                  className="mr-2 transition-transform duration-300 hover:scale-125"
-                  onClick={() => setIsModalOpen(true)}
-                >
-                  <FormatListBulletedIcon className="blueGray rounded-full text-white p-1 !size-8" />
-                </IconButton>
+                  <FiX className="size-8 text-white blueGray rounded-full p-2 hover:bg-stone-500" />
+                </button>
               </div>
-            ))}
-          </div>
+              <h1 className="futuraFont text-xl font-medium mt-4 mb-4">
+                Please choose one template to start:
+              </h1>
 
-          {/* Start logging Button */}
-          <div className="flex justify-center mt-4">
-            <BasicRoundedButton
-              onClick={onGenerate}
-              label="Start Logging"
-              disabled={!selectedTemplate}
-              buttonClassNames="secondaryButtonColor"
-            />
-          </div>
-        </div>
+              {/* Templates to Choose From */}
+              <div className="min-h-24 overflow-y-auto w-96 max-h-58 w-full">
+                {templates?.map((template, idx) => (
+                  <div
+                    key={idx}
+                    className={`flex justify-between cursor-pointer p-2 border-b lightTanOrange mt-5 ${
+                      activeTemplateIdx === idx
+                        ? "defaultButtonColor colorWhite"
+                        : ""
+                    }`}
+                    onClick={() => handleTemplateClick(template.exercises, idx)} // this should send a whole log instead of exercises
+                  >
+                    <div
+                      className={`text-base font-light leading-6 verdanaFont self-center ${
+                        activeTemplateIdx === idx && "font-bold"
+                      } `}
+                    >
+                      {template.name}
+                    </div>
+                    <IconButton
+                      className="mr-2 transition-transform duration-300 hover:scale-125"
+                      onClick={() => setIsModalOpen(true)}
+                    >
+                      <FormatListBulletedIcon className="blueGray rounded-full text-white p-1 !size-8" />
+                    </IconButton>
+                  </div>
+                ))}
+              </div>
+
+              {/* Start logging Button */}
+              <div className="flex justify-center mt-4">
+                <BasicRoundedButton
+                  onClick={onGenerate}
+                  label="Start Logging"
+                  disabled={!selectedTemplate}
+                  buttonClassNames="secondaryButtonColor"
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </Modal>
       <TemplateDataModal
         open={isModalOpen}

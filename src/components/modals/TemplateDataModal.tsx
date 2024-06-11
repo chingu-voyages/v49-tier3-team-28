@@ -1,5 +1,6 @@
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Modal } from "@mui/material";
+import { AnimatePresence, motion } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import { FiX } from "react-icons/fi";
@@ -28,16 +29,20 @@ const TemplateDataModal: React.FC<TemplateDataModalProps> = ({
   };
 
   return (
-    <Modal open={open} onClose={onClose} className="p-4">
-      <div className="flex flex-col pt-8 p-6 modalBgColor relative justify-evenly rounded-3xl items-center max-h-min">
+    <Modal open={open} onClose={onClose} className="modalOuterContainer">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.8 }}
+        transition={{ duration: 0.3 }}
+        className="modalInnerContainer modalBgColor relative items-center"
+      >
         {/* Templates to Choose From */}
         {exerciseData !== null ? (
-          <div className="mt-4 w-full mb-4">
-            <div className="flex justify-between mb-4">
+          <div className="w-full p-4">
+            <div className="flex justify-between mb-4 items-center">
               {/* TODO: For Exercise list we should have access to the log.name (template Name) */}
-              <h2 className="futuraFont text-2xl leading-7 font-medium">
-                Exercise List
-              </h2>
+              <h2 className="futuraFont text-2xl font-medium">Exercise List</h2>
               <button
                 onClick={onClose}
                 className="absolute top-8 right-6 scale-150 darkCharcoal"
@@ -47,31 +52,39 @@ const TemplateDataModal: React.FC<TemplateDataModalProps> = ({
             </div>
             {/* Exercise Activity */}
             <div className="max-h-96 overflow-y-auto overflow-hidden">
-              {exerciseData.map((exercise, eIdx) => (
-                <div
-                  key={(exercise as any).id}
-                  className="rounded-xl mb-4 border border-gray-100 shadow-md relative"
-                >
-                  <h4 className="text-white font-bold p-2 defaultButtonColor">
-                    {exercise.exerciseName}
-                  </h4>
-                  <table className="w-full border-collapse bg-white">
-                    {exercise.sets.map((set, eIdx) => (
-                      <tbody>
-                        <td className="p-2">
-                          <b>{set.setNumber}</b> set
-                        </td>
-                        <td className="p-2">
-                          <b>{set.weight}</b> {set.unit}{" "}
-                        </td>
-                        <td className="p-2 text-right">
-                          <b>{set.reps}</b> reps
-                        </td>
-                      </tbody>
-                    ))}
-                  </table>
-                </div>
-              ))}
+              <AnimatePresence>
+                {exerciseData.map((exercise, eIdx) => (
+                  <motion.div
+                    key={(exercise as any).id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ delay: eIdx * 0.1 }}
+                    className="rounded-xl mb-4 border border-gray-100 shadow-md relative"
+                  >
+                    <h4 className="text-white font-bold p-2 defaultButtonColor">
+                      {exercise.exerciseName}
+                    </h4>
+                    <table className="w-full border-collapse bg-white">
+                      {exercise.sets.map((set, eIdx) => (
+                        <tbody key={eIdx}>
+                          <tr>
+                            <td className="p-2">
+                              <b>{set.setNumber}</b> set
+                            </td>
+                            <td className="p-2">
+                              <b>{set.weight}</b> {set.unit}{" "}
+                            </td>
+                            <td className="p-2 text-right">
+                              <b>{set.reps}</b> reps
+                            </td>
+                          </tr>
+                        </tbody>
+                      ))}
+                    </table>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </div>
           </div>
         ) : null}
@@ -88,7 +101,7 @@ const TemplateDataModal: React.FC<TemplateDataModalProps> = ({
             />
           )}
         </div>
-      </div>
+      </motion.div>
     </Modal>
   );
 };
