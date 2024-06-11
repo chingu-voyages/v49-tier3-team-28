@@ -105,8 +105,9 @@ const TemplatesModal: React.FC<TemplateModalProps> = ({
           <div className="flex justify-center mt-4">
             <BasicRoundedButton
               onClick={onGenerate}
-              label="Start logging"
+              label="Start Logging"
               disabled={!selectedTemplate}
+              buttonClassNames="secondaryButtonColor"
             />
           </div>
         </div>
