@@ -115,7 +115,7 @@ export function CalendarLogViewer({ readonly }: CalendarLogViewerProps) {
                   day={day}
                   outsideCurrentMonth={outsideCurrentMonth}
                   sx={{
-                    color: isSelected ? "black" : "black",
+                    color: "black",
                     fontWeight: 700,
                     "&.MuiPickersDay-root": {
                       borderRadius: "50%",
