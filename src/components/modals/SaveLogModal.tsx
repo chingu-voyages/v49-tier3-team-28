@@ -18,7 +18,7 @@ const SaveLogModal: React.FC<SaveLogModalProps> = ({ open, onClose, data }) => {
     <div>
       <Modal open={open} onClose={onClose}>
         <div className="bg-white fixed inset-0 flex items-center justify-center bg-opacity-70">
-          <div className="flex flex-col gap-4 m-4 mt-10 mb-10 pt-8 pb-8 modalBgColor rounded-3xl w-full max-w-md shadow-lg text-center relative h-fill-available">
+          <div className="flex flex-col gap-4 m-4 mt-10 mb-10 pt-8 pb-8 modalBgColor rounded-3xl w-full max-w-md shadow-lg text-center relative max-h-min">
             <Link href="/user/home" className="absolute top-8 right-6">
               <FiX className="scale-150 darkCharcoal" />
             </Link>

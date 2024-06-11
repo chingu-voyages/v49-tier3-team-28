@@ -11,7 +11,7 @@ interface SuccessModalProps {
 const SuccessModal: React.FC<SuccessModalProps> = ({ open }) => {
   return (
     <Modal open={open}>
-      <div className="flex flex-col gap-4 modalBgColor p-6 rounded-3xl relative justify-evenly h-fill-available ml-4 mr-4 mt-10 mb-10">
+      <div className="flex flex-col gap-4 modalBgColor p-6 rounded-3xl relative justify-evenly max-h-min ml-4 mr-4 mt-10 mb-10">
         <div className="flex justify-center">
           <Image
             src="/success.svg"

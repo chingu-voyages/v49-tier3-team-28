@@ -29,7 +29,7 @@ const TemplateDataModal: React.FC<TemplateDataModalProps> = ({
 
   return (
     <Modal open={open} onClose={onClose} className="p-4">
-      <div className="flex flex-col pt-8 p-6 modalBgColor relative justify-evenly rounded-3xl items-center">
+      <div className="flex flex-col pt-8 p-6 modalBgColor relative justify-evenly rounded-3xl items-center max-h-min">
         {/* Templates to Choose From */}
         {exerciseData !== null ? (
           <div className="mt-4 w-full mb-4">

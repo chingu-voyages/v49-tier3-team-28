@@ -18,7 +18,7 @@ const SaveDraftModal: React.FC<SaveDraftModalProps> = ({
   return (
     <Modal open={open} onClose={onClose}>
       <div className="bg-white fixed inset-0 flex items-center justify-center bg-opacity-70">
-        <div className="m-4 pt-8 mb-80 modalBgColor rounded-3xl w-full max-w-md shadow-lg text-center relative h-fill-available">
+        <div className="m-4 pt-8 pb-8 mb-80 modalBgColor rounded-3xl w-full max-w-md shadow-lg text-center relative max-h-min">
           <button
             onClick={onClose}
             className="absolute top-8 right-6 scale-150 darkCharcoal"
