@@ -85,10 +85,10 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
   return (
     <div>
       <Modal open={open} onClose={onClose}>
-        <div className="bg-white fixed inset-0 flex items-center justify-center bg-opacity-70">
-          <div className="flex flex-col justify-between m-4 pt-8 pb-8 bg-white rounded-3xl w-full max-w-md shadow-lg text-center relative h-fill-available">
+        <div className="bg-white flex justify-center items-center h-full bg-opacity-70">
+          <div className="flex flex-col gap-6 pt-8 pb-8 bg-white w-full max-w-md shadow-lg text-center relative overflow-y-auto max-h-screen">
             <div className="flex justify-between">
-              <h1 className="text-3xl font-bold futuraFont uppercase self-center ml-4">
+              <h1 className="text-3xl font-bold futuraFont uppercase ml-4">
                 Add log as template
               </h1>
               <button onClick={onClose}>
@@ -96,8 +96,8 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
               </button>
             </div>
 
-            <div>
-              <h1 className="verdanaFont text-base mt-2">
+            <div className="ml-4 mr-4">
+              <h1 className="verdanaFont mt-2 text-left text-gray-500 text-sm">
                 Give your template a name
               </h1>
               <input
@@ -107,7 +107,7 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
                 maxLength={50}
                 onChange={(e) => setTemplateName(e.target.value)}
                 placeholder="Template Name"
-                className="mt-2 w-4/5 bg-gray-50 robotoFont h-16 text-xl hover:bg-neutral-300 text-center"
+                className="mt-2 pl-4 w-full bg-gray-50 robotoFont h-16 text-xl hover:bg-neutral-300"
               />
               {errorMessage && (
                 <p className="text-red-500 mt-2 font-light text-sm">
@@ -116,17 +116,14 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
               )}
             </div>
 
-            <div className="m-4">
+            <div className="m-4 text-left flex flex-col gap-8">
               <h1 className="futuraFont font-medium text-xl">
                 Please Review Your Template:
               </h1>
               <div>
                 {data.map((exercise, index) => (
-                  <>
-                    <div
-                      className="flex justify-between items-center mb-1 defaultButtonColor p-2"
-                      key={index}
-                    >
+                  <div key={index}>
+                    <div className="flex justify-between items-center mb-1 defaultButtonColor p-2">
                       <p className="text-white verdanaFont">
                         {exercise.exerciseName}
                       </p>
@@ -136,7 +133,7 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
                         <b>{exercise.sets.length}</b> Sets
                       </p>
                     </div>
-                  </>
+                  </div>
                 ))}
               </div>
               <p className="verdanaFont text-xs mt-4 p-1">
