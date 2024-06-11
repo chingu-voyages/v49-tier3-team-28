@@ -23,7 +23,7 @@ const SaveLogModal: React.FC<SaveLogModalProps> = ({ open, onClose, data }) => {
               <FiX className="scale-150" />
             </Link>
             <img
-              src="/images/create-log-page/modal-splash.jpg"
+              src="/savelog.svg"
               alt="modal-image"
               style={{ height: "50%", width: "50%" }}
               className="self-center mb-4"

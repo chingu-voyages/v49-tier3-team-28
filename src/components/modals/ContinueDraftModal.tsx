@@ -17,13 +17,18 @@ const ContinueDraftModal: React.FC<ContinueDraftModalProps> = ({
   return (
     <Modal open={open} onClose={onClose}>
       <div className="bg-white fixed inset-0 flex items-center justify-center bg-opacity-70">
-        <div className="m-4 mt-20 mb-10 pt-8 pb-8 bg-white rounded-3xl w-full max-w-md sm:w-3/4 shadow-lg text-center relative h-fill-available">
+        <div className="m-4 mt-20 mb-10 pt-8 pb-8 bg-white rounded-3xl w-full max-w-md sm:w-3/4 shadow-lg text-center relative h-fill-available flex flex-col justify-center items-center">
           <button
             onClick={onClose}
             className="absolute top-5 right-5 scale-150"
           >
             <FiX />
           </button>
+          <img
+            src="/incomplete.svg"
+            alt="modal-image"
+            style={{ height: "50%", width: "50%" }}
+          />
           <h2 className="text-2xl font-bold mb-4">Incomplete Exercise Log</h2>
           <p className="text-lg mb-8">
             Keep logging your exercise to track your progress, stay motivated,

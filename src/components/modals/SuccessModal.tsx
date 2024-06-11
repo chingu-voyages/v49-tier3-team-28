@@ -10,10 +10,10 @@ interface SuccessModalProps {
 const SuccessModal: React.FC<SuccessModalProps> = ({ open }) => {
   return (
     <Modal open={open}>
-      <div className="flex flex-col gap-4 bg-white p-6 rounded-3xl relative justify-evenly h-fill-available ml-4 mr-4 mt-10 mb-10">
+      <div className="flex flex-col gap-4 bg-gray-100 p-6 rounded-3xl relative justify-evenly h-fill-available ml-4 mr-4 mt-10 mb-10">
         <div className="flex justify-center">
           <Image
-            src="/images/create-log-page/modal-splash.jpg"
+            src="/success.svg"
             width={250}
             height={250}
             alt="modal-image"
