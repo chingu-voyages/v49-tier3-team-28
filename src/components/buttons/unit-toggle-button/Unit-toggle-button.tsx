@@ -19,6 +19,9 @@ const toggleButtonGroupSx: SxProps<Theme> = {
     "&.Mui-selected": {
       backgroundColor: "#03BB9B",
       color: "white",
+      "&:hover": {
+        backgroundColor: "#03BB9B",
+      },
     },
   },
 };
