@@ -85,8 +85,8 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
   return (
     <div>
       <Modal open={open} onClose={onClose}>
-        <div className="bg-white flex justify-center items-center h-full bg-opacity-70">
-          <div className="flex flex-col gap-6 pt-8 pb-8 bg-white w-full max-w-md shadow-lg text-center relative overflow-y-auto max-h-screen">
+        <div className="bg-white flex justify-center items-center h-full">
+          <div className="flex flex-col gap-6 pt-8 pb-8 bg-white w-full max-w-md text-center relative overflow-y-auto max-h-screen">
             <div className="flex justify-between">
               <h1 className="text-3xl font-bold futuraFont uppercase ml-4">
                 Add log as template
