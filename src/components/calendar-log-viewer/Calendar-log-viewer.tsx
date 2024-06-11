@@ -10,7 +10,7 @@ import {
 } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs, { Dayjs } from "dayjs";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface CalendarLogViewerProps {
   readonly?: boolean;
@@ -174,10 +174,8 @@ export function CalendarLogViewer({ readonly }: CalendarLogViewerProps) {
             <h4 className="text-center">{value?.format("ddd MMMM D, YYYY")}</h4>
           </div>
 
-          <div>
-            {/* Logs for a selected date appear here */}
-            {renderLogsForDay(value, currentLogsByMonthAndYear)}
-          </div>
+          {/* Logs for a selected date appear here */}
+          {renderLogsForDay(value, currentLogsByMonthAndYear)}
         </div>
       )}
     </LocalizationProvider>
@@ -197,21 +195,25 @@ function renderLogsForDay(
 
   const renderedLogData = logs
     .filter((log) => dayjs(log.createdAt).date() === dateData.date())
-    .map((log) => {
-      return renderExerciseTables(log.exercises);
+    .map((log, idx) => {
+      return renderExerciseTables(log.exercises, `${log._id}-${idx}`);
     });
 
   return renderedLogData.length > 0
     ? renderedLogData
-    : [<p className="text-center transition-opacity">No logs for this date</p>];
+    : [
+        <p key={"no-logs"} className="text-center transition-opacity">
+          No logs for this date
+        </p>,
+      ];
 }
 
-const renderExerciseTables = (ex: ExerciseActivity[]) => {
+const renderExerciseTables = (ex: ExerciseActivity[], idxKey: string) => {
   return (
-    <div className="p-4">
-      {ex.map((exercise) => {
+    <div className="p-4" key={idxKey}>
+      {ex.map((exercise, idx) => {
         return (
-          <>
+          <React.Fragment key={(exercise as any)._id}>
             <div>
               <h4 className="text-white text-sm font-bold p-2 defaultButtonColor">
                 {exercise.exerciseName}
@@ -221,7 +223,7 @@ const renderExerciseTables = (ex: ExerciseActivity[]) => {
               <tbody>
                 {exercise.sets.map((set, setIndex) => (
                   <tr
-                    key={(set as any).id}
+                    key={`${(exercise as any)._id}-${(set as any)._id}`}
                     className="odd:bg-orange-100 text-center text-sm"
                   >
                     <td className="p-2 text-center">{setIndex + 1}</td>
@@ -245,9 +247,13 @@ const renderExerciseTables = (ex: ExerciseActivity[]) => {
                 ))}
               </tbody>
             </table>
-          </>
+          </React.Fragment>
         );
       })}
     </div>
   );
+};
+
+const generateRandomNumberBetween = (min: number, max: number) => {
+  return Math.floor(Math.random() * (max - min + 1) + min);
 };
