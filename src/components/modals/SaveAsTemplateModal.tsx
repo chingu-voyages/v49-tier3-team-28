@@ -2,6 +2,7 @@ import { LoggingClient } from "@/app/clients/logging-client/logging-client";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { CircularProgress, Modal } from "@mui/material";
+import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { FiX } from "react-icons/fi";
 import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
@@ -66,6 +67,7 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
           logs: logData,
         });
         setIsModalOpen(true);
+        onClose();
       } catch (error: any) {
         setErrorMessage(error.message);
         return;
@@ -82,11 +84,22 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
       </div>
     );
   }
+
   return (
     <div>
       <Modal open={open} onClose={onClose}>
-        <div className="bg-white flex justify-center items-center h-full">
-          <div className="flex flex-col gap-6 pt-8 pb-8 bg-white w-full max-w-md text-center relative overflow-y-auto max-h-screen">
+        <motion.div
+          initial={{ opacity: 0, y: "-100vh" }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="bg-white fixed inset-0 flex items-center justify-center"
+        >
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.3 }}
+            className="flex flex-col gap-6 pt-8 pb-8 bg-white w-full max-w-md text-center relative overflow-y-auto max-h-screen"
+          >
             <div className="flex justify-between">
               <h1 className="text-3xl font-bold futuraFont uppercase ml-4">
                 Add log as template
@@ -122,7 +135,12 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
               </h1>
               <div>
                 {data.map((exercise, index) => (
-                  <div key={index}>
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.2 * (index + 1), duration: 0.3 }}
+                  >
                     <div className="flex justify-between items-center mb-1 defaultButtonColor p-2">
                       <p className="text-white verdanaFont">
                         {exercise.exerciseName}
@@ -133,7 +151,7 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
                         <b>{exercise.sets.length}</b> Sets
                       </p>
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
               <p className="verdanaFont text-xs mt-4 p-1">
@@ -150,8 +168,8 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
                 disabled={templateName?.length === 0}
               />
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </Modal>
       <SuccessModal open={isModalOpen} />
     </div>
