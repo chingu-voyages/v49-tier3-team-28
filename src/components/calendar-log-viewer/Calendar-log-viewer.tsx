@@ -84,7 +84,7 @@ export function CalendarLogViewer({ readonly }: CalendarLogViewerProps) {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div>
+      <div className="flex justify-center flex-col p-4">
         {isLoading && (
           <div className="absolute left-1/2 inset-y-1/4">
             <CircularProgress />
@@ -115,9 +115,26 @@ export function CalendarLogViewer({ readonly }: CalendarLogViewerProps) {
                   day={day}
                   outsideCurrentMonth={outsideCurrentMonth}
                   sx={{
-                    backgroundColor: isSelected ? "#2F4858" : "inherit",
-                    color: isSelected ? "white" : "inherit",
+                    color: isSelected ? "black" : "black",
                     fontWeight: 700,
+                    "&.MuiPickersDay-root": {
+                      borderRadius: "50%",
+                      border: isSelected ? "2px solid var(--orange)" : "none",
+                    },
+                    "&.MuiPickersDay-root:hover": {
+                      opacity: 0.5,
+                    },
+                    "&.Mui-selected": {
+                      backgroundColor: "var(--orange)",
+                      color: "white",
+                    },
+                    "&.Mui-selected:hover": {
+                      backgroundColor: "var(--orange)",
+                      opacity: 0.8,
+                    },
+                    "&.Mui-selected:focus": {
+                      backgroundColor: "var(--orange)",
+                    },
                   }}
                 />
               );

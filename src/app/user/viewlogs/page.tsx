@@ -1,6 +1,8 @@
 "use client";
 import { CalendarLogViewer } from "@/components/calendar-log-viewer/Calendar-log-viewer";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function ViewLogs() {
@@ -13,7 +15,26 @@ export default function ViewLogs() {
   }
 
   return (
-    <div>
+    <div className="p-4">
+      <div className="flex gap-8">
+        <div className="self-center cursor-pointer">
+          <Link href={"/user/home"}>
+            <Image
+              src="/images/calendar-log/back-button-left.svg"
+              height={48}
+              width={48}
+              alt="Back button"
+            />
+          </Link>
+        </div>
+        <div>
+          <h1
+            className={`text-xl leading-7 futuraFont font-bold uppercase py-6`}
+          >
+            My Logs
+          </h1>
+        </div>
+      </div>
       <CalendarLogViewer />
     </div>
   );
