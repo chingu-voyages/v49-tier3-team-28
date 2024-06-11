@@ -29,21 +29,24 @@ const TemplateDataModal: React.FC<TemplateDataModalProps> = ({
 
   return (
     <Modal open={open} onClose={onClose} className="p-4">
-      <div className="flex flex-col p-8 bg-white relative justify-evenly w-full rounded-3xl">
+      <div className="flex flex-col pt-8 p-6 modalBgColor relative justify-evenly rounded-3xl items-center">
         {/* Templates to Choose From */}
         {exerciseData !== null ? (
-          <div className="mt-4 w-full">
+          <div className="mt-4 w-full mb-4">
             <div className="flex justify-between mb-4">
               {/* TODO: For Exercise list we should have access to the log.name (template Name) */}
               <h2 className="futuraFont text-2xl leading-7 font-medium">
                 Exercise List
               </h2>
-              <button onClick={onClose}>
-                <FiX className="size-5" />
+              <button
+                onClick={onClose}
+                className="absolute top-8 right-6 scale-150 darkCharcoal"
+              >
+                <FiX />
               </button>
             </div>
             {/* Exercise Activity */}
-            <div className="min-h-96 max-h-96 overflow-y-auto overflow-hidden">
+            <div className="max-h-96 overflow-y-auto overflow-hidden">
               {exerciseData.map((exercise, eIdx) => (
                 <div
                   key={(exercise as any).id}
@@ -72,20 +75,16 @@ const TemplateDataModal: React.FC<TemplateDataModalProps> = ({
             </div>
           </div>
         ) : null}
-        <div className="flex flex-col justify-between h-28 mt-4 w-full">
+        <div className="flex flex-col gap-4 h-28">
           <BasicRoundedButton
             onClick={onClose}
             label="Back to Selection"
-            buttonClassNames="!w-full"
-            customMaterialButtonStyles={{
-              backgroundColor: "#95A1A8",
-            }}
+            buttonClassNames="defaultButtonColor"
           />
           {pathname == "/user/mytemplates" && (
             <BasicRoundedButton
               onClick={() => handleUseTemplate(exerciseData!)}
               label="Use Template"
-              buttonClassNames="!w-full"
             />
           )}
         </div>
