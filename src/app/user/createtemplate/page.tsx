@@ -78,9 +78,6 @@ export default function CreateTemplate() {
   };
 
   const handleSetCountUpdate = (id: string, setCount: number) => {
-    const index = selectedExercises.findIndex((ex) => ex.id === id);
-    if (index === -1) return;
-
     setSelectedExercises((prev) =>
       prev.map((ex) => {
         if (ex.id === id) {
