@@ -232,9 +232,9 @@ export default function CreateLog() {
     <div className="flex flex-col gap-y-10 justify-center w-screen mt-4 p-4">
       {/* Header */}
       <motion.div
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
         className="flex justify-between"
       >
         <h1 className="text-3xl font-bold futuraFont uppercase self-center">
@@ -254,7 +254,7 @@ export default function CreateLog() {
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
           className="self-center"
         >
           <BasicRoundedButton
@@ -282,9 +282,9 @@ export default function CreateLog() {
 
       {/* Search Bar */}
       <motion.div
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.5, delay: 0.7 }}
         className="relative flex flex-col min-w-80"
       >
         <div className="relative flex items-center">
