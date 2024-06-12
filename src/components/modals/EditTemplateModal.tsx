@@ -135,7 +135,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
           <div className="self-center cursor-pointer">
             <button onClick={onClose}>
               <Image
-                src="/images/calendar-log/back-button-left.svg"
+                src="/images/buttons/back-button-left.svg"
                 height={48}
                 width={48}
                 alt="Back button"
@@ -143,7 +143,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
             </button>
           </div>
           <div>
-            <h1 className="text-3xl leading-7 futuraFont font-bold uppercase py-6">
+            <h1 className="text-2xl leading-7 openSansFont font-bold uppercase py-6">
               Edit Template
             </h1>
           </div>
@@ -172,45 +172,47 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
         </div>
 
         {/* Search Bar */}
-        {toggleSearchBar && (
-          <div className="relative flex flex-col w-full">
-            <div className="relative flex items-center">
-              <FiSearch className="absolute left-3" />
-              <input
-                type="text"
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="Search for an exercise to add"
-                className="border rounded-xl pl-10 pr-10 p-2 w-full bg-gray-50"
-              />
-              {searchInput && (
-                <FiX
-                  className="absolute right-3 cursor-pointer"
-                  onClick={() => setSearchInput("")}
+        <motion.div layout>
+          {toggleSearchBar && (
+            <div className="relative flex flex-col w-full">
+              <div className="relative flex items-center">
+                <FiSearch className="absolute left-3" />
+                <input
+                  type="text"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  placeholder="Search for an exercise to add"
+                  className="border rounded-xl pl-10 pr-10 p-2 w-full bg-gray-50"
                 />
+                {searchInput && (
+                  <FiX
+                    className="absolute right-3 cursor-pointer"
+                    onClick={() => setSearchInput("")}
+                  />
+                )}
+              </div>
+
+              {searchResults.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="absolute top-full bg-gray-50 left-0 right-0 flex flex-col border rounded shadow-lg z-10 overflow-y-auto max-h-48"
+                >
+                  {searchResults.map((exercise: Exercise) => (
+                    <div
+                      key={exercise.id}
+                      onClick={() => handleSelectExercise(exercise)}
+                      className="cursor-pointer p-2 border-b hover:bg-orange-500 hover:text-white"
+                    >
+                      {exercise.label}
+                    </div>
+                  ))}
+                </motion.div>
               )}
             </div>
-
-            {searchResults.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="absolute top-full bg-gray-50 left-0 right-0 flex flex-col border rounded shadow-lg z-10 overflow-y-auto max-h-48"
-              >
-                {searchResults.map((exercise: Exercise) => (
-                  <div
-                    key={exercise.id}
-                    onClick={() => handleSelectExercise(exercise)}
-                    className="cursor-pointer p-2 border-b hover:bg-orange-500 hover:text-white"
-                  >
-                    {exercise.label}
-                  </div>
-                ))}
-              </motion.div>
-            )}
-          </div>
-        )}
+          )}
+        </motion.div>
 
         {/* Exercise Table */}
         <div className="w-full overflow-y-auto">
