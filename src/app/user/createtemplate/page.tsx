@@ -10,6 +10,8 @@ import { Set } from "@/models/set.model";
 import { Divider } from "@mui/material";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import mongoose from "mongoose";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiSearch, FiX } from "react-icons/fi";
@@ -134,15 +136,30 @@ export default function CreateTemplate() {
   };
 
   return (
-    <div className="flex flex-col justify-center w-screen mt-8 mb-10 p-4">
+    <motion.div
+      className="flex flex-col justify-center w-screen p-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       {/* Header */}
-      <div className="flex justify-between">
-        <h1 className="text-3xl font-bold futuraFont uppercase self-center">
-          Create a Workout Template
-        </h1>
-        <button>
-          <FiX className="size-8 text-white blueGray rounded-full ml-2 p-2 hover:bg-stone-500" />
-        </button>
+      <div className="flex gap-8">
+        <div className="self-center cursor-pointer">
+          <Link href="/user/mytemplates">
+            <Image
+              src="/images/calendar-log/back-button-left.svg"
+              height={48}
+              width={48}
+              alt="Back button"
+            />
+          </Link>
+        </div>
+        <div>
+          <h1 className="text-3xl leading-7 futuraFont font-bold uppercase py-6">
+            Create a Template
+          </h1>
+        </div>
       </div>
 
       <div className="flex mt-8">
@@ -160,7 +177,14 @@ export default function CreateTemplate() {
           className="p-2 bg-gray-50 w-full robotoFont h-16 text-xl hover:bg-neutral-300"
         />
         {errorMessage && (
-          <p className="text-red-500 text-center mt-4">{errorMessage}</p>
+          <motion.p
+            className="text-red-500 text-center mt-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            {errorMessage}
+          </motion.p>
         )}
       </div>
       <div className="mt-2">
@@ -192,7 +216,12 @@ export default function CreateTemplate() {
         </div>
 
         {searchResults.length > 0 && (
-          <div className="absolute top-full bg-gray-50 left-0 right-0 flex flex-col border rounded shadow-lg z-10 overflow-y-auto max-h-48">
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="absolute top-full bg-gray-50 left-0 right-0 flex flex-col border rounded shadow-lg z-10 overflow-y-auto max-h-48"
+          >
             {searchResults.map((exercise: Exercise) => (
               <div
                 key={exercise.id}
@@ -202,7 +231,7 @@ export default function CreateTemplate() {
                 {exercise.label}
               </div>
             ))}
-          </div>
+          </motion.div>
         )}
       </div>
       <div className="mt-2">
@@ -237,7 +266,8 @@ export default function CreateTemplate() {
             <BasicRoundedButton
               onClick={handleSaveLog}
               label="Save Template"
-              buttonClassNames="defaultButtonColor"
+              buttonClassNames="default
+              ButtonColor"
               disabled={
                 selectedExercises.length === 0 ||
                 !templateName ||
@@ -247,9 +277,8 @@ export default function CreateTemplate() {
           </motion.div>
         </>
       </LayoutGroup>
-
       <SuccessModal open={isModalOpen} />
-    </div>
+    </motion.div>
   );
 }
 

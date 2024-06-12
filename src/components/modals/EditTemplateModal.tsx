@@ -5,6 +5,7 @@ import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Log } from "@/models/log.model";
 import { Set } from "@/models/set.model";
 import { Modal } from "@mui/material";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { FiMinus, FiPlus, FiSearch, FiX } from "react-icons/fi";
@@ -123,7 +124,12 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
 
   return (
     <Modal open={open} onClose={onClose}>
-      <div className="flex flex-col bg-white p-8 rounded-xl relative gap-4 h-fill-available">
+      <motion.div
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="flex flex-col bg-white p-8 rounded-xl relative gap-4 h-fill-available"
+      >
         {/* Header */}
         <div className="flex gap-8">
           <div className="self-center cursor-pointer">
@@ -137,9 +143,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
             </button>
           </div>
           <div>
-            <h1
-              className={`text-3xl leading-7 futuraFont font-bold uppercase py-6`}
-            >
+            <h1 className="text-3xl leading-7 futuraFont font-bold uppercase py-6">
               Edit Template
             </h1>
           </div>
@@ -186,8 +190,14 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
                 />
               )}
             </div>
+
             {searchResults.length > 0 && (
-              <div className="absolute top-full bg-gray-50 left-0 right-0 flex flex-col border rounded shadow-lg z-10 overflow-y-auto max-h-48">
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="absolute top-full bg-gray-50 left-0 right-0 flex flex-col border rounded shadow-lg z-10 overflow-y-auto max-h-48"
+              >
                 {searchResults.map((exercise: Exercise) => (
                   <div
                     key={exercise.id}
@@ -197,7 +207,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
                     {exercise.label}
                   </div>
                 ))}
-              </div>
+              </motion.div>
             )}
           </div>
         )}
@@ -205,11 +215,14 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
         {/* Exercise Table */}
         <div className="w-full overflow-y-auto">
           {selectedExercises.map((exercise, eIdx) => (
-            <div
+            <motion.div
               key={eIdx}
               className={`text-center flex justify-between ${
                 eIdx % 2 === 0 ? "lightTanOrange" : "bg-white"
               }`}
+              initial={{ x: -50, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: eIdx * 0.1 }}
             >
               <div className="flex justify-between w-full items-center pl-2">
                 <div className="p-1">{exercise.exerciseName}</div>
@@ -231,7 +244,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
                   <FiMinus className="text-red-500" />
                 </button>
               </div>
-            </div>
+            </motion.div>
           ))}
           {!toggleSearchBar && (
             <div>
@@ -248,14 +261,19 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
           )}
         </div>
 
-        <div className="flex self-center">
+        <motion.div
+          className="flex self-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: selectedExercises.length * 0.1 }}
+        >
           <BasicRoundedButton
             label="Save"
             onClick={handleSave}
             buttonClassNames="defaultButtonColor"
           />
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </Modal>
   );
 };

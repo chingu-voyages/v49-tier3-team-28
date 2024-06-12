@@ -50,9 +50,9 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
               sets: exerciseActivity.sets.map((set, index) => {
                 return {
                   setNumber: index + 1,
-                  weight: set.weight,
+                  weight: 0,
                   unit: unit,
-                  reps: set.reps,
+                  reps: 0,
                 };
               }),
             };
