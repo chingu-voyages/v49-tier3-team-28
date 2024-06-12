@@ -47,7 +47,10 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
     name: string;
     id: string;
   } | null>(null);
+
   const [isBusy, setIsBusy] = useState<boolean>(false);
+  const [isPageLoading, setIsPageLoading] = useState<boolean>(false);
+
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [updateTemplateErrorMessage, setUpdateTemplateErrorMessage] = useState<
     string | null
@@ -171,7 +174,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
           <div className="self-center cursor-pointer">
             <Link href={"/user/home"}>
               <Image
-                src="/images/calendar-log/back-button-left.svg"
+                src="/images/buttons/back-button-left.svg"
                 height={48}
                 width={48}
                 alt="Back button"
@@ -180,7 +183,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
           </div>
           <div>
             <h1
-              className={`text-3xl leading-7 futuraFont font-bold uppercase py-6`}
+              className={`text-xl leading-7 openSansFont font-bold uppercase py-6`}
             >
               My Templates
             </h1>
@@ -194,11 +197,11 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           {filteredTemplates.length > 0 ? (
-            <h1 className="futuraFont font-medium text-2xl py-2">
+            <h1 className="openSansFont font-medium text-md py-2 leading-7">
               Please review or edit your templates:
             </h1>
           ) : (
-            <h1 className="futuraFont font-medium text-2xl py-2">
+            <h1 className="openSansFont font-medium text-2xl py-2 leading-7">
               There are currently no templates. Create one below.
             </h1>
           )}
@@ -268,11 +271,19 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
           transition={{ duration: 0.5, delay: 0.7 }}
           className="flex flex-col justify-center items-center gap-4 mt-10"
         >
-          <Link href="/user/createtemplate">
+          <Link
+            href="/user/createtemplate"
+            onClick={() => setIsPageLoading(true)}
+          >
             <BasicRoundedButton
               label="Create New Template"
-              buttonClassNames="defaultButtonColor"
-            />
+              buttonClassNames="defaultButtonColor !justify-evenly"
+              disabled={isPageLoading}
+            >
+              {isPageLoading && (
+                <CircularProgress size={30} sx={{ color: "white" }} />
+              )}
+            </BasicRoundedButton>
           </Link>
           <BasicRoundedButton
             onClick={() => handleUseTemplate(selectedTemplate!)}
