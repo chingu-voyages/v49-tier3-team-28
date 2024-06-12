@@ -27,7 +27,7 @@ export default function LandingPage() {
   if (status === "loading")
     return (
       <div className="flex justify-center" style={{ marginTop: "40%" }}>
-        <CircularProgress />;
+        <CircularProgress />
       </div>
     );
 
@@ -60,7 +60,7 @@ export default function LandingPage() {
               }
               customMaterialButtonStyles={{
                 fontSize: "12px",
-                fontFamily: "Roboto",
+                fontFamily: "Roboto, sans-serif",
                 lineHeight: "15px",
                 backgroundColor: "#95A1A8",
               }}
