@@ -86,14 +86,7 @@ export function SigninForm() {
 
   const signInUserWithGoogle = async () => {
     setIsLoading(true);
-
-    const res = await AuthClient.signInWithGoogle();
-
-    if (!res.success) {
-      setAppError({ error: true, message: res.errorMessage! });
-      setIsLoading(false);
-      return;
-    }
+    await AuthClient.signInWithGoogle();
     setIsLoading(false);
   };
 
