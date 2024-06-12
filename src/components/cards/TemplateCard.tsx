@@ -21,7 +21,6 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
   isSelected,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  console.log(isSelected);
 
   const toggleAccordion = (e: React.MouseEvent) => {
     e.stopPropagation();
