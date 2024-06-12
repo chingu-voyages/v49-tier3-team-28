@@ -8,7 +8,7 @@ import { Modal } from "@mui/material";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { FiMinus, FiPlus, FiSearch, FiX } from "react-icons/fi";
+import { FiMinusCircle, FiPlus, FiSearch, FiX } from "react-icons/fi";
 
 interface EditTemplateModalProps {
   open: boolean;
@@ -241,7 +241,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
 
               <div className="flex pr-2 items-center">
                 <button onClick={() => handleDeleteExercise(eIdx)}>
-                  <FiMinus className="text-red-500" />
+                  <FiMinusCircle className="text-red-500" />
                 </button>
               </div>
             </motion.div>
