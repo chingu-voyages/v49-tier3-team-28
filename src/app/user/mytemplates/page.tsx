@@ -9,6 +9,7 @@ import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Log } from "@/models/log.model";
 import { CircularProgress } from "@mui/material";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -158,13 +159,46 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
   return (
     <div>
       <div className="flex flex-col justify-evenly min-h-screen p-4">
-        <div className="flex justify-between">
-          <h1 className="futuraFont text-xl font-bold uppercase">
-            Choose From Templates
-          </h1>
-          <FiX className="size-8 text-white blueGray rounded-full ml-2 p-2 hover:bg-stone-500" />
+        {/* Header */}
+        <div className="flex gap-8">
+          <div className="self-center cursor-pointer">
+            <Link href={"/user/home"}>
+              <Image
+                src="/images/calendar-log/back-button-left.svg"
+                height={48}
+                width={48}
+                alt="Back button"
+              />
+            </Link>
+          </div>
+          <div>
+            <h1
+              className={`text-xl leading-7 futuraFont font-bold uppercase py-6`}
+            >
+              My Templates
+            </h1>
+          </div>
         </div>
 
+        {/* Secondary Header */}
+        {filteredTemplates.length > 0 ? (
+          <h1 className="futuraFont font-medium text-xl py-2">
+            Please review or edit your templates:
+          </h1>
+        ) : (
+          <h1 className="futuraFont font-medium text-xl py-2">
+            There are currently no templates. Create one below
+          </h1>
+        )}
+        <div>
+          {errorMessage && (
+            <div className="text-red-500 text-center verdanaFont">
+              {errorMessage}
+            </div>
+          )}
+        </div>
+
+        {/* Search Filter */}
         <div className="relative flex items-center mt-4 mb-4">
           <FiSearch className="absolute left-3" />
           <input
@@ -182,22 +216,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
           )}
         </div>
 
-        {filteredTemplates.length > 0 ? (
-          <h1 className="futuraFont font-medium text-xl py-2">
-            Please choose one template to start
-          </h1>
-        ) : (
-          <h1 className="futuraFont font-medium text-xl py-2">
-            There are currently no templates. Create one below
-          </h1>
-        )}
-        <div>
-          {errorMessage && (
-            <div className="text-red-500 text-center verdanaFont">
-              {errorMessage}
-            </div>
-          )}
-        </div>
+        {/* Templates */}
         <div className="flex flex-wrap -mx-2">
           {filteredTemplates.map((template, idx) => (
             <div key={idx} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
