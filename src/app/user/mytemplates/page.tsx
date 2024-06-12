@@ -2,13 +2,13 @@
 import { LoggingClient } from "@/app/clients/logging-client/logging-client";
 import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
 import TemplateCard from "@/components/cards/TemplateCard";
-import ConfirmDeleteDialog from "@/components/dialogs/Confirmation-dialog";
+import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import EditTemplateModal from "@/components/modals/EditTemplateModal";
 import TemplateDataModal from "@/components/modals/TemplateDataModal";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Log } from "@/models/log.model";
-import { Button, CircularProgress } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -265,37 +265,19 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
         templateId={selectedTemplateId}
         updateTemplateError={updateTemplateErrorMessage}
       />
-      <ConfirmDeleteDialog
-        title={`Delete '${templateDataToDelete?.name}'`}
-        message={`Please confirm the deletion of this template.`}
+      <ConfirmDeleteModal
+        title={`Are you sure you want to delete '${templateDataToDelete?.name}'?`}
+        message={`This action is permanent and can't be undone.`}
         onClose={() => {
           setIsConfirmDeleteTemplateModalOpen(false);
           setTemplateDataDelete(null);
         }}
         open={isConfirmDeleteTemplateModalOpen}
-        actionButtons={[
-          <Button
-            color="primary"
-            sx={{ textTransform: "none" }}
-            onClick={() => {
-              setIsConfirmDeleteTemplateModalOpen(false);
-              setTemplateDataDelete(null);
-            }}
-          >
-            Cancel
-          </Button>,
-          <Button
-            color="error"
-            sx={{ fontWeight: "bold", textTransform: "none" }}
-            onClick={() => {
-              templateDataToDelete?.id &&
-                handleDeleteTemplate(templateDataToDelete.id);
-              setIsConfirmDeleteTemplateModalOpen(false);
-            }}
-          >
-            Delete
-          </Button>,
-        ]}
+        onDelete={() => {
+          templateDataToDelete?.id &&
+            handleDeleteTemplate(templateDataToDelete.id);
+          setIsConfirmDeleteTemplateModalOpen(false);
+        }}
       />
     </div>
   );
