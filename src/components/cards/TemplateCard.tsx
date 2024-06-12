@@ -10,6 +10,7 @@ interface TemplateCardProps {
   onClick: () => void;
   onDelete: () => void;
   onEdit: () => void;
+  isSelected: boolean;
 }
 
 const TemplateCard: React.FC<TemplateCardProps> = ({
@@ -17,8 +18,10 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
   onClick,
   onDelete,
   onEdit,
+  isSelected,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  console.log(isSelected);
 
   const toggleAccordion = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -45,7 +48,13 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
   return (
     <div className="border shadow-md bg-white cursor-pointer" onClick={onClick}>
       <div>
-        <div className="flex justify-between items-center relative text-lg p-4 cursor-pointer lightTanOrange ">
+        <div
+          className={`flex justify-between items-center relative text-lg p-4 cursor-pointer ${
+            isSelected
+              ? "bg-orange-500 text-white"
+              : "lightTanOrange text-black"
+          }`}
+        >
           <p className="verdanaFont">{data.name}</p>
           <div className="flex items-center gap-2">
             <button

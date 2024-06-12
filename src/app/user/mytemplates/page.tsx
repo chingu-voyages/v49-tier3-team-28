@@ -79,6 +79,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
   const handleTemplateClick = (template: Log) => {
     setSelectedTemplate(template.exercises);
     setSelectedTemplateName(template.name!);
+    setSelectedTemplateId(template._id!);
   };
 
   const handleConfirmDeleteTemplate = (
@@ -254,6 +255,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
                 }
                 onEdit={() => handleEditTemplate(template._id!)}
                 data={template}
+                isSelected={template._id === selectedTemplateId}
               />
             </motion.div>
           ))}
