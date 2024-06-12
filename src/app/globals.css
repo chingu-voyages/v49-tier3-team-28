@@ -6,6 +6,10 @@
 
 /* This is the Rowdies font from google fonts */
 @import url("https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap");
+
+/* Open sans font from google fonts */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
 :root {
   font-family: futura-pt, sans-serif;
   margin: 0;
@@ -62,6 +66,10 @@ body {
 
 .futuraFont {
   font-family: futura-pt-condensed, sans-serif;
+}
+
+.openSansFont {
+  font-family: "Open Sans", sans-serif;
 }
 
 .robotoFont {
