@@ -158,7 +158,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
 
   return (
     <div>
-      <div className="flex flex-col justify-evenly min-h-screen p-4">
+      <div className="flex flex-col min-h-screen p-4">
         {/* Header */}
         <div className="flex gap-8">
           <div className="self-center cursor-pointer">
@@ -173,7 +173,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
           </div>
           <div>
             <h1
-              className={`text-xl leading-7 futuraFont font-bold uppercase py-6`}
+              className={`text-3xl leading-7 futuraFont font-bold uppercase py-6`}
             >
               My Templates
             </h1>
@@ -182,12 +182,12 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
 
         {/* Secondary Header */}
         {filteredTemplates.length > 0 ? (
-          <h1 className="futuraFont font-medium text-xl py-2">
+          <h1 className="futuraFont font-medium text-2xl py-2">
             Please review or edit your templates:
           </h1>
         ) : (
-          <h1 className="futuraFont font-medium text-xl py-2">
-            There are currently no templates. Create one below
+          <h1 className="futuraFont font-medium text-2xl py-2">
+            There are currently no templates. Create one below.
           </h1>
         )}
         <div>
@@ -231,9 +231,12 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
             </div>
           ))}
         </div>
-        <div className="flex justify-center h-28">
+        <div className="flex justify-center mt-10">
           <Link href="/user/createtemplate">
-            <BasicRoundedButton label="Create New Template" />
+            <BasicRoundedButton
+              label="Create New Template"
+              buttonClassNames="defaultButtonColor"
+            />
           </Link>
         </div>
       </div>
