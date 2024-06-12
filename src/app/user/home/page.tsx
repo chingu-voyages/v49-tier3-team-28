@@ -2,10 +2,10 @@
 import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
 import { CalendarLogViewer } from "@/components/calendar-log-viewer/Calendar-log-viewer";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { CircularProgress, Link } from "@mui/material";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -99,15 +99,12 @@ export default function LandingPage() {
               isPageLoadingStartViewLogs
             }
             endIcon={
-              <ArrowForwardIcon
-                sx={{
-                  background: "white",
-                  color: "#143452",
-                  borderRadius: "50%",
-                  "&.MuiSvgIcon-root": {
-                    fontSize: "40px",
-                  },
-                }}
+              <Image
+                src="/images/buttons/go-button.svg"
+                alt="start-logging"
+                width={48}
+                height={48}
+                className="relative left-1.5"
               />
             }
           >
