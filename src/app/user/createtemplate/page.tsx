@@ -8,6 +8,7 @@ import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Set } from "@/models/set.model";
 import { Divider } from "@mui/material";
+import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import mongoose from "mongoose";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -208,33 +209,45 @@ export default function CreateTemplate() {
         <Divider className="blueGray" />
       </div>
       {/* Selected Exercises (Exercise Log) */}
-      <div className="flex flex-col mt-8">
-        {selectedExercises.map((exercise) => (
-          <div
-            className="rounded-xl mb-4 border border-gray-100 shadow-md relative"
-            key={exercise.id}
-          >
-            <TemplateExerciseTable
-              exerciseActivity={exercise}
-              onDeleteExercise={handleDeleteExercise}
-              onSetCountChange={handleSetCountUpdate}
-            />
+      <LayoutGroup>
+        <>
+          <div className="flex flex-col mt-8">
+            <AnimatePresence>
+              {selectedExercises.map((exercise) => (
+                <motion.div
+                  layout
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                  className="rounded-xl mb-4 border border-gray-100 shadow-md relative"
+                  exit={{ opacity: 0, position: "relative", x: "-100vw" }}
+                  key={exercise.id}
+                >
+                  <TemplateExerciseTable
+                    exerciseActivity={exercise}
+                    onDeleteExercise={handleDeleteExercise}
+                    onSetCountChange={handleSetCountUpdate}
+                  />
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
-        ))}
-      </div>
-      {/* Save Button */}
-      <div className="flex justify-center gap-y-9 mt-8">
-        <BasicRoundedButton
-          onClick={handleSaveLog}
-          label="Save Template"
-          buttonClassNames="defaultButtonColor"
-          disabled={
-            selectedExercises.length === 0 ||
-            !templateName ||
-            templateName.trim() === ""
-          }
-        ></BasicRoundedButton>
-      </div>
+          {/* Save Button */}
+          <motion.div layout className="flex justify-center gap-y-9 mt-8">
+            <BasicRoundedButton
+              onClick={handleSaveLog}
+              label="Save Template"
+              buttonClassNames="defaultButtonColor"
+              disabled={
+                selectedExercises.length === 0 ||
+                !templateName ||
+                templateName.trim() === ""
+              }
+            ></BasicRoundedButton>
+          </motion.div>
+        </>
+      </LayoutGroup>
+
       <SuccessModal open={isModalOpen} />
     </div>
   );
