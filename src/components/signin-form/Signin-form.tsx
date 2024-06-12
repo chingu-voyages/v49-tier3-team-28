@@ -94,11 +94,15 @@ export function SigninForm() {
 
   return (
     <div className="mt-6">
-      <h1 className={"font-bold leading-7 text-xl uppercase mt-14 p-5"}>
+      <h1
+        className={
+          "font-bold openSansFont leading-7 text-2xl uppercase mt-14 pl-5"
+        }
+      >
         Welcome back!
       </h1>
       <div>
-        <h2 className="font-normal leading-7 text-xs p-5">
+        <h2 className="font-normal leading-7 text-sm pl-5 robotoFont">
           Sign in to continue your journey
         </h2>
       </div>
