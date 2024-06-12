@@ -8,7 +8,7 @@ const config: Config = {
   ],
   theme: {
     fontFamily: {
-      sans: ["futura-pt", "helvetica", "Rowdies", "sans-serif"],
+      sans: ["helvetica", "Rowdies", "sans-serif"],
     },
     extend: {
       height: {
