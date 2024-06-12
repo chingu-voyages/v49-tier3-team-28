@@ -92,7 +92,7 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
           initial={{ opacity: 0, y: "-100vh" }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="bg-white fixed inset-0 flex items-center justify-center"
+          className="flex flex-col bg-white p-2 rounded-xl relative gap-4 h-fill-available"
         >
           <motion.div
             initial={{ opacity: 0 }}
@@ -101,11 +101,11 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
             className="flex flex-col gap-6 pt-8 pb-8 bg-white w-full max-w-md text-center relative overflow-y-auto max-h-screen"
           >
             <div className="flex justify-between">
-              <h1 className="text-3xl font-bold futuraFont uppercase ml-4">
+              <h1 className="text-2xl font-bold openSansFont uppercase ml-4 text-nowrap self-center">
                 Add log as template
               </h1>
               <button onClick={onClose}>
-                <FiX className="size-8 text-white blueGray rounded-full ml-2 mr-4 p-2 hover:bg-stone-500" />
+                <FiX className="size-12 text-white blueGray rounded-full ml-2 mr-4 p-2 hover:bg-stone-500" />
               </button>
             </div>
 
@@ -130,8 +130,8 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
             </div>
 
             <div className="m-4 text-left flex flex-col gap-8">
-              <h1 className="futuraFont font-medium text-xl">
-                Please Review Your Template:
+              <h1 className="openSansFont font-medium text-lg leading-7">
+                Please review your template:
               </h1>
               <div>
                 {data.map((exercise, index) => (
