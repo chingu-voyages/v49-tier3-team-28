@@ -205,8 +205,13 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
         {/* Exercise Table */}
         <div className="w-full overflow-y-auto">
           {selectedExercises.map((exercise, eIdx) => (
-            <div key={eIdx} className="text-center flex justify-between">
-              <div className="flex justify-between w-full modalBgColor items-center pl-2">
+            <div
+              key={eIdx}
+              className={`text-center flex justify-between ${
+                eIdx % 2 === 0 ? "lightTanOrange" : "bg-white"
+              }`}
+            >
+              <div className="flex justify-between w-full items-center pl-2">
                 <div className="p-1">{exercise.exerciseName}</div>
                 <div className="flex gap-2 items-center mr-2">
                   <input
@@ -221,26 +226,27 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
                 </div>
               </div>
 
-              <div className="flex pr-2 modalBgColor items-center">
+              <div className="flex pr-2 items-center">
                 <button onClick={() => handleDeleteExercise(eIdx)}>
                   <FiMinus className="text-red-500" />
                 </button>
               </div>
             </div>
           ))}
+          {!toggleSearchBar && (
+            <div>
+              <button
+                onClick={() => setToggleSearchBar(true)}
+                className="flex gap-1 items-center p-2 hover:scale-110 transition ease-in-out duration-100"
+              >
+                <FiPlus style={{ color: "#03BB9B" }} />
+                <p className="text-sm font-bold" style={{ color: "#03BB9B" }}>
+                  Add Exercise
+                </p>
+              </button>
+            </div>
+          )}
         </div>
-
-        {!toggleSearchBar && (
-          <div>
-            <button
-              className="flex text-green-500 justify-center w-full text-center"
-              onClick={() => setToggleSearchBar(true)}
-            >
-              <FiPlus />
-              <p>Add Exercise</p>
-            </button>
-          </div>
-        )}
 
         <div className="flex self-center">
           <BasicRoundedButton
