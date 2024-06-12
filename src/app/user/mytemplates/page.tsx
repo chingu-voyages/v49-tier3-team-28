@@ -9,6 +9,7 @@ import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Log } from "@/models/log.model";
 import { CircularProgress } from "@mui/material";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -18,12 +19,12 @@ import { FiSearch, FiX } from "react-icons/fi";
 interface MyTemplatesProps {}
 
 const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
-  const { status } = useAuthSession(); // status, session and update are available, see auth-context.tsx
+  const { status } = useAuthSession();
   const router = useRouter();
 
   if (status === "unauthenticated") {
     router.replace("/signin");
-    return null; // Ensure the component does not render until redirection
+    return null;
   }
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -31,33 +32,27 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
     isConfirmDeleteTemplateModalOpen,
     setIsConfirmDeleteTemplateModalOpen,
   ] = useState<boolean>(false);
-
   const [selectedTemplate, setSelectedTemplate] = useState<
     ExerciseActivity[] | null
   >(null);
   const [selectedTemplateName, setSelectedTemplateName] = useState<
     string | null
   >(null);
-
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(
     null
   );
-
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [templates, setTemplates] = useState<Log[]>([]);
   const [filteredTemplates, setFilteredTemplates] = useState<Log[]>([]);
-
   const [templateDataToDelete, setTemplateDataDelete] = useState<{
     name: string;
     id: string;
   } | null>(null);
-
   const [isBusy, setIsBusy] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [updateTemplateErrorMessage, setUpdateTemplateErrorMessage] = useState<
     string | null
   >(null);
-
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
@@ -73,7 +68,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
       setIsBusy(true);
       const fetchedTemplates = await LoggingClient.getTemplates();
       setTemplates(fetchedTemplates);
-      setFilteredTemplates(fetchedTemplates); // Initialize filteredTemplates
+      setFilteredTemplates(fetchedTemplates);
     } catch (error: any) {
       setErrorMessage("Error fetching templates");
       console.log("Error fetching templates: ", error.message);
@@ -160,7 +155,12 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
     <div>
       <div className="flex flex-col min-h-screen p-4">
         {/* Header */}
-        <div className="flex gap-8">
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="flex gap-8"
+        >
           <div className="self-center cursor-pointer">
             <Link href={"/user/home"}>
               <Image
@@ -178,28 +178,39 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
               My Templates
             </h1>
           </div>
-        </div>
+        </motion.div>
 
         {/* Secondary Header */}
-        {filteredTemplates.length > 0 ? (
-          <h1 className="futuraFont font-medium text-2xl py-2">
-            Please review or edit your templates:
-          </h1>
-        ) : (
-          <h1 className="futuraFont font-medium text-2xl py-2">
-            There are currently no templates. Create one below.
-          </h1>
-        )}
-        <div>
-          {errorMessage && (
-            <div className="text-red-500 text-center verdanaFont">
-              {errorMessage}
-            </div>
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          {filteredTemplates.length > 0 ? (
+            <h1 className="futuraFont font-medium text-2xl py-2">
+              Please review or edit your templates:
+            </h1>
+          ) : (
+            <h1 className="futuraFont font-medium text-2xl py-2">
+              There are currently no templates. Create one below.
+            </h1>
           )}
-        </div>
+          <div>
+            {errorMessage && (
+              <div className="text-red-500 text-center verdanaFont">
+                {errorMessage}
+              </div>
+            )}
+          </div>
+        </motion.div>
 
         {/* Search Filter */}
-        <div className="relative flex items-center mt-4 mb-4">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="relative flex items-center mt-4 mb-4"
+        >
           <FiSearch className="absolute left-3" />
           <input
             type="text"
@@ -214,12 +225,22 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
               onClick={() => setSearchQuery("")}
             />
           )}
-        </div>
+        </motion.div>
 
         {/* Templates */}
-        <div className="flex flex-wrap -mx-2">
+        <motion.div
+          className="flex flex-wrap -mx-2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ staggerChildren: 0.1, delay: 0.7 }}
+        >
           {filteredTemplates.map((template, idx) => (
-            <div key={idx} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
+            <motion.div
+              key={idx}
+              className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
               <TemplateCard
                 onClick={() => handleTemplateClick(template)}
                 onDelete={() =>
@@ -228,18 +249,27 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
                 onEdit={() => handleEditTemplate(template._id!)}
                 data={template}
               />
-            </div>
+            </motion.div>
           ))}
-        </div>
-        <div className="flex justify-center mt-10">
+        </motion.div>
+
+        {/* Button */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.7 }}
+          className="flex justify-center mt-10"
+        >
           <Link href="/user/createtemplate">
             <BasicRoundedButton
               label="Create New Template"
               buttonClassNames="defaultButtonColor"
             />
           </Link>
-        </div>
+        </motion.div>
       </div>
+
+      {/* Popup Modals */}
       <TemplateDataModal
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
