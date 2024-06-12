@@ -123,7 +123,7 @@ export default function LandingPage() {
         className="flex flex-col gap-y-9 mt-8"
       >
         <div className="flex justify-between">
-          <h1 className="openSansFont text-base font-bold uppercase">
+          <h1 className="openSansFont text-base font-bold uppercase self-center">
             Journal Tracker
           </h1>
           <div className="w-30">
