@@ -171,7 +171,9 @@ export function CalendarLogViewer({ readonly }: CalendarLogViewerProps) {
       {!readonly && (
         <div>
           <div>
-            <h4 className="text-center">{value?.format("ddd MMMM D, YYYY")}</h4>
+            <h4 className="text-center verdanaFont">
+              {value?.format("ddd MMMM D, YYYY")}
+            </h4>
           </div>
 
           {/* Logs for a selected date appear here */}

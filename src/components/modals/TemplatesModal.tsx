@@ -64,7 +64,7 @@ const TemplatesModal: React.FC<TemplateModalProps> = ({
               className="flex flex-col bg-white p-8 relative h-fill-available"
             >
               <div className="flex justify-between">
-                <h1 className="text-3xl font-bold futuraFont uppercase">
+                <h1 className="text-xl font-bold openSansFont uppercase text-nowrap self-center">
                   Choose From Templates
                 </h1>
                 <button
@@ -74,10 +74,10 @@ const TemplatesModal: React.FC<TemplateModalProps> = ({
                     onClose();
                   }}
                 >
-                  <FiX className="size-8 text-white blueGray rounded-full p-2 hover:bg-stone-500" />
+                  <FiX className="size-12 text-white blueGray rounded-full p-2 hover:bg-stone-500" />
                 </button>
               </div>
-              <h1 className="futuraFont text-xl font-medium mt-4 mb-4">
+              <h1 className="openSansFont text-xl font-medium mt-10 mb-4">
                 Please choose one template to start:
               </h1>
 

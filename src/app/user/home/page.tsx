@@ -2,20 +2,22 @@
 import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
 import { CalendarLogViewer } from "@/components/calendar-log-viewer/Calendar-log-viewer";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { CircularProgress, Link } from "@mui/material";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function LandingPage() {
-  /*
-    This is an example of how to use the hook to access the auth sesion, which indicates if user is logged in or not.
-    It also has basic user data that we may need to use on the front end (like the email, username, _id).
-    We can always add more data to the session object in the auth-options.ts file.
-  */
-  const { status, session } = useAuthSession(); // status, session and update are available, see auth-context.tsx
+  const { status, session } = useAuthSession();
   const router = useRouter();
+  const [isPageLoadingTemplates, setIsPageLoadingTemplates] =
+    useState<boolean>(false);
+  const [isPageLoadingStartLogging, setIsPageLoadingStartLogging] =
+    useState<boolean>(false);
+  const [isPageLoadingStartViewLogs, setIsPageLoadingViewLogs] =
+    useState<boolean>(false);
 
   // Users who are not authenticated will be redirected to the sign in page.
   if (status === "unauthenticated") {
@@ -39,21 +41,34 @@ export default function LandingPage() {
       >
         <div className="flex gap-4">
           <h1
-            className={`text-xl leading-7 futuraFont font-bold uppercase self-center py-6`}
+            className={`text-xl leading-7 openSansFont font-bold uppercase self-center py-6`}
           >
             Welcome, {session?.user?.username}
           </h1>
-          <Link href="/user/mytemplates" className="self-center">
+          <Link
+            href="/user/mytemplates"
+            className="self-center"
+            onClick={() => setIsPageLoadingTemplates(true)}
+          >
             <BasicRoundedButton
               label="Manage Templates"
               buttonClassNames="!w-36"
+              disabled={
+                isPageLoadingTemplates ||
+                isPageLoadingStartLogging ||
+                isPageLoadingStartViewLogs
+              }
               customMaterialButtonStyles={{
                 fontSize: "12px",
                 fontFamily: "Roboto",
                 lineHeight: "15px",
                 backgroundColor: "#95A1A8",
               }}
-            />
+            >
+              {isPageLoadingTemplates && (
+                <CircularProgress size={30} sx={{ color: "orange" }} />
+              )}
+            </BasicRoundedButton>
           </Link>
         </div>
 
@@ -71,23 +86,32 @@ export default function LandingPage() {
         transition={{ duration: 0.5, delay: 0.5 }}
         className="flex flex-col min-w-[360px]"
       >
-        <Link href="/user/createlog">
+        <Link
+          href="/user/createlog"
+          onClick={() => setIsPageLoadingStartLogging(true)}
+        >
           <BasicRoundedButton
             label="Start Logging"
-            buttonClassNames="defaultButtonColor h-14 !justify-between !w-full "
+            buttonClassNames="defaultButtonColor h-14 !justify-between !w-full"
+            disabled={
+              isPageLoadingTemplates ||
+              isPageLoadingStartLogging ||
+              isPageLoadingStartViewLogs
+            }
             endIcon={
-              <ArrowForwardIcon
-                sx={{
-                  background: "white",
-                  color: "#143452",
-                  borderRadius: "50%",
-                  "&.MuiSvgIcon-root": {
-                    fontSize: "40px",
-                  },
-                }}
+              <Image
+                src="/images/buttons/go-button.svg"
+                alt="start-logging"
+                width={48}
+                height={48}
+                className="relative left-1.5"
               />
             }
-          />
+          >
+            {isPageLoadingStartLogging && (
+              <CircularProgress size={30} sx={{ color: "white" }} />
+            )}
+          </BasicRoundedButton>
         </Link>
       </motion.div>
 
@@ -96,17 +120,25 @@ export default function LandingPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.7 }}
-        className="flex flex-col gap-y-9 w-80 mt-8"
+        className="flex flex-col gap-y-9 mt-8"
       >
         <div className="flex justify-between">
-          <h1 className="futuraFont text-base font-bold uppercase">
+          <h1 className="openSansFont text-base font-bold uppercase self-center">
             Journal Tracker
           </h1>
           <div className="w-30">
-            <Link href="/user/viewlogs">
+            <Link
+              href="/user/viewlogs"
+              onClick={() => setIsPageLoadingViewLogs(true)}
+            >
               <BasicRoundedButton
                 label="View Logs"
                 buttonClassNames="!w-24 !h-8"
+                disabled={
+                  isPageLoadingTemplates ||
+                  isPageLoadingStartLogging ||
+                  isPageLoadingStartViewLogs
+                }
                 customMaterialButtonStyles={{
                   fontSize: "10px",
                   backgroundColor: "#03BB9B",

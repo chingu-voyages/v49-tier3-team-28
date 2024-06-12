@@ -38,7 +38,12 @@ export function FormTextInputField({
       onChange={(e) => onChange && onChange(e.target.value)}
       disabled={disabled}
       onBlur={onBlur}
-      inputProps={{ maxLength }}
+      inputProps={{
+        maxLength,
+        style: {
+          fontFamily: "Roboto, sans-serif",
+        },
+      }}
       sx={{
         marginTop: "4px",
         marginBottom: "4px",

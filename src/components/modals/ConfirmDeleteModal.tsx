@@ -1,6 +1,5 @@
 import { Modal } from "@mui/material";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import React from "react";
 import { FiX } from "react-icons/fi";
 import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
@@ -47,14 +46,11 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
             label="Delete"
             buttonClassNames="defaultButtonColor"
           />
-
-          <Link href="/user/home">
-            <BasicRoundedButton
-              onClick={onClose}
-              label="Cancel"
-              buttonClassNames="secondaryButtonColor"
-            />
-          </Link>
+          <BasicRoundedButton
+            onClick={onClose}
+            label="Cancel"
+            buttonClassNames="secondaryButtonColor"
+          />
         </div>
       </motion.div>
     </Modal>

@@ -33,7 +33,9 @@ const TemplateDataModal: React.FC<TemplateDataModalProps> = ({
           <div className="w-full p-4">
             <div className="flex justify-between mb-4 items-center">
               {/* TODO: For Exercise list we should have access to the log.name (template Name) */}
-              <h2 className="futuraFont text-2xl font-medium">Exercise List</h2>
+              <h2 className="openSansFont leading-7 text-2xl font-medium">
+                Exercise List
+              </h2>
               <button
                 onClick={onClose}
                 className="absolute top-8 right-6 scale-150 darkCharcoal"

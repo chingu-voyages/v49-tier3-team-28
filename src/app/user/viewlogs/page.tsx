@@ -20,7 +20,7 @@ export default function ViewLogs() {
         <div className="self-center cursor-pointer">
           <Link href={"/user/home"}>
             <Image
-              src="/images/calendar-log/back-button-left.svg"
+              src="/images/buttons/back-button-left.svg"
               height={48}
               width={48}
               alt="Back button"
@@ -29,7 +29,7 @@ export default function ViewLogs() {
         </div>
         <div>
           <h1
-            className={`text-xl leading-7 futuraFont font-bold uppercase py-6`}
+            className={`text-2xl leading-7 openSansFont font-bold uppercase py-6`}
           >
             My Logs
           </h1>
