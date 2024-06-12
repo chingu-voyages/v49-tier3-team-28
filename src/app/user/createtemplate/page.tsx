@@ -7,7 +7,7 @@ import { Exercise } from "@/lib/exercises/exercise";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Set } from "@/models/set.model";
-import { Divider } from "@mui/material";
+import { CircularProgress, Divider } from "@mui/material";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 import mongoose from "mongoose";
 import Image from "next/image";
@@ -41,6 +41,8 @@ export default function CreateTemplate() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [templateName, setTemplateName] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const [isBusy, setIsBusy] = useState<boolean>(false);
 
   const exercisesArray = Object.values(ExercisesDictionary);
 
@@ -123,6 +125,7 @@ export default function CreateTemplate() {
       ];
 
       try {
+        setIsBusy(true);
         setErrorMessage("");
         await LoggingClient.saveLog({
           logs: logData,
@@ -130,6 +133,8 @@ export default function CreateTemplate() {
       } catch (error: any) {
         setErrorMessage(error.message);
         return;
+      } finally {
+        setIsBusy(false);
       }
     }
     setIsModalOpen(true);
@@ -148,7 +153,7 @@ export default function CreateTemplate() {
         <div className="self-center cursor-pointer">
           <Link href="/user/mytemplates">
             <Image
-              src="/images/calendar-log/back-button-left.svg"
+              src="/images/buttons/back-button-left.svg"
               height={48}
               width={48}
               alt="Back button"
@@ -156,7 +161,7 @@ export default function CreateTemplate() {
           </Link>
         </div>
         <div>
-          <h1 className="text-3xl leading-7 futuraFont font-bold uppercase py-6">
+          <h1 className="text-2xl leading-7 openSansFont font-bold uppercase py-6">
             Create a Template
           </h1>
         </div>
@@ -266,14 +271,16 @@ export default function CreateTemplate() {
             <BasicRoundedButton
               onClick={handleSaveLog}
               label="Save Template"
-              buttonClassNames="default
-              ButtonColor"
+              buttonClassNames="defaultButtonColor !justify-evenly"
               disabled={
                 selectedExercises.length === 0 ||
                 !templateName ||
-                templateName.trim() === ""
+                templateName.trim() === "" ||
+                isBusy
               }
-            ></BasicRoundedButton>
+            >
+              {isBusy && <CircularProgress size={30} sx={{ color: "white" }} />}
+            </BasicRoundedButton>
           </motion.div>
         </>
       </LayoutGroup>
