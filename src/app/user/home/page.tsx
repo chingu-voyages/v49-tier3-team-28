@@ -69,12 +69,12 @@ export default function LandingPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.5 }}
-        className="flex flex-col min-w-96 "
+        className="flex flex-col min-w-[360px]"
       >
         <Link href="/user/createlog">
           <BasicRoundedButton
             label="Start Logging"
-            buttonClassNames="defaultButtonColor h-14 !justify-between !w-full"
+            buttonClassNames="defaultButtonColor h-14 !justify-between !w-full "
             endIcon={
               <ArrowForwardIcon
                 sx={{
@@ -82,7 +82,7 @@ export default function LandingPage() {
                   color: "#143452",
                   borderRadius: "50%",
                   "&.MuiSvgIcon-root": {
-                    fontSize: "48px",
+                    fontSize: "40px",
                   },
                 }}
               />
@@ -96,7 +96,7 @@ export default function LandingPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.7 }}
-        className="flex flex-col gap-y-9 w-96 mt-8"
+        className="flex flex-col gap-y-9 w-80 mt-8"
       >
         <div className="flex justify-between">
           <h1 className="futuraFont text-base font-bold uppercase">

@@ -1,7 +1,7 @@
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Modal } from "@mui/material";
 import { AnimatePresence, motion } from "framer-motion";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FiX } from "react-icons/fi";
 import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
@@ -18,15 +18,6 @@ const TemplateDataModal: React.FC<TemplateDataModalProps> = ({
   exerciseData,
 }) => {
   const router = useRouter();
-  const pathname = usePathname();
-
-  const handleUseTemplate = (exerciseData: ExerciseActivity[]) => {
-    if (localStorage.getItem("draft")) {
-      localStorage.removeItem("draft");
-    }
-    localStorage.setItem("selectedTemplate", JSON.stringify(exerciseData));
-    router.push("/user/createlog");
-  };
 
   return (
     <Modal open={open} onClose={onClose} className="modalOuterContainer">
@@ -94,12 +85,6 @@ const TemplateDataModal: React.FC<TemplateDataModalProps> = ({
             label="Back to Selection"
             buttonClassNames="defaultButtonColor"
           />
-          {pathname == "/user/mytemplates" && (
-            <BasicRoundedButton
-              onClick={() => handleUseTemplate(exerciseData!)}
-              label="Use Template"
-            />
-          )}
         </div>
       </motion.div>
     </Modal>

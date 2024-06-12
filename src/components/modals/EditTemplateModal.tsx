@@ -5,8 +5,10 @@ import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Log } from "@/models/log.model";
 import { Set } from "@/models/set.model";
 import { Modal } from "@mui/material";
+import { motion } from "framer-motion";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { FiPlus, FiSearch, FiX } from "react-icons/fi";
+import { FiMinusCircle, FiPlus, FiSearch, FiX } from "react-icons/fi";
 
 interface EditTemplateModalProps {
   open: boolean;
@@ -122,18 +124,33 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
 
   return (
     <Modal open={open} onClose={onClose}>
-      <div className="flex flex-col bg-white pl-8 pr-8 rounded-xl relative justify-evenly h-fill-available ml-4 mr-4 mt-20 mb-10">
-        <div className="flex justify-between">
-          <h1 className="text-3xl font-bold futuraFont uppercase self-center">
-            Edit Template
-          </h1>
-          <button onClick={onClose}>
-            <FiX className="size-8 text-white blueGray rounded-full ml-2 p-2 hover:bg-stone-500" />
-          </button>
+      <motion.div
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="flex flex-col bg-white p-8 rounded-xl relative gap-4 h-fill-available"
+      >
+        {/* Header */}
+        <div className="flex gap-8">
+          <div className="self-center cursor-pointer">
+            <button onClick={onClose}>
+              <Image
+                src="/images/calendar-log/back-button-left.svg"
+                height={48}
+                width={48}
+                alt="Back button"
+              />
+            </button>
+          </div>
+          <div>
+            <h1 className="text-3xl leading-7 futuraFont font-bold uppercase py-6">
+              Edit Template
+            </h1>
+          </div>
         </div>
 
         {/* Template Name */}
-        <div className="w-full text-center">
+        <div className="w-full">
           <h1 className="text-lg mb-2 text-stone-500">Template Name</h1>
           <input
             type="text"
@@ -155,7 +172,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
         </div>
 
         {/* Search Bar */}
-        {toggleSearchBar ? (
+        {toggleSearchBar && (
           <div className="relative flex flex-col w-full">
             <div className="relative flex items-center">
               <FiSearch className="absolute left-3" />
@@ -173,8 +190,14 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
                 />
               )}
             </div>
+
             {searchResults.length > 0 && (
-              <div className="absolute top-full bg-gray-50 left-0 right-0 flex flex-col border rounded shadow-lg z-10 overflow-y-auto max-h-48">
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="absolute top-full bg-gray-50 left-0 right-0 flex flex-col border rounded shadow-lg z-10 overflow-y-auto max-h-48"
+              >
                 {searchResults.map((exercise: Exercise) => (
                   <div
                     key={exercise.id}
@@ -184,60 +207,73 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
                     {exercise.label}
                   </div>
                 ))}
-              </div>
+              </motion.div>
             )}
-          </div>
-        ) : (
-          <div>
-            <button
-              className="flex text-green-500 justify-center w-full text-center"
-              onClick={() => setToggleSearchBar(true)}
-            >
-              <FiPlus />
-              <p>Add Exercise</p>
-            </button>
           </div>
         )}
 
         {/* Exercise Table */}
-        <div className="w-full max-h-48 overflow-y-auto">
-          <table className="min-w-full">
-            <thead>
-              <tr className="text-white text-center bg-orange-500">
-                <th className="p-2">Exercise Name</th>
-                <th className="p-2"># of Sets</th>
-                <th className="p-2"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedExercises.map((exercise, eIdx) => (
-                <tr key={eIdx} className="text-center">
-                  <td className="p-2">{exercise.exerciseName}</td>
-                  <td className="p-2">
-                    <input
-                      type="number"
-                      value={exercise.sets.length}
-                      onChange={(e) =>
-                        handleSetNumberChange(eIdx, Number(e.target.value))
-                      }
-                      className="mb-2 mt-2 p-1 border rounded-xl w-1/2 text-center"
-                    />
-                  </td>
-                  <td className="p-2">
-                    <button onClick={() => handleDeleteExercise(eIdx)}>
-                      <FiX />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="w-full overflow-y-auto">
+          {selectedExercises.map((exercise, eIdx) => (
+            <motion.div
+              key={eIdx}
+              className={`text-center flex justify-between ${
+                eIdx % 2 === 0 ? "lightTanOrange" : "bg-white"
+              }`}
+              initial={{ x: -50, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: eIdx * 0.1 }}
+            >
+              <div className="flex justify-between w-full items-center pl-2">
+                <div className="p-1">{exercise.exerciseName}</div>
+                <div className="flex gap-2 items-center mr-2">
+                  <input
+                    type="number"
+                    value={exercise.sets.length}
+                    onChange={(e) =>
+                      handleSetNumberChange(eIdx, Number(e.target.value))
+                    }
+                    className="mb-2 mt-2 p-1 border rounded-xl text-center w-12"
+                  />
+                  <p> set(s)</p>
+                </div>
+              </div>
+
+              <div className="flex pr-2 items-center">
+                <button onClick={() => handleDeleteExercise(eIdx)}>
+                  <FiMinusCircle className="text-red-500" />
+                </button>
+              </div>
+            </motion.div>
+          ))}
+          {!toggleSearchBar && (
+            <div>
+              <button
+                onClick={() => setToggleSearchBar(true)}
+                className="flex gap-1 items-center p-2 hover:scale-110 transition ease-in-out duration-100"
+              >
+                <FiPlus style={{ color: "#03BB9B" }} />
+                <p className="text-sm font-bold" style={{ color: "#03BB9B" }}>
+                  Add Exercise
+                </p>
+              </button>
+            </div>
+          )}
         </div>
 
-        <div className="flex justify-end">
-          <BasicRoundedButton label="Save" onClick={handleSave} />
-        </div>
-      </div>
+        <motion.div
+          className="flex self-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: selectedExercises.length * 0.1 }}
+        >
+          <BasicRoundedButton
+            label="Save"
+            onClick={handleSave}
+            buttonClassNames="defaultButtonColor"
+          />
+        </motion.div>
+      </motion.div>
     </Modal>
   );
 };
