@@ -4,7 +4,6 @@ import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Ba
 import TemplateCard from "@/components/cards/TemplateCard";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import EditTemplateModal from "@/components/modals/EditTemplateModal";
-import TemplateDataModal from "@/components/modals/TemplateDataModal";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Log } from "@/models/log.model";
@@ -80,7 +79,6 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
   const handleTemplateClick = (template: Log) => {
     setSelectedTemplate(template.exercises);
     setSelectedTemplateName(template.name!);
-    setIsModalOpen(true);
   };
 
   const handleConfirmDeleteTemplate = (
@@ -141,6 +139,14 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
       template.name?.toLowerCase().includes(lowercasedQuery)
     );
     setFilteredTemplates(filtered);
+  };
+
+  const handleUseTemplate = (exerciseData: ExerciseActivity[]) => {
+    if (localStorage.getItem("draft")) {
+      localStorage.removeItem("draft");
+    }
+    localStorage.setItem("selectedTemplate", JSON.stringify(exerciseData));
+    router.push("/user/createlog");
   };
 
   if (isBusy) {
@@ -258,7 +264,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.7 }}
-          className="flex justify-center mt-10"
+          className="flex flex-col justify-center items-center gap-4 mt-10"
         >
           <Link href="/user/createtemplate">
             <BasicRoundedButton
@@ -266,15 +272,15 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
               buttonClassNames="defaultButtonColor"
             />
           </Link>
+          <BasicRoundedButton
+            onClick={() => handleUseTemplate(selectedTemplate!)}
+            label="Use Template"
+            disabled={!selectedTemplate}
+          />
         </motion.div>
       </div>
 
       {/* Popup Modals */}
-      <TemplateDataModal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        exerciseData={selectedTemplate}
-      />
       <EditTemplateModal
         open={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
