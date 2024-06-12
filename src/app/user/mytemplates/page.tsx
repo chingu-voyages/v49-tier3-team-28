@@ -26,7 +26,6 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
     return null;
   }
 
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [
     isConfirmDeleteTemplateModalOpen,
     setIsConfirmDeleteTemplateModalOpen,
@@ -124,7 +123,6 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
       setIsBusy(true);
       await LoggingClient.updateTemplate(updatedTemplateData);
       fetchTemplates();
-      setIsModalOpen(false);
       setIsEditModalOpen(false);
       setIsConfirmDeleteTemplateModalOpen(false);
       setTemplateDataDelete(null);

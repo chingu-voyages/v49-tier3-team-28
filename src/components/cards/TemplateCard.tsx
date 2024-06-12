@@ -1,8 +1,8 @@
 import { Log } from "@/models/log.model";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
-import { FiMinusCircle } from "react-icons/fi";
 import { MdEdit } from "react-icons/md";
+import { PiTrashFill } from "react-icons/pi";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 
 interface TemplateCardProps {
@@ -62,15 +62,6 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
             >
               {isOpen ? <TiArrowSortedUp /> : <TiArrowSortedDown />}
             </button>
-            <button
-              className="text-red-500 scale-125 hover:scale-150 transform duration-300 ease-out"
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete();
-              }}
-            >
-              <FiMinusCircle />
-            </button>
           </div>
         </div>
       </div>
@@ -96,7 +87,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
               </motion.div>
             ))}
 
-            <div className="modalBgColor">
+            <div className="modalBgColor flex justify-between">
               <button
                 onClick={(e) => {
                   e.stopPropagation();
@@ -107,6 +98,21 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
                 <MdEdit style={{ color: "#03BB9B" }} />
                 <p className="text-sm font-bold" style={{ color: "#03BB9B" }}>
                   Edit
+                </p>
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete();
+                }}
+                className="flex gap-1 items-center p-2 hover:scale-110 transition ease-in-out duration-100"
+              >
+                <PiTrashFill
+                  style={{ color: "#03BB9B" }}
+                  className="text-red-500"
+                />
+                <p className="text-sm font-bold" style={{ color: "#03BB9B" }}>
+                  Delete
                 </p>
               </button>
             </div>
