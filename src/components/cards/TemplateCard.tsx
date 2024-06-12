@@ -1,4 +1,5 @@
 import { Log } from "@/models/log.model";
+import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import { FiMinusCircle } from "react-icons/fi";
 import { MdEdit } from "react-icons/md";
@@ -24,7 +25,22 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
     setIsOpen(!isOpen);
   };
 
-  // const exercisesToShow = isOpen ? data.exercises : [];
+  const containerVariants = {
+    hidden: { opacity: 1, height: 0 },
+    show: {
+      opacity: 1,
+      height: "auto",
+      transition: {
+        staggerChildren: 0.1,
+        when: "beforeChildren",
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: -20 },
+    show: { opacity: 1, y: 0 },
+  };
 
   return (
     <div className="border shadow-md bg-white cursor-pointer" onClick={onClick}>
@@ -39,7 +55,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
               {isOpen ? <TiArrowSortedUp /> : <TiArrowSortedDown />}
             </button>
             <button
-              className=" text-red-500 scale-125 hover:scale-150 transform duration-300 ease-out"
+              className="text-red-500 scale-125 hover:scale-150 transform duration-300 ease-out"
               onClick={(e) => {
                 e.stopPropagation();
                 onDelete();
@@ -52,17 +68,24 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
       </div>
 
       {/* Dropdown */}
-      <div>
+      <AnimatePresence initial={false}>
         {isOpen && (
-          <div>
+          <motion.div
+            initial="hidden"
+            animate="show"
+            exit="hidden"
+            variants={containerVariants}
+            style={{ overflow: "hidden" }}
+          >
             {data.exercises.map((exercise, index) => (
-              <div
+              <motion.div
                 className="flex justify-between items-center p-2 mt-1 mb-1 modalBgColor"
                 key={index}
+                variants={itemVariants}
               >
                 <div>{exercise.exerciseName}</div>
                 <div>{exercise.sets.length} set(s)</div>
-              </div>
+              </motion.div>
             ))}
 
             <div className="modalBgColor">
@@ -79,9 +102,9 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
                 </p>
               </button>
             </div>
-          </div>
+          </motion.div>
         )}
-      </div>
+      </AnimatePresence>
     </div>
   );
 };
