@@ -14,6 +14,7 @@ import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Set } from "@/models/set.model";
 import AddIcon from "@mui/icons-material/Add";
 import { CircularProgress, IconButton } from "@mui/material";
+import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FiSearch, FiX } from "react-icons/fi";
@@ -223,15 +224,20 @@ export default function CreateLog() {
   if (status === "loading")
     return (
       <div className="flex justify-center" style={{ marginTop: "40%" }}>
-        <CircularProgress />;
+        <CircularProgress />
       </div>
     );
 
   return (
-    <div className="flex flex-col gap-y-20 justify-center w-screen mt-20 mb-10 p-4">
+    <div className="flex flex-col gap-y-10 justify-center w-screen mt-4 p-4">
       {/* Header */}
-      <div className="flex justify-between">
-        <h1 className="text-3xl font-bold futuraFont uppercase self-center">
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
+        className="flex justify-between"
+      >
+        <h1 className="text-2xl font-bold openSansFont uppercase self-center">
           Log Your Workout
         </h1>
         <button
@@ -241,29 +247,46 @@ export default function CreateLog() {
               : router.push("/user/home")
           }
         >
-          <FiX className="size-8 text-white blueGray rounded-full ml-2 p-2 hover:bg-stone-500" />
+          <FiX className="size-12 text-white blueGray rounded-full ml-2 p-2 hover:bg-stone-500" />
         </button>
-      </div>
+      </motion.div>
       {!isUserSearching && (
-        <BasicRoundedButton
-          buttonClassNames="self-center defaultButtonColor"
-          label="Choose From Templates"
-          onClick={() => setIsTemplateModalOpen(true)}
-        />
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="self-center"
+        >
+          <BasicRoundedButton
+            buttonClassNames="self-center defaultButtonColor"
+            label="Choose From Templates"
+            onClick={() => setIsTemplateModalOpen(true)}
+          />
+        </motion.div>
       )}
 
       {!isUserSearching && (
-        <div className="flex items-center">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="flex items-center"
+        >
           <div className="flex-1 w-48 border-t-2"></div>
           <h2 className="text-sm text-gray-500 pl-2 pr-2 verdanaFont">
             Or start Logging by Search
           </h2>
           <div className="flex-1 w-48 border-t-2"></div>
-        </div>
+        </motion.div>
       )}
 
       {/* Search Bar */}
-      <div className="relative flex flex-col min-w-80">
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.7 }}
+        className="relative flex flex-col min-w-80"
+      >
         <div className="relative flex items-center">
           <FiSearch className="absolute left-3" />
           <input
@@ -281,7 +304,10 @@ export default function CreateLog() {
           )}
         </div>
         {searchResults.length > 0 && (
-          <div
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
             className="absolute top-full bg-gray-50 left-0 right-0 flex flex-col border rounded shadow-lg z-10"
             style={{ overflowY: "auto", maxHeight: "200px" }}
           >
@@ -294,9 +320,9 @@ export default function CreateLog() {
                 {exercise.label}
               </div>
             ))}
-          </div>
+          </motion.div>
         )}
-      </div>
+      </motion.div>
       {selectedExercises.length > 0 && (
         <>
           <div className="flex flex-col gap-y-9 w-full px-4">
@@ -304,16 +330,19 @@ export default function CreateLog() {
               <ColorToggleButton
                 onChange={toggleUnit}
                 alignment={unit}
-                leftLabel="Metric"
-                rightLabel="Imperial"
+                leftLabel="Imperial"
+                rightLabel="Metric"
                 leftValue="lbs"
                 rightValue="kg"
               />
             </div>
 
             {selectedExercises.map((exercise, index) => (
-              <div
+              <motion.div
                 key={index}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
                 className="rounded-xl mb-4 border border-gray-100 shadow-md relative"
               >
                 <ExerciseTable
@@ -333,18 +362,23 @@ export default function CreateLog() {
                     Set
                   </p>
                 </IconButton>
-              </div>
+              </motion.div>
             ))}
           </div>
 
-          <div className="flex flex-col gap-y-9">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col gap-y-9"
+          >
             <BasicRoundedButton
               onClick={() => handleSaveLog()}
               buttonClassNames="self-center defaultButtonColor"
               label="Save Log"
               disabled={selectedExercises.length === 0}
             ></BasicRoundedButton>
-          </div>
+          </motion.div>
         </>
       )}
       <SaveLogModal

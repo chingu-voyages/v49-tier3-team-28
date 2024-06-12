@@ -1,6 +1,7 @@
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Modal } from "@mui/material";
-import { usePathname, useRouter } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FiX } from "react-icons/fi";
 import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
@@ -17,79 +18,77 @@ const TemplateDataModal: React.FC<TemplateDataModalProps> = ({
   exerciseData,
 }) => {
   const router = useRouter();
-  const pathname = usePathname();
-
-  const handleUseTemplate = (exerciseData: ExerciseActivity[]) => {
-    if (localStorage.getItem("draft")) {
-      localStorage.removeItem("draft");
-    }
-    localStorage.setItem("selectedTemplate", JSON.stringify(exerciseData));
-    router.push("/user/createlog");
-  };
 
   return (
-    <Modal open={open} onClose={onClose} className="p-4">
-      <div className="flex flex-col w-1/2 h-3/4 p-4 bg-white rounded-xl relative justify-evenly w-full">
+    <Modal open={open} onClose={onClose} className="modalOuterContainer">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.8 }}
+        transition={{ duration: 0.3 }}
+        className="modalInnerContainer modalBgColor relative items-center"
+      >
         {/* Templates to Choose From */}
         {exerciseData !== null ? (
-          <div className="mt-4 w-full">
-            <div className="flex justify-between mb-4">
+          <div className="w-full p-4">
+            <div className="flex justify-between mb-4 items-center">
               {/* TODO: For Exercise list we should have access to the log.name (template Name) */}
-              <h2 className="futuraFont text-2xl leading-7 font-medium">
+              <h2 className="openSansFont leading-7 text-2xl font-medium">
                 Exercise List
               </h2>
-              <button onClick={onClose}>
-                <FiX className="size-5" />
+              <button
+                onClick={onClose}
+                className="absolute top-8 right-6 scale-150 darkCharcoal"
+              >
+                <FiX />
               </button>
             </div>
             {/* Exercise Activity */}
-            <div className="min-h-96 max-h-96 overflow-y-auto overflow-hidden">
-              {exerciseData.map((exercise, eIdx) => (
-                <div
-                  key={(exercise as any).id}
-                  className="rounded-xl mb-4 border border-gray-100 shadow-md relative"
-                >
-                  <h4 className="text-white font-bold p-2 defaultButtonColor">
-                    {exercise.exerciseName}
-                  </h4>
-                  <table className="w-full border-collapse bg-white">
-                    {exercise.sets.map((set, eIdx) => (
-                      <tbody>
-                        <td className="p-2">
-                          <b>{set.setNumber}</b> set
-                        </td>
-                        <td className="p-2">
-                          <b>{set.weight}</b> {set.unit}{" "}
-                        </td>
-                        <td className="p-2 text-right">
-                          <b>{set.reps}</b> reps
-                        </td>
-                      </tbody>
-                    ))}
-                  </table>
-                </div>
-              ))}
+            <div className="max-h-96 overflow-y-auto overflow-hidden">
+              <AnimatePresence>
+                {exerciseData.map((exercise, eIdx) => (
+                  <motion.div
+                    key={(exercise as any).id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ delay: eIdx * 0.1 }}
+                    className="rounded-xl mb-4 border border-gray-100 shadow-md relative"
+                  >
+                    <h4 className="text-white font-bold p-2 defaultButtonColor">
+                      {exercise.exerciseName}
+                    </h4>
+                    <table className="w-full border-collapse bg-white">
+                      {exercise.sets.map((set, eIdx) => (
+                        <tbody key={eIdx}>
+                          <tr>
+                            <td className="p-2">
+                              <b>{set.setNumber}</b> set
+                            </td>
+                            <td className="p-2">
+                              <b>{set.weight}</b> {set.unit}{" "}
+                            </td>
+                            <td className="p-2 text-right">
+                              <b>{set.reps}</b> reps
+                            </td>
+                          </tr>
+                        </tbody>
+                      ))}
+                    </table>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </div>
           </div>
         ) : null}
-        <div className="flex flex-col justify-between h-28 mt-4 w-full">
+        <div className="flex flex-col gap-4 h-28">
           <BasicRoundedButton
             onClick={onClose}
             label="Back to Selection"
-            buttonClassNames="!w-full"
-            customMaterialButtonStyles={{
-              backgroundColor: "#95A1A8",
-            }}
+            buttonClassNames="defaultButtonColor"
           />
-          {pathname == "/user/mytemplates" && (
-            <BasicRoundedButton
-              onClick={() => handleUseTemplate(exerciseData!)}
-              label="Use Template"
-              buttonClassNames="!w-full"
-            />
-          )}
         </div>
-      </div>
+      </motion.div>
     </Modal>
   );
 };

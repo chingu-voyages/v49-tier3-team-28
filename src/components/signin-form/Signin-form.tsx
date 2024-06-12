@@ -7,7 +7,7 @@ import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { CircularProgress, FormControlLabel, Switch } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
 import { GoogleAuthButton } from "../buttons/google-auth-button/Google-auth-button";
 import { PasswordInputField } from "../input-fields/password-input-field/Password-input-field";
@@ -24,6 +24,8 @@ export function SigninForm() {
     password: { error: false, message: "" },
   };
 
+  const router = useRouter();
+
   const [formFieldErrors, setFormFieldErrors] = useState<
     Record<string, { error: boolean; message: string }>
   >(formFieldErrorsInitialState);
@@ -35,7 +37,11 @@ export function SigninForm() {
     message: "",
   });
 
-  const router = useRouter();
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace("/user/home");
+    }
+  }, []);
 
   const allFormFieldsValid = (displayErrors: boolean = true): boolean => {
     try {
@@ -80,30 +86,23 @@ export function SigninForm() {
 
   const signInUserWithGoogle = async () => {
     setIsLoading(true);
-
-    const res = await AuthClient.signInWithGoogle();
-
-    if (!res.success) {
-      setAppError({ error: true, message: res.errorMessage! });
-      setIsLoading(false);
-      return;
-    }
+    await AuthClient.signInWithGoogle();
     setIsLoading(false);
   };
 
   const { status } = useAuthSession();
 
-  if (status === "authenticated") {
-    router.replace("/user/home");
-  }
-
   return (
     <div className="mt-6">
-      <h1 className={"font-bold leading-7 text-xl uppercase mt-14 p-5"}>
+      <h1
+        className={
+          "font-bold openSansFont leading-7 text-2xl uppercase mt-14 pl-5"
+        }
+      >
         Welcome back!
       </h1>
       <div>
-        <h2 className="font-normal leading-7 text-xs p-5">
+        <h2 className="font-normal leading-7 text-sm pl-5 robotoFont">
           Sign in to continue your journey
         </h2>
       </div>

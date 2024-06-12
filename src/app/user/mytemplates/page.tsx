@@ -2,13 +2,14 @@
 import { LoggingClient } from "@/app/clients/logging-client/logging-client";
 import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
 import TemplateCard from "@/components/cards/TemplateCard";
-import ConfirmDeleteDialog from "@/components/dialogs/Confirmation-dialog";
+import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import EditTemplateModal from "@/components/modals/EditTemplateModal";
-import TemplateDataModal from "@/components/modals/TemplateDataModal";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Log } from "@/models/log.model";
-import { Button, CircularProgress } from "@mui/material";
+import { CircularProgress } from "@mui/material";
+import { motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -17,49 +18,42 @@ import { FiSearch, FiX } from "react-icons/fi";
 interface MyTemplatesProps {}
 
 const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
-  const { status } = useAuthSession(); // status, session and update are available, see auth-context.tsx
+  const { status } = useAuthSession();
   const router = useRouter();
 
   if (status === "unauthenticated") {
     router.replace("/signin");
-    return null; // Ensure the component does not render until redirection
+    return null;
   }
 
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [
     isConfirmDeleteTemplateModalOpen,
     setIsConfirmDeleteTemplateModalOpen,
   ] = useState<boolean>(false);
-
   const [selectedTemplate, setSelectedTemplate] = useState<
     ExerciseActivity[] | null
   >(null);
   const [selectedTemplateName, setSelectedTemplateName] = useState<
     string | null
   >(null);
-
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(
     null
   );
-
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [templates, setTemplates] = useState<Log[]>([]);
   const [filteredTemplates, setFilteredTemplates] = useState<Log[]>([]);
-
   const [templateDataToDelete, setTemplateDataDelete] = useState<{
     name: string;
     id: string;
   } | null>(null);
 
   const [isBusy, setIsBusy] = useState<boolean>(false);
+  const [isPageLoading, setIsPageLoading] = useState<boolean>(false);
+
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [updateTemplateErrorMessage, setUpdateTemplateErrorMessage] = useState<
     string | null
   >(null);
-
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const templatesPerPage = 6;
-
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
@@ -75,7 +69,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
       setIsBusy(true);
       const fetchedTemplates = await LoggingClient.getTemplates();
       setTemplates(fetchedTemplates);
-      setFilteredTemplates(fetchedTemplates); // Initialize filteredTemplates
+      setFilteredTemplates(fetchedTemplates);
     } catch (error: any) {
       setErrorMessage("Error fetching templates");
       console.log("Error fetching templates: ", error.message);
@@ -87,7 +81,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
   const handleTemplateClick = (template: Log) => {
     setSelectedTemplate(template.exercises);
     setSelectedTemplateName(template.name!);
-    setIsModalOpen(true);
+    setSelectedTemplateId(template._id!);
   };
 
   const handleConfirmDeleteTemplate = (
@@ -129,7 +123,6 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
       setIsBusy(true);
       await LoggingClient.updateTemplate(updatedTemplateData);
       fetchTemplates();
-      setIsModalOpen(false);
       setIsEditModalOpen(false);
       setIsConfirmDeleteTemplateModalOpen(false);
       setTemplateDataDelete(null);
@@ -150,33 +143,13 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
     setFilteredTemplates(filtered);
   };
 
-  const indexOfLastTemplate = currentPage * templatesPerPage;
-  const indexOfFirstTemplate = indexOfLastTemplate - templatesPerPage;
-  const currentTemplates = filteredTemplates.slice(
-    indexOfFirstTemplate,
-    indexOfLastTemplate
-  );
-
-  const totalPages = Math.ceil(filteredTemplates.length / templatesPerPage);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+  const handleUseTemplate = (exerciseData: ExerciseActivity[]) => {
+    if (localStorage.getItem("draft")) {
+      localStorage.removeItem("draft");
+    }
+    localStorage.setItem("selectedTemplate", JSON.stringify(exerciseData));
+    router.push("/user/createlog");
   };
-
-  const paginationButtons = [];
-  for (let i = 1; i <= totalPages; i++) {
-    paginationButtons.push(
-      <button
-        key={i}
-        onClick={() => handlePageChange(i)}
-        className={`px-3 py-1 mx-1 border rounded-xl ${
-          i === currentPage ? "bg-orange-500 text-white" : ""
-        }`}
-      >
-        {i}
-      </button>
-    );
-  }
 
   if (isBusy) {
     return (
@@ -188,15 +161,64 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
 
   return (
     <div>
-      <div className="flex flex-col justify-evenly min-h-screen p-4">
-        <div className="flex justify-between">
-          <h1 className="futuraFont text-xl font-bold uppercase">
-            Choose From Templates
-          </h1>
-          <FiX className="size-8 text-white blueGray rounded-full ml-2 p-2 hover:bg-stone-500" />
-        </div>
+      <div className="flex flex-col min-h-screen p-4">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="flex gap-8"
+        >
+          <div className="self-center cursor-pointer">
+            <Link href={"/user/home"}>
+              <Image
+                src="/images/buttons/back-button-left.svg"
+                height={48}
+                width={48}
+                alt="Back button"
+              />
+            </Link>
+          </div>
+          <div>
+            <h1
+              className={`text-xl leading-7 openSansFont font-bold uppercase py-6`}
+            >
+              My Templates
+            </h1>
+          </div>
+        </motion.div>
 
-        <div className="relative flex items-center mt-4 mb-4">
+        {/* Secondary Header */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          {filteredTemplates.length > 0 ? (
+            <h1 className="openSansFont font-medium text-md py-2 leading-7">
+              Please review or edit your templates:
+            </h1>
+          ) : (
+            <h1 className="openSansFont font-medium text-2xl py-2 leading-7">
+              There are currently no templates. Create one below.
+            </h1>
+          )}
+          <div>
+            {errorMessage && (
+              <div className="text-red-500 text-center verdanaFont">
+                {errorMessage}
+              </div>
+            )}
+          </div>
+        </motion.div>
+
+        {/* Search Filter */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          className="relative flex items-center mt-4 mb-4"
+        >
           <FiSearch className="absolute left-3" />
           <input
             type="text"
@@ -211,28 +233,22 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
               onClick={() => setSearchQuery("")}
             />
           )}
-        </div>
+        </motion.div>
 
-        {filteredTemplates.length > 0 ? (
-          <h1 className="futuraFont font-medium text-xl py-2">
-            Please choose one template to start
-          </h1>
-        ) : (
-          <h1 className="futuraFont font-medium text-xl py-2">
-            There are currently no templates. Create one below
-          </h1>
-        )}
-        <div>
-          {errorMessage && (
-            <div className="text-red-500 text-center verdanaFont">
-              {errorMessage}
-            </div>
-          )}
-        </div>
-        <div className="flex justify-center mt-4 mb-4">{paginationButtons}</div>
-        <div className="flex flex-wrap -mx-2">
-          {currentTemplates.map((template, idx) => (
-            <div key={idx} className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4">
+        {/* Templates */}
+        <motion.div
+          className="flex flex-wrap -mx-2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ staggerChildren: 0.1, delay: 0.7 }}
+        >
+          {filteredTemplates.map((template, idx) => (
+            <motion.div
+              key={idx}
+              className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
               <TemplateCard
                 onClick={() => handleTemplateClick(template)}
                 onDelete={() =>
@@ -240,22 +256,42 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
                 }
                 onEdit={() => handleEditTemplate(template._id!)}
                 data={template}
+                isSelected={template._id === selectedTemplateId}
               />
-            </div>
+            </motion.div>
           ))}
-        </div>
-        <div className="flex justify-center mb-4">{paginationButtons}</div>
-        <div className="flex justify-center h-28">
-          <Link href="/user/createtemplate">
-            <BasicRoundedButton label="Create New Template" />
+        </motion.div>
+
+        {/* Button */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.7 }}
+          className="flex flex-col justify-center items-center gap-4 mt-10"
+        >
+          <Link
+            href="/user/createtemplate"
+            onClick={() => setIsPageLoading(true)}
+          >
+            <BasicRoundedButton
+              label="Create New Template"
+              buttonClassNames="defaultButtonColor !justify-evenly"
+              disabled={isPageLoading}
+            >
+              {isPageLoading && (
+                <CircularProgress size={30} sx={{ color: "white" }} />
+              )}
+            </BasicRoundedButton>
           </Link>
-        </div>
+          <BasicRoundedButton
+            onClick={() => handleUseTemplate(selectedTemplate!)}
+            label="Use Template"
+            disabled={!selectedTemplate}
+          />
+        </motion.div>
       </div>
-      <TemplateDataModal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        exerciseData={selectedTemplate}
-      />
+
+      {/* Popup Modals */}
       <EditTemplateModal
         open={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
@@ -265,37 +301,19 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
         templateId={selectedTemplateId}
         updateTemplateError={updateTemplateErrorMessage}
       />
-      <ConfirmDeleteDialog
-        title={`Delete '${templateDataToDelete?.name}'`}
-        message={`Please confirm the deletion of this template.`}
+      <ConfirmDeleteModal
+        title={`Are you sure you want to delete '${templateDataToDelete?.name}'?`}
+        message={`This action is permanent and can't be undone.`}
         onClose={() => {
           setIsConfirmDeleteTemplateModalOpen(false);
           setTemplateDataDelete(null);
         }}
         open={isConfirmDeleteTemplateModalOpen}
-        actionButtons={[
-          <Button
-            color="primary"
-            sx={{ textTransform: "none" }}
-            onClick={() => {
-              setIsConfirmDeleteTemplateModalOpen(false);
-              setTemplateDataDelete(null);
-            }}
-          >
-            Cancel
-          </Button>,
-          <Button
-            color="error"
-            sx={{ fontWeight: "bold", textTransform: "none" }}
-            onClick={() => {
-              templateDataToDelete?.id &&
-                handleDeleteTemplate(templateDataToDelete.id);
-              setIsConfirmDeleteTemplateModalOpen(false);
-            }}
-          >
-            Delete
-          </Button>,
-        ]}
+        onDelete={() => {
+          templateDataToDelete?.id &&
+            handleDeleteTemplate(templateDataToDelete.id);
+          setIsConfirmDeleteTemplateModalOpen(false);
+        }}
       />
     </div>
   );

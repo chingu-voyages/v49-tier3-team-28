@@ -89,25 +89,21 @@ export default function SignupForm() {
 
   const signUpUserWithGoogle = async () => {
     setIsLoading(true);
-
-    const res = await AuthClient.signInWithGoogle();
-
-    if (!res.success) {
-      setAppError({ error: true, message: res.errorMessage! });
-      setIsLoading(false);
-      return;
-    }
-
+    await AuthClient.signInWithGoogle();
     setIsLoading(false);
   };
 
   return (
     <div className={`mt-6`}>
-      <h1 className={"font-bold leading-7 text-xl uppercase mt-14 p-5"}>
+      <h1
+        className={
+          "font-bold openSansFront leading-7 text-2xl uppercase mt-14 pl-5"
+        }
+      >
         Let's get started!
       </h1>
       <div>
-        <h2 className="font-normal leading-7 text-xs p-5">
+        <h2 className="font-normal robotoFont leading-7 text-sm pl-5">
           Fill in the form below to join our community.
         </h2>
       </div>

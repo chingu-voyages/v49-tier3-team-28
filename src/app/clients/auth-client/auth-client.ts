@@ -76,20 +76,10 @@ export const AuthClient = {
       errorMessage: "Please check your credentials and try again",
     };
   },
-  async signInWithGoogle(): Promise<{
-    success: boolean;
-    redirectUrl?: string;
-    errorMessage?: string;
-  }> {
-    const res = await signIn("google", {
+  async signInWithGoogle(): Promise<void> {
+    await signIn("google", {
       redirect: true,
       callbackUrl: "/user/home",
     });
-    if (res?.ok) return { success: true, redirectUrl: res.url! };
-
-    return {
-      success: false,
-      errorMessage: "An error occured while signing in with Google",
-    };
   },
 };

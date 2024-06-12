@@ -2,6 +2,7 @@ import { LoggingClient } from "@/app/clients/logging-client/logging-client";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { CircularProgress, Modal } from "@mui/material";
+import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { FiX } from "react-icons/fi";
 import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
@@ -49,9 +50,9 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
               sets: exerciseActivity.sets.map((set, index) => {
                 return {
                   setNumber: index + 1,
-                  weight: set.weight,
+                  weight: 0,
                   unit: unit,
-                  reps: set.reps,
+                  reps: 0,
                 };
               }),
             };
@@ -66,6 +67,7 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
           logs: logData,
         });
         setIsModalOpen(true);
+        onClose();
       } catch (error: any) {
         setErrorMessage(error.message);
         return;
@@ -82,74 +84,92 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
       </div>
     );
   }
+
   return (
     <div>
-      <Modal open={open} onClose={onClose} className="p-4">
-        <div className="flex flex-col w-1/2 h-3/4 bg-white p-10 rounded-xl relative justify-evenly w-full ">
-          <div className="flex justify-between">
-            <h1 className="text-3xl font-bold futuraFont uppercase self-center">
-              Add log as template
-            </h1>
-            <button onClick={onClose}>
-              <FiX className="size-8 text-white blueGray rounded-full ml-2 p-2 hover:bg-stone-500" />
-            </button>
-          </div>
-
-          <div>
-            <h1 className="verdanaFont text-base">Give your template a name</h1>
-            <input
-              type="text"
-              id="templateName"
-              value={templateName}
-              maxLength={50}
-              onChange={(e) => setTemplateName(e.target.value)}
-              placeholder="Template Name"
-              className="p-2 bg-gray-50 w-full robotoFont h-16 text-xl hover:bg-neutral-300"
-            />
-            {errorMessage && (
-              <p className="text-red-500 mt-2 font-light text-sm">
-                {errorMessage}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <h1 className="futuraFont font-medium text-xl">
-              Please Review Your Template:
-            </h1>
-            <div>
-              {data.map((exercise, index) => (
-                <>
-                  <div
-                    className="flex justify-between items-center mb-1 defaultButtonColor p-2"
-                    key={index}
-                  >
-                    <p className="text-white verdanaFont">
-                      {exercise.exerciseName}
-                    </p>
-                  </div>
-                  <div className="paleSalmon p-2">
-                    <p className="text-black">
-                      <b>{exercise.sets.length}</b> Sets
-                    </p>
-                  </div>
-                </>
-              ))}
+      <Modal open={open} onClose={onClose}>
+        <motion.div
+          initial={{ opacity: 0, y: "-100vh" }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="flex flex-col bg-white p-2 rounded-xl relative gap-4 h-fill-available"
+        >
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.3 }}
+            className="flex flex-col gap-6 pt-8 pb-8 bg-white w-full max-w-md text-center relative overflow-y-auto max-h-screen"
+          >
+            <div className="flex justify-between">
+              <h1 className="text-2xl font-bold openSansFont uppercase ml-4 text-nowrap self-center">
+                Add log as template
+              </h1>
+              <button onClick={onClose}>
+                <FiX className="size-12 text-white blueGray rounded-full ml-2 mr-4 p-2 hover:bg-stone-500" />
+              </button>
             </div>
-            <p className="verdanaFont text-xs mt-4 p-1">
-              * Please note that only the exercise name and number of sets will
-              be saved when adding the log as a template.
-            </p>
-          </div>
-          <div className="flex flex-col justify-between h-28">
-            <BasicRoundedButton
-              onClick={() => handleSaveTemplate()}
-              label="Save as a Template"
-              buttonClassNames="defaultButtonColor"
-              disabled={templateName?.length === 0}
-            />
-          </div>
-        </div>
+
+            <div className="ml-4 mr-4">
+              <h1 className="verdanaFont mt-2 text-left text-gray-500 text-sm">
+                Give your template a name
+              </h1>
+              <input
+                type="text"
+                id="templateName"
+                value={templateName}
+                maxLength={50}
+                onChange={(e) => setTemplateName(e.target.value)}
+                placeholder="Template Name"
+                className="mt-2 pl-4 w-full bg-gray-50 robotoFont h-16 text-xl hover:bg-neutral-300"
+              />
+              {errorMessage && (
+                <p className="text-red-500 mt-2 font-light text-sm">
+                  {errorMessage}
+                </p>
+              )}
+            </div>
+
+            <div className="m-4 text-left flex flex-col gap-8">
+              <h1 className="openSansFont font-medium text-lg leading-7">
+                Please review your template:
+              </h1>
+              <div>
+                {data.map((exercise, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.2 * (index + 1), duration: 0.3 }}
+                  >
+                    <div className="flex justify-between items-center mb-1 defaultButtonColor p-2">
+                      <p className="text-white verdanaFont">
+                        {exercise.exerciseName}
+                      </p>
+                    </div>
+                    <div className="paleSalmon p-2">
+                      <p className="text-black">
+                        <b>{exercise.sets.length}</b> Sets
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+              <p className="verdanaFont text-xs mt-4 p-1">
+                * Please note that only the exercise name and number of sets
+                will be saved when adding the log as a template.
+              </p>
+            </div>
+
+            <div className="flex flex-col justify-between h-28 self-center">
+              <BasicRoundedButton
+                onClick={() => handleSaveTemplate()}
+                label="Save as a Template"
+                buttonClassNames="defaultButtonColor"
+                disabled={templateName?.length === 0}
+              />
+            </div>
+          </motion.div>
+        </motion.div>
       </Modal>
       <SuccessModal open={isModalOpen} />
     </div>

@@ -8,9 +8,12 @@ const config: Config = {
   ],
   theme: {
     fontFamily: {
-      sans: ["futura-pt", "helvetica", "Rowdies", "sans-serif"],
+      sans: ["helvetica", "Rowdies", "sans-serif"],
     },
     extend: {
+      height: {
+        "fill-available": "-webkit-fill-available",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

@@ -1,20 +1,23 @@
 import { Modal } from "@mui/material";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import React from "react";
 import { FiX } from "react-icons/fi";
 import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
 
-interface SaveDraftModalProps {
+interface ConfirmDeleteModalProps {
   open: boolean;
   onClose: () => void;
-  onSaveDraft: () => void;
+  title: string;
+  message?: string;
+  onDelete: () => void;
 }
 
-const SaveDraftModal: React.FC<SaveDraftModalProps> = ({
+const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
   open,
   onClose,
-  onSaveDraft,
+  title,
+  message,
+  onDelete,
 }) => {
   return (
     <Modal open={open} onClose={onClose} className="modalOuterContainer">
@@ -31,34 +34,27 @@ const SaveDraftModal: React.FC<SaveDraftModalProps> = ({
         >
           <FiX />
         </button>
-        <h1 className="text-xl verdanaFont ml-10 text-left darkCharcoal ">
-          Are You Sure?
+        <h1 className="text-xl verdanaFont ml-10 text-left darkCharcoal mr-10">
+          {title}
         </h1>
-        <p className="robotoFont text-sm ml-10 mr-10 text-gray-500 text-left">
-          You have unsaved exercise data. Do you want to save it before leaving?
+        <p className="robotoFont text-sm ml-10 text-gray-500 text-left">
+          {message}
         </p>
         <div className="flex justify-between flex-col items-center gap-4">
           <BasicRoundedButton
-            onClick={onSaveDraft}
-            label="Save and Exit"
+            onClick={onDelete}
+            label="Delete"
             buttonClassNames="defaultButtonColor"
           />
-
-          <Link href="/user/home">
-            <BasicRoundedButton
-              onClick={() => {
-                if (localStorage.getItem("draft")) {
-                  localStorage.removeItem("draft");
-                }
-              }}
-              label="Leave Without Saving"
-              buttonClassNames="secondaryButtonColor"
-            />
-          </Link>
+          <BasicRoundedButton
+            onClick={onClose}
+            label="Cancel"
+            buttonClassNames="secondaryButtonColor"
+          />
         </div>
       </motion.div>
     </Modal>
   );
 };
 
-export default SaveDraftModal;
+export default ConfirmDeleteModal;

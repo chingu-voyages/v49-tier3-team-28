@@ -1,7 +1,9 @@
 import { Modal } from "@mui/material";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
 
 interface SuccessModalProps {
   open: boolean;
@@ -9,38 +11,47 @@ interface SuccessModalProps {
 
 const SuccessModal: React.FC<SuccessModalProps> = ({ open }) => {
   return (
-    <Modal open={open} className="p-4">
-      <div className="flex flex-col w-1/2 h-3/4 bg-white p-6 rounded-xl relative justify-evenly w-full">
+    <Modal open={open} className="modalOuterContainer">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3 }}
+        className="modalInnerContainer modalBgColor shadow-lg relative"
+      >
         <div className="flex justify-center">
           <Image
-            src="/images/create-log-page/modal-splash.jpg"
+            src="/success.svg"
             width={250}
             height={250}
             alt="modal-image"
           />
         </div>
         <div>
-          <h1 className="text-2xl verdanaFont text-center">SUCCESS!</h1>
-          <h3 className="robotoFont text-sm text-justify">
-            Your exercise template has been saved successfully.<br></br> You can
-            now re-use this template to log your exercises next time!
-          </h3>
-          <div className="mt-2 flex flex-col gap-2 px-4">
-            <Link
-              className="rounded-3xl bg-slate-300 p-2 text-center"
-              href={"/user/home"}
-            >
-              Return to Home
+          <div className="flex flex-col gap-">
+            <h1 className="text-xl verdanaFont text-center darkCharcoal">
+              SUCCESS!
+            </h1>
+            <h3 className="robotoFont text-sm m-6 text-gray-500">
+              Your exercise template has been saved successfully. You can now
+              re-use this template to log your exercises next time!
+            </h3>
+          </div>
+          <div className="mt-2 flex flex-col gap-4 px-4 items-center">
+            <Link href={"/user/home"}>
+              <BasicRoundedButton
+                label="Return To Home"
+                buttonClassNames="secondaryButtonColor"
+              />
             </Link>
-            <Link
-              className="rounded-3xl bg-slate-300 p-2 text-center"
-              href={"/user/mytemplates"}
-            >
-              View Templates
+            <Link href={"/user/mytemplates"}>
+              <BasicRoundedButton
+                label="View Templates"
+                buttonClassNames="defaultButtonColor"
+              />
             </Link>
           </div>
         </div>
-      </div>
+      </motion.div>
     </Modal>
   );
 };
