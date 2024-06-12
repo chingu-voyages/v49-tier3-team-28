@@ -54,7 +54,7 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
               : "lightTanOrange text-black"
           }`}
         >
-          <p className="verdanaFont">{data.name}</p>
+          <p className="verdanaFont text-base leading-6">{data.name}</p>
           <div className="flex items-center gap-2">
             <button
               className="scale-125 hover:scale-150 transform duration-300 ease-out"
@@ -82,8 +82,16 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
                 key={index}
                 variants={itemVariants}
               >
-                <div>{exercise.exerciseName}</div>
-                <div>{exercise.sets.length} set(s)</div>
+                <div className="pl-1">
+                  <p className="verdanaFont text-sm leading-6">
+                    {exercise.exerciseName}
+                  </p>
+                </div>
+                <div>
+                  <p className="verdanaFont text-sm leading-6">
+                    {exercise.sets.length} set{exercise.sets.length > 1 && "s"}
+                  </p>
+                </div>
               </motion.div>
             ))}
 
