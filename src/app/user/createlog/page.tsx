@@ -224,7 +224,7 @@ export default function CreateLog() {
   if (status === "loading")
     return (
       <div className="flex justify-center" style={{ marginTop: "40%" }}>
-        <CircularProgress />;
+        <CircularProgress />
       </div>
     );
 
@@ -237,7 +237,7 @@ export default function CreateLog() {
         transition={{ duration: 0.5, delay: 0.3 }}
         className="flex justify-between"
       >
-        <h1 className="text-3xl font-bold futuraFont uppercase self-center">
+        <h1 className="text-2xl font-bold openSansFont uppercase self-center">
           Log Your Workout
         </h1>
         <button
@@ -247,7 +247,7 @@ export default function CreateLog() {
               : router.push("/user/home")
           }
         >
-          <FiX className="size-8 text-white blueGray rounded-full ml-2 p-2 hover:bg-stone-500" />
+          <FiX className="size-12 text-white blueGray rounded-full ml-2 p-2 hover:bg-stone-500" />
         </button>
       </motion.div>
       {!isUserSearching && (
