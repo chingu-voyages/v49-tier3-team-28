@@ -1,4 +1,4 @@
-import { TextField } from "@mui/material";
+import { InputBaseComponentProps, TextField } from "@mui/material";
 
 // Reusable text field we can use in forms (for basic text and email inputs)
 interface FormTextInputFieldProps {
@@ -12,6 +12,7 @@ interface FormTextInputFieldProps {
   error?: boolean;
   disabled?: boolean;
   maxLength?: number;
+  inputProps?: InputBaseComponentProps;
 }
 
 export function FormTextInputField({
@@ -25,6 +26,7 @@ export function FormTextInputField({
   disabled,
   onBlur,
   maxLength,
+  inputProps,
 }: FormTextInputFieldProps) {
   return (
     <TextField
@@ -43,6 +45,7 @@ export function FormTextInputField({
         style: {
           fontFamily: "Roboto, sans-serif",
         },
+        ...inputProps,
       }}
       sx={{
         marginTop: "4px",

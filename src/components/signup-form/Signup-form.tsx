@@ -129,6 +129,10 @@ export default function SignupForm() {
                   username: value,
                 });
               }}
+              inputProps={{
+                autoCapitalize: "off",
+                "aria-autocomplete": "none",
+              }}
             />
             <FormTextInputField
               id="email"
@@ -148,6 +152,10 @@ export default function SignupForm() {
                   ...formFieldValues,
                   email: value,
                 });
+              }}
+              inputProps={{
+                autoCapitalize: "off",
+                "aria-autocomplete": "none",
               }}
             />
             <PasswordInputField
