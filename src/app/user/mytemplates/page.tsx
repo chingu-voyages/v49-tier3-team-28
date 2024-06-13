@@ -154,7 +154,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
   if (isBusy) {
     return (
       <div className="flex justify-center" style={{ marginTop: "40%" }}>
-        <CircularProgress />;
+        <CircularProgress />
       </div>
     );
   }
