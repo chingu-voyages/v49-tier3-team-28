@@ -40,7 +40,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({ open }) => {
             <Link href={"/user/home"}>
               <BasicRoundedButton
                 label="Return To Home"
-                buttonClassNames="secondaryButtonColor"
+                buttonClassNames="whiteButton"
               />
             </Link>
             <Link href={"/user/mytemplates"}>

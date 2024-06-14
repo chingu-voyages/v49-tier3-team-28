@@ -52,7 +52,7 @@ const SaveDraftModal: React.FC<SaveDraftModalProps> = ({
                 }
               }}
               label="Leave Without Saving"
-              buttonClassNames="secondaryButtonColor"
+              buttonClassNames="whiteButton"
             />
           </Link>
         </div>

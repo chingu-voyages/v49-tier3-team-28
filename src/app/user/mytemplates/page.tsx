@@ -275,7 +275,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
           >
             <BasicRoundedButton
               label="Create New Template"
-              buttonClassNames="defaultButtonColor !justify-evenly"
+              buttonClassNames="whiteButton !justify-evenly"
               disabled={isPageLoading}
             >
               {isPageLoading && (
@@ -287,6 +287,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
             onClick={() => handleUseTemplate(selectedTemplate!)}
             label="Use Template"
             disabled={!selectedTemplate}
+            buttonClassNames={selectedTemplate! && "defaultButtonColor"}
           />
         </motion.div>
       </div>

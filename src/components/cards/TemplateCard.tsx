@@ -116,10 +116,10 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
                 className="flex gap-1 items-center p-2 hover:scale-110 transition ease-in-out duration-100"
               >
                 <PiTrashFill
-                  style={{ color: "#03BB9B" }}
+                  style={{ color: "red" }}
                   className="text-red-500"
                 />
-                <p className="text-sm font-bold" style={{ color: "#03BB9B" }}>
+                <p className="text-sm font-bold" style={{ color: "red" }}>
                   Delete
                 </p>
               </button>

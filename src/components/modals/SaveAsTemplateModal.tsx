@@ -92,7 +92,7 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
           initial={{ opacity: 0, y: "-100vh" }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="flex flex-col bg-white p-2 rounded-xl relative gap-4 h-fill-available"
+          className="flex flex-col bg-white p-2 relative gap-4 h-fill-available"
         >
           <motion.div
             initial={{ opacity: 0 }}
@@ -164,8 +164,8 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
               <BasicRoundedButton
                 onClick={() => handleSaveTemplate()}
                 label="Save as a Template"
-                buttonClassNames="defaultButtonColor"
-                disabled={templateName?.length === 0}
+                disabled={!templateName}
+                buttonClassNames={templateName! && "defaultButtonColor"}
               />
             </div>
           </motion.div>

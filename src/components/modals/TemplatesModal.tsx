@@ -116,7 +116,7 @@ const TemplatesModal: React.FC<TemplateModalProps> = ({
                   onClick={onGenerate}
                   label="Start Logging"
                   disabled={!selectedTemplate}
-                  buttonClassNames="secondaryButtonColor"
+                  buttonClassNames={selectedTemplate! && "defaultButtonColor"}
                 />
               </div>
             </motion.div>

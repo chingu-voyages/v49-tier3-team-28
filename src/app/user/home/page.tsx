@@ -47,12 +47,12 @@ export default function LandingPage() {
           </h1>
           <Link
             href="/user/mytemplates"
-            className="self-center"
+            className="self-center "
             onClick={() => setIsPageLoadingTemplates(true)}
           >
             <BasicRoundedButton
               label="Manage Templates"
-              buttonClassNames="!w-36"
+              buttonClassNames="!w-36 !bg-white !text-black !border-solid"
               disabled={
                 isPageLoadingTemplates ||
                 isPageLoadingStartLogging ||
@@ -62,7 +62,7 @@ export default function LandingPage() {
                 fontSize: "12px",
                 fontFamily: "Roboto, sans-serif",
                 lineHeight: "15px",
-                backgroundColor: "#95A1A8",
+                border: "black",
               }}
             >
               {isPageLoadingTemplates && (
@@ -133,7 +133,7 @@ export default function LandingPage() {
             >
               <BasicRoundedButton
                 label="View Logs"
-                buttonClassNames="!w-24 !h-8"
+                buttonClassNames="!w-24 !h-8 !bg-white !text-black !border-solid"
                 disabled={
                   isPageLoadingTemplates ||
                   isPageLoadingStartLogging ||
@@ -141,7 +141,7 @@ export default function LandingPage() {
                 }
                 customMaterialButtonStyles={{
                   fontSize: "10px",
-                  backgroundColor: "#03BB9B",
+                  border: "black",
                 }}
               />
             </Link>

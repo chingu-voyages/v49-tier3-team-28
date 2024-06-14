@@ -52,7 +52,7 @@ const ContinueDraftModal: React.FC<ContinueDraftModalProps> = ({
           <BasicRoundedButton
             onClick={onClose}
             label="Create New Log"
-            buttonClassNames="secondaryButtonColor"
+            buttonClassNames="whiteButton"
           />
         </div>
       </motion.div>

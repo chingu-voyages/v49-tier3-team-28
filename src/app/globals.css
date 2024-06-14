@@ -6,7 +6,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap");
 
 /* Open sans font from google fonts */
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap");
 
 :root {
   margin: 0;
@@ -50,6 +50,12 @@ body {
 /* Background color of most buttons */
 .defaultButtonColor {
   background-color: var(--orange) !important;
+}
+
+.whiteButton {
+  background-color: white !important;
+  color: black !important;
+  border: solid !important;
 }
 
 .secondaryButtonColor {
