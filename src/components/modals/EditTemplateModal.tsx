@@ -128,7 +128,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col bg-white p-8 rounded-xl relative gap-4 h-fill-available"
+        className="flex flex-col bg-white p-8 relative gap-4 h-fill-available"
       >
         {/* Header */}
         <div className="flex gap-8">
