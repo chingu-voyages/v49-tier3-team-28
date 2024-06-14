@@ -128,6 +128,10 @@ export function SigninForm() {
                   email: value,
                 });
               }}
+              inputProps={{
+                autoCapitalize: "off",
+                "aria-autocomplete": "none",
+              }}
             />
             <PasswordInputField
               id="password"
