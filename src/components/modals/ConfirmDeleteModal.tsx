@@ -49,7 +49,7 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
           <BasicRoundedButton
             onClick={onClose}
             label="Cancel"
-            buttonClassNames="secondaryButtonColor"
+            buttonClassNames="whiteButton"
           />
         </div>
       </motion.div>

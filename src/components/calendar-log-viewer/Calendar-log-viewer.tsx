@@ -147,12 +147,12 @@ export function CalendarLogViewer({ readonly }: CalendarLogViewerProps) {
           }}
           sx={{
             "& .MuiPickersCalendarHeader-label": {
-              backgroundColor: "#03BB9B",
+              backgroundColor: "white",
               borderRadius: "20px",
               paddingLeft: "10px",
               paddingRight: "10px",
               fontWeight: 700,
-              color: "white",
+              color: "black",
             },
             "& .MuiPickersCalendarHeader-switchViewIcon": {
               display: "none",

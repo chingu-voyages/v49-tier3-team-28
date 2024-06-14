@@ -39,7 +39,11 @@ export const PasswordInputField = ({
       helperText={helperText}
       disabled={disabled}
       onBlur={onBlur}
-      inputProps={{ maxLength }}
+      inputProps={{
+        maxLength,
+        autoCapitalize: "off",
+        "aria-autocomplete": "none",
+      }}
       sx={{
         marginTop: "4px",
         marginBottom: "4px",
