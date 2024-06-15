@@ -161,13 +161,11 @@ export function CalendarLogViewer({ readonly }: CalendarLogViewerProps) {
           onMonthChange={handleMonthChange}
         />
       </div>
-      <div>
-        {errorMessage && (
-          <Alert severity="error" variant="outlined" sx={{ marginTop: "10px" }}>
-            {errorMessage}
-          </Alert>
-        )}
-      </div>
+      {errorMessage && (
+        <Alert severity="error" variant="outlined" sx={{ marginTop: "10px" }}>
+          {errorMessage}
+        </Alert>
+      )}
       {!readonly && (
         <div>
           <div>

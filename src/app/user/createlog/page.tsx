@@ -229,7 +229,7 @@ export default function CreateLog() {
     );
 
   return (
-    <div className="flex flex-col gap-y-10 justify-center w-screen mt-4 p-4">
+    <div className="flex flex-col gap-y-10 justify-center w-screen mt-4 p-4 xl:w-1280">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
