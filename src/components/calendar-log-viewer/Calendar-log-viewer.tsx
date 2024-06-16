@@ -161,13 +161,11 @@ export function CalendarLogViewer({ readonly }: CalendarLogViewerProps) {
           onMonthChange={handleMonthChange}
         />
       </div>
-      <div>
-        {errorMessage && (
-          <Alert severity="error" variant="outlined" sx={{ marginTop: "10px" }}>
-            {errorMessage}
-          </Alert>
-        )}
-      </div>
+      {errorMessage && (
+        <Alert severity="error" variant="outlined" sx={{ marginTop: "10px" }}>
+          {errorMessage}
+        </Alert>
+      )}
       {!readonly && (
         <div>
           <div>
@@ -254,8 +252,4 @@ const renderExerciseTables = (ex: ExerciseActivity[], idxKey: string) => {
       })}
     </div>
   );
-};
-
-const generateRandomNumberBetween = (min: number, max: number) => {
-  return Math.floor(Math.random() * (max - min + 1) + min);
 };

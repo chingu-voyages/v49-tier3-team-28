@@ -245,7 +245,7 @@ const MyTemplates: React.FC<MyTemplatesProps> = ({}) => {
           {filteredTemplates.map((template, idx) => (
             <motion.div
               key={idx}
-              className="w-full sm:w-1/2 lg:w-1/3 px-2 mb-4"
+              className="w-full px-2 mb-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
             >
