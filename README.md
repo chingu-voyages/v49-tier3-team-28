@@ -19,6 +19,10 @@ It is a mobile-first web application that helps individuals who are interested i
 
 ## Screenshots
 
+![Title Page](https://github.com/chingu-voyages/v49-tier3-team-28/blob/71a06b378c3648189e99781c6f098c414e79b6d0/public/images/screenshots/splash.png | width=190)
+
+![Landing Page](https://github.com/chingu-voyages/v49-tier3-team-28/blob/71a06b378c3648189e99781c6f098c414e79b6d0/public/images/screenshots/landing.png | width=190)
+
 ## Tech Stack
 
 - NextJS
