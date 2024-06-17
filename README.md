@@ -32,6 +32,22 @@ It is a mobile-first web application that helps individuals who are interested i
 - MongoDB
 - Tailwind w/ MaterialUI
 
+## Local Development
+
+### Setup
+
+- Clone the repo and run `npm i` to install dependencies
+
+### Required environment variables
+
+- Refer to `env.local.sample` for the environment variables
+- Create a `.env.local` file at the root of the project.
+- Use of Google for an authentication providers with NextAuth.js requires Google Cloud. See documenation: (https://next-auth.js.org/providers/google)
+
+### Running the local development app
+
+- `npm run dev`
+
 ## Our Team
 
 - Helena Chen: [GitHub](https://github.com/helenachen03) / [LinkedIn](https://linkedin.com/in/helenachen0308)
