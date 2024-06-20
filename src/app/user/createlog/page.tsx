@@ -9,6 +9,7 @@ import ExerciseTable from "@/components/tables/ExerciseTable";
 import { convertWeight } from "@/helpers/helpers";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { Exercise } from "@/lib/exercises/exercise";
+import { ExerciseEnum } from "@/lib/exercises/exercise-enum";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Set } from "@/models/set.model";
@@ -98,7 +99,7 @@ export default function CreateLog() {
 
   const handleSelectExercise = (exercise: Exercise) => {
     const newExercise: ExerciseActivity = {
-      exerciseName: exercise.label,
+      exerciseName: exercise.name,
       sets: [{ setNumber: 1, reps: 0, weight: 0, unit }],
     };
 
@@ -193,7 +194,10 @@ export default function CreateLog() {
           exercises: selectedExercises.map((exerciseActivity) => {
             // Map selected exercises to exerciseSchema
             return {
-              exerciseName: exerciseActivity.exerciseName,
+              exerciseName:
+                ExercisesDictionary[
+                  exerciseActivity.exerciseName as ExerciseEnum
+                ].name,
               sets: exerciseActivity.sets.map((set, index) => {
                 // Map sets to setSchema
                 return {
@@ -346,7 +350,10 @@ export default function CreateLog() {
                 className="rounded-xl mb-4 border border-gray-100 shadow-md relative"
               >
                 <ExerciseTable
-                  exerciseName={exercise.exerciseName}
+                  exerciseName={
+                    ExercisesDictionary[exercise.exerciseName as ExerciseEnum]
+                      ?.label || exercise.exerciseName
+                  }
                   idx={index}
                   sets={exercise.sets}
                   unit={unit}

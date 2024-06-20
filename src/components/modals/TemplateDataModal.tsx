@@ -1,7 +1,8 @@
+import { ExerciseEnum } from "@/lib/exercises/exercise-enum";
+import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Modal } from "@mui/material";
 import { AnimatePresence, motion } from "framer-motion";
-import { useRouter } from "next/navigation";
 import React from "react";
 import { FiX } from "react-icons/fi";
 import { BasicRoundedButton } from "../buttons/basic-rounded-button/Basic-rounded-button";
@@ -17,8 +18,6 @@ const TemplateDataModal: React.FC<TemplateDataModalProps> = ({
   onClose,
   exerciseData,
 }) => {
-  const router = useRouter();
-
   return (
     <Modal open={open} onClose={onClose} className="modalOuterContainer">
       <motion.div
@@ -56,7 +55,9 @@ const TemplateDataModal: React.FC<TemplateDataModalProps> = ({
                     className="rounded-xl mb-4 border border-gray-100 shadow-md relative"
                   >
                     <h4 className="text-white font-bold p-2 defaultButtonColor">
-                      {exercise.exerciseName}
+                      {ExercisesDictionary[
+                        exercise.exerciseName as ExerciseEnum
+                      ]?.label || exercise.exerciseName}
                     </h4>
                     <table className="w-full border-collapse bg-white">
                       {exercise.sets.map((set, eIdx) => (

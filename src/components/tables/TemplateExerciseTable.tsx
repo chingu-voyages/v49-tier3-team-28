@@ -1,3 +1,5 @@
+import { ExerciseEnum } from "@/lib/exercises/exercise-enum";
+import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { FormControl, MenuItem, Select, styled } from "@mui/material";
 import { useState } from "react";
@@ -24,7 +26,8 @@ export function TemplateExerciseTable({
     <div>
       {/* Header with exercise name and close button */}
       <h4 className="text-white text-sm font-bold p-2 defaultButtonColor">
-        {exerciseActivity.exerciseName}
+        {ExercisesDictionary[exerciseActivity.exerciseName as ExerciseEnum]
+          ?.label || exerciseActivity.exerciseName}
       </h4>
       <button
         onClick={() => onDeleteExercise(exerciseActivity.id)}

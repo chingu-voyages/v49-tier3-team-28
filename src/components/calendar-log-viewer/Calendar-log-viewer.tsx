@@ -1,4 +1,6 @@
 import { LoggingClient } from "@/app/clients/logging-client/logging-client";
+import { ExerciseEnum } from "@/lib/exercises/exercise-enum";
+import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Log } from "@/models/log.model";
 import { Alert, CircularProgress } from "@mui/material";
@@ -216,7 +218,8 @@ const renderExerciseTables = (ex: ExerciseActivity[], idxKey: string) => {
           <React.Fragment key={(exercise as any)._id}>
             <div>
               <h4 className="text-white text-sm font-bold p-2 defaultButtonColor">
-                {exercise.exerciseName}
+                {ExercisesDictionary[exercise.exerciseName as ExerciseEnum]
+                  ?.label || exercise.exerciseName}
               </h4>
             </div>
             <table className="w-full border-collapse bg-white">
@@ -230,7 +233,6 @@ const renderExerciseTables = (ex: ExerciseActivity[], idxKey: string) => {
                     <td className="p-2">
                       <div className="flex">
                         <p>{set.weight}</p>
-
                         <div>
                           <p className="px-2 self-center">{set.unit}</p>
                         </div>
@@ -239,7 +241,6 @@ const renderExerciseTables = (ex: ExerciseActivity[], idxKey: string) => {
                     <td className="p-2 text-center ">
                       <div className="flex">
                         <p>{set.reps}</p>
-
                         <p className="px-2 self-center">reps</p>
                       </div>
                     </td>

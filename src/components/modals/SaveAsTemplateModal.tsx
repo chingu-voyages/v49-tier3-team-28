@@ -1,5 +1,7 @@
 import { LoggingClient } from "@/app/clients/logging-client/logging-client";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
+import { ExerciseEnum } from "@/lib/exercises/exercise-enum";
+import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { CircularProgress, Modal } from "@mui/material";
 import { motion } from "framer-motion";
@@ -46,7 +48,10 @@ const SaveAsTemplateModal: React.FC<SaveAsTemplateModalProps> = ({
           name: templateName,
           exercises: data.map((exerciseActivity) => {
             return {
-              exerciseName: exerciseActivity.exerciseName,
+              exerciseName:
+                ExercisesDictionary[
+                  exerciseActivity.exerciseName as ExerciseEnum
+                ].name,
               sets: exerciseActivity.sets.map((set, index) => {
                 return {
                   setNumber: index + 1,

@@ -1,5 +1,6 @@
 import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
 import { Exercise } from "@/lib/exercises/exercise";
+import { ExerciseEnum } from "@/lib/exercises/exercise-enum";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Log } from "@/models/log.model";
@@ -65,7 +66,7 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
 
   const handleSelectExercise = (exercise: Exercise) => {
     const newExercise: ExerciseActivity = {
-      exerciseName: exercise.label,
+      exerciseName: exercise.name,
       sets: [{ setNumber: 1, reps: 0, weight: 0, unit: "lbs" }],
     };
 
@@ -227,7 +228,10 @@ const EditTemplateModal: React.FC<EditTemplateModalProps> = ({
               transition={{ delay: eIdx * 0.1 }}
             >
               <div className="flex justify-between w-full items-center pl-2">
-                <div className="p-1">{exercise.exerciseName}</div>
+                <div className="p-1">
+                  {ExercisesDictionary[exercise.exerciseName as ExerciseEnum]
+                    ?.label || exercise.exerciseName}
+                </div>
                 <div className="flex gap-2 items-center mr-2">
                   <input
                     type="number"

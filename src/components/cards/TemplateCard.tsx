@@ -1,3 +1,5 @@
+import { ExerciseEnum } from "@/lib/exercises/exercise-enum";
+import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { Log } from "@/models/log.model";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
@@ -84,7 +86,8 @@ const TemplateCard: React.FC<TemplateCardProps> = ({
               >
                 <div className="pl-1">
                   <p className="verdanaFont text-sm leading-6">
-                    {exercise.exerciseName}
+                    {ExercisesDictionary[exercise.exerciseName as ExerciseEnum]
+                      ?.label || exercise.exerciseName}
                   </p>
                 </div>
                 <div>

@@ -1,7 +1,6 @@
 "use client";
 import { BasicRoundedButton } from "@/components/buttons/basic-rounded-button/Basic-rounded-button";
 import { CalendarLogViewer } from "@/components/calendar-log-viewer/Calendar-log-viewer";
-import { MonthToDateExerciseChart } from "@/components/charts/mtd-exercise-count/MonthToDateExerciseChart";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { CircularProgress, Link } from "@mui/material";
 import dayjs from "dayjs";
@@ -150,7 +149,6 @@ export default function LandingPage() {
         </div>
         <CalendarLogViewer readonly />
       </motion.div>
-      <MonthToDateExerciseChart />
     </div>
   );
 }

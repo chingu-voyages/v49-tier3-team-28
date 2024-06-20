@@ -4,6 +4,7 @@ import SuccessModal from "@/components/modals/SuccessModal";
 import { TemplateExerciseTable } from "@/components/tables/TemplateExerciseTable";
 import { useAuthSession } from "@/lib/contexts/auth-context/auth-context";
 import { Exercise } from "@/lib/exercises/exercise";
+import { ExerciseEnum } from "@/lib/exercises/exercise-enum";
 import { ExercisesDictionary } from "@/lib/exercises/exercises-dictionary";
 import { ExerciseActivity } from "@/models/exercise-activity.model";
 import { Set } from "@/models/set.model";
@@ -109,7 +110,10 @@ export default function CreateTemplate() {
           name: templateName.trim(),
           exercises: selectedExercises.map((exerciseActivity) => {
             return {
-              exerciseName: exerciseActivity.exerciseName,
+              exerciseName:
+                ExercisesDictionary[
+                  exerciseActivity.exerciseName as ExerciseEnum
+                ].name,
               sets: exerciseActivity.sets.map((set, index) => {
                 return {
                   setNumber: index + 1,
